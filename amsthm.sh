@@ -1,0 +1,9 @@
+#!/bin/bash
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+cd $DIR
+
+pandoc -f markdown -S --base-header-level=1 --toc --toc-depth=6 -N --normalize -s --latex-engine=pdflatex --include-in-header=./amsthm.tex --filter=./py/case.py --filter=./py/conjecture.py --filter=./py/corollary.py --filter=./py/definition.py --filter=./py/example.py --filter=./py/lemma.py --filter=./py/note.py --filter=./py/postulate.py --filter=./py/problem.py --filter=./py/proof.py --filter=./py/proposition.py --filter=./py/remark.py --filter=./py/theorem.py -o index.tex index.md
+
+pandoc -f markdown -S --base-header-level=1 --toc --toc-depth=6 -N --normalize -s --latex-engine=pdflatex --include-in-header=./amsthm.tex --filter=./py/case.py --filter=./py/conjecture.py --filter=./py/corollary.py --filter=./py/definition.py --filter=./py/example.py --filter=./py/lemma.py --filter=./py/note.py --filter=./py/postulate.py --filter=./py/problem.py --filter=./py/proof.py --filter=./py/proposition.py --filter=./py/remark.py --filter=./py/theorem.py -o index.pdf index.md
+
+pandoc -f markdown -S --base-header-level=1 --toc --toc-depth=6 -N --normalize -s --mathjax="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML-full" -c ./css/amsthm.css --filter=./py/case.py --filter=./py/conjecture.py --filter=./py/corollary.py --filter=./py/definition.py --filter=./py/example.py --filter=./py/lemma.py --filter=./py/note.py --filter=./py/postulate.py --filter=./py/problem.py --filter=./py/proof.py --filter=./py/proposition.py --filter=./py/remark.py --filter=./py/theorem.py -t html -o index.html index.md

@@ -1,0 +1,95 @@
+/* style of "before" */
+/** before plain or definition **/
+.conjecture:before,.corollary:before,.definition:before,.example:before,.lemma:before,.postulate:before,.problem:before,.proposition:before,.theorem:before
+{
+	font-weight:700;
+	font-style:normal
+}
+/** before remark or proof **/
+.remark:before,.note:before,.case:before,.proof:before
+{
+	font-style:italic
+}
+/* content of "before" (everything goes here) */
+.corollary:before
+{
+	content:"Corollary."
+}
+
+.lemma:before
+{
+	content:"Lemma."
+}
+
+.proposition:before
+{
+	content:"Proposition."
+}
+
+.theorem:before
+{
+	content:"Theorem."
+}
+.definition:before
+{
+	content:"Definition."
+}
+
+.conjecture:before
+{
+	content:"Conjecture."
+}
+
+.example:before
+{
+	content:"Example."
+}
+
+.postulate:before
+{
+	content:"Postulate."
+}
+
+.problem:before
+{
+	content:"Problem."
+}
+.remark:before
+{
+	content:"Remark."
+}
+
+.note:before
+{
+	content:"Note."
+}
+
+.case:before
+{
+	content:"Case."
+}
+.proof:before
+{
+	content:"Proof."
+}
+/* main style */
+/** plain **/
+.corollary,.lemma,.proposition,.theorem
+{
+	display:block;
+	margin:12px 0;
+	font-style:italic
+}
+/** definition, remark or proof **/
+.case,.conjecture,.definition,.example,.note,.postulate,.problem,.proof,.remark
+{
+	display:block;
+	margin:12px 0;
+	font-style:normal
+}
+/* after proof */
+.proof:after
+{
+	content:"\25FB";
+	float:right
+}
