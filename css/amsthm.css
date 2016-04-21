@@ -1,3 +1,17 @@
+/* CSS counter */
+
+body {
+    counter-reset: theorem;
+    counter-reset: lemma;
+    counter-reset: proposition;
+    counter-reset: definition;
+    counter-reset: conjecture;
+    counter-reset: example;
+    counter-reset: postulate;
+    counter-reset: problem;
+    counter-reset: case;
+}
+
 /* style of "before" */
 /** before plain or definition **/
 .conjecture:before,.corollary:before,.definition:before,.example:before,.lemma:before,.postulate:before,.problem:before,.proposition:before,.theorem:before
@@ -18,41 +32,49 @@
 
 .lemma:before
 {
-	content:"Lemma."
+	counter-increment: lemma;
+	content:"Lemma " counter(lemma) ". "
 }
 
 .proposition:before
 {
-	content:"Proposition."
+	counter-increment: proposition;
+	content:"Proposition " counter(proposition) ". "
 }
 
 .theorem:before
 {
-	content:"Theorem."
+	counter-increment: theorem;
+	content:"Theorem " counter(theorem) ". "
 }
 .definition:before
 {
-	content:"Definition."
+	counter-increment: definition;
+	content:"Definition " counter(definition) ". "
 }
 
 .conjecture:before
 {
-	content:"Conjecture."
+	counter-increment: conjecture;
+	content:"Conjecture " counter(conjecture) ". "
 }
 
 .example:before
 {
-	content:"Example."
+	counter-increment: example;
+	content:"Example " counter(example) ". "
 }
 
 .postulate:before
 {
-	content:"Postulate."
+	counter-increment: postulate;
+	content:"Postulate " counter(postulate) ". "
 }
 
 .problem:before
 {
-	content:"Problem."
+	counter-increment: problem;
+	content:"Problem " counter(problem) ". "
 }
 .remark:before
 {
@@ -66,7 +88,8 @@
 
 .case:before
 {
-	content:"Case."
+	counter-increment: case;
+	content:"Case " counter(case) ". "
 }
 .proof:before
 {
