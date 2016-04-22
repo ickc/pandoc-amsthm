@@ -1,15 +1,7 @@
 /* CSS counter */
 
 body {
-    counter-reset: theorem;
-    counter-reset: lemma;
-    counter-reset: proposition;
-    counter-reset: definition;
-    counter-reset: conjecture;
-    counter-reset: example;
-    counter-reset: postulate;
-    counter-reset: problem;
-    counter-reset: case;
+    counter-reset: theorem lemma proposition definition conjecture example postulate problem case;
 }
 
 /* style of "before" */
