@@ -21,215 +21,319 @@ colorlinks:	true
 # First Heading #
 
 <div latex="true" class="Theorem">
-$$\nabla \times \mathbf{E} = - \frac{\partial \mathbf{B}}{\partial t}$$
+The Riemann zeta function is defined for complex $s$ with real part greater than $1$ by the absolutely convergent infinite series
+
+$$\zeta(s) = \sum_{n=1}^\infty \frac{1}{n^s} = \frac{1}{1^s} + \frac{1}{2^s} + \frac{1}{3^s} + \cdots.$$
 </div>
 
 <div latex="true" class="Lemma">
-$$\nabla \times \mathbf{E} = - \frac{\partial \mathbf{B}}{\partial t}$$
+The Riemann zeta function is defined for complex $s$ with real part greater than $1$ by the absolutely convergent infinite series
+
+$$\zeta(s) = \sum_{n=1}^\infty \frac{1}{n^s} = \frac{1}{1^s} + \frac{1}{2^s} + \frac{1}{3^s} + \cdots.$$
 </div>
 
 <div latex="true" class="Proposition">
-$$\nabla \times \mathbf{E} = - \frac{\partial \mathbf{B}}{\partial t}$$
+The Riemann zeta function is defined for complex $s$ with real part greater than $1$ by the absolutely convergent infinite series
+
+$$\zeta(s) = \sum_{n=1}^\infty \frac{1}{n^s} = \frac{1}{1^s} + \frac{1}{2^s} + \frac{1}{3^s} + \cdots.$$
 </div>
 
 <div latex="true" class="Corollary">
-$$\nabla \times \mathbf{E} = - \frac{\partial \mathbf{B}}{\partial t}$$
+The Riemann zeta function is defined for complex $s$ with real part greater than $1$ by the absolutely convergent infinite series
+
+$$\zeta(s) = \sum_{n=1}^\infty \frac{1}{n^s} = \frac{1}{1^s} + \frac{1}{2^s} + \frac{1}{3^s} + \cdots.$$
 </div>
 
 <div latex="true" class="Definition">
-$$E=mc^2$$
+Leonhard Euler showed that this series equals the Euler product
+
+$$\zeta(s) = \prod_{p \text{ prime}} \frac{1}{1-p^{-s}}= \frac{1}{1-2^{-s}}\cdot\frac{1}{1-3^{-s}}\cdot\frac{1}{1-5^{-s}}\cdot\frac{1}{1-7^{-s}} \cdots \frac{1}{1-p^{-s}} \cdots$$
 </div>
 
 <div latex="true" class="Conjecture">
-$$E=mc^2$$
+Leonhard Euler showed that this series equals the Euler product
+
+$$\zeta(s) = \prod_{p \text{ prime}} \frac{1}{1-p^{-s}}= \frac{1}{1-2^{-s}}\cdot\frac{1}{1-3^{-s}}\cdot\frac{1}{1-5^{-s}}\cdot\frac{1}{1-7^{-s}} \cdots \frac{1}{1-p^{-s}} \cdots$$
 </div>
 
 <div latex="true" class="Example">
-$$E=mc^2$$
+Leonhard Euler showed that this series equals the Euler product
+
+$$\zeta(s) = \prod_{p \text{ prime}} \frac{1}{1-p^{-s}}= \frac{1}{1-2^{-s}}\cdot\frac{1}{1-3^{-s}}\cdot\frac{1}{1-5^{-s}}\cdot\frac{1}{1-7^{-s}} \cdots \frac{1}{1-p^{-s}} \cdots$$
 </div>
 
 <div latex="true" class="Postulate">
-$$E=mc^2$$
+Leonhard Euler showed that this series equals the Euler product
+
+$$\zeta(s) = \prod_{p \text{ prime}} \frac{1}{1-p^{-s}}= \frac{1}{1-2^{-s}}\cdot\frac{1}{1-3^{-s}}\cdot\frac{1}{1-5^{-s}}\cdot\frac{1}{1-7^{-s}} \cdots \frac{1}{1-p^{-s}} \cdots$$
 </div>
 
 <div latex="true" class="Problem">
-$$E=mc^2$$
+Leonhard Euler showed that this series equals the Euler product
+
+$$\zeta(s) = \prod_{p \text{ prime}} \frac{1}{1-p^{-s}}= \frac{1}{1-2^{-s}}\cdot\frac{1}{1-3^{-s}}\cdot\frac{1}{1-5^{-s}}\cdot\frac{1}{1-7^{-s}} \cdots \frac{1}{1-p^{-s}} \cdots$$
 </div>
 
 <div latex="true" class="Remark">
-$$\nabla \times \mathbf{E} = - \frac{\partial \mathbf{B}}{\partial t}$$
+The Riemann zeta function is defined for complex $s$ with real part greater than $1$ by the absolutely convergent infinite series
+
+$$\zeta(s) = \sum_{n=1}^\infty \frac{1}{n^s} = \frac{1}{1^s} + \frac{1}{2^s} + \frac{1}{3^s} + \cdots.$$
 </div>
 
 <div latex="true" class="Note">
-$$\nabla \times \mathbf{E} = - \frac{\partial \mathbf{B}}{\partial t}$$
+The Riemann zeta function is defined for complex $s$ with real part greater than $1$ by the absolutely convergent infinite series
+
+$$\zeta(s) = \sum_{n=1}^\infty \frac{1}{n^s} = \frac{1}{1^s} + \frac{1}{2^s} + \frac{1}{3^s} + \cdots.$$
 </div>
 
 <div latex="true" class="Case">
-$$\nabla \times \mathbf{E} = - \frac{\partial \mathbf{B}}{\partial t}$$
+The Riemann zeta function is defined for complex $s$ with real part greater than $1$ by the absolutely convergent infinite series
+
+$$\zeta(s) = \sum_{n=1}^\infty \frac{1}{n^s} = \frac{1}{1^s} + \frac{1}{2^s} + \frac{1}{3^s} + \cdots.$$
 </div>
 
 <div latex="true" class="proof">
-$$E=mc^2$$
+Leonhard Euler showed that this series equals the Euler product
+
+$$\zeta(s) = \prod_{p \text{ prime}} \frac{1}{1-p^{-s}}= \frac{1}{1-2^{-s}}\cdot\frac{1}{1-3^{-s}}\cdot\frac{1}{1-5^{-s}}\cdot\frac{1}{1-7^{-s}} \cdots \frac{1}{1-p^{-s}} \cdots$$
 </div>
 
 **Repeating once:**
 
 <div latex="true" class="Theorem">
-$$\nabla \times \mathbf{E} = - \frac{\partial \mathbf{B}}{\partial t}$$
+The Riemann zeta function is defined for complex $s$ with real part greater than $1$ by the absolutely convergent infinite series
+
+$$\zeta(s) = \sum_{n=1}^\infty \frac{1}{n^s} = \frac{1}{1^s} + \frac{1}{2^s} + \frac{1}{3^s} + \cdots.$$
 </div>
 
 <div latex="true" class="Lemma">
-$$\nabla \times \mathbf{E} = - \frac{\partial \mathbf{B}}{\partial t}$$
+The Riemann zeta function is defined for complex $s$ with real part greater than $1$ by the absolutely convergent infinite series
+
+$$\zeta(s) = \sum_{n=1}^\infty \frac{1}{n^s} = \frac{1}{1^s} + \frac{1}{2^s} + \frac{1}{3^s} + \cdots.$$
 </div>
 
 <div latex="true" class="Proposition">
-$$\nabla \times \mathbf{E} = - \frac{\partial \mathbf{B}}{\partial t}$$
+The Riemann zeta function is defined for complex $s$ with real part greater than $1$ by the absolutely convergent infinite series
+
+$$\zeta(s) = \sum_{n=1}^\infty \frac{1}{n^s} = \frac{1}{1^s} + \frac{1}{2^s} + \frac{1}{3^s} + \cdots.$$
 </div>
 
 <div latex="true" class="Corollary">
-$$\nabla \times \mathbf{E} = - \frac{\partial \mathbf{B}}{\partial t}$$
+The Riemann zeta function is defined for complex $s$ with real part greater than $1$ by the absolutely convergent infinite series
+
+$$\zeta(s) = \sum_{n=1}^\infty \frac{1}{n^s} = \frac{1}{1^s} + \frac{1}{2^s} + \frac{1}{3^s} + \cdots.$$
 </div>
 
 <div latex="true" class="Definition">
-$$E=mc^2$$
+Leonhard Euler showed that this series equals the Euler product
+
+$$\zeta(s) = \prod_{p \text{ prime}} \frac{1}{1-p^{-s}}= \frac{1}{1-2^{-s}}\cdot\frac{1}{1-3^{-s}}\cdot\frac{1}{1-5^{-s}}\cdot\frac{1}{1-7^{-s}} \cdots \frac{1}{1-p^{-s}} \cdots$$
 </div>
 
 <div latex="true" class="Conjecture">
-$$E=mc^2$$
+Leonhard Euler showed that this series equals the Euler product
+
+$$\zeta(s) = \prod_{p \text{ prime}} \frac{1}{1-p^{-s}}= \frac{1}{1-2^{-s}}\cdot\frac{1}{1-3^{-s}}\cdot\frac{1}{1-5^{-s}}\cdot\frac{1}{1-7^{-s}} \cdots \frac{1}{1-p^{-s}} \cdots$$
 </div>
 
 <div latex="true" class="Example">
-$$E=mc^2$$
+Leonhard Euler showed that this series equals the Euler product
+
+$$\zeta(s) = \prod_{p \text{ prime}} \frac{1}{1-p^{-s}}= \frac{1}{1-2^{-s}}\cdot\frac{1}{1-3^{-s}}\cdot\frac{1}{1-5^{-s}}\cdot\frac{1}{1-7^{-s}} \cdots \frac{1}{1-p^{-s}} \cdots$$
 </div>
 
 <div latex="true" class="Postulate">
-$$E=mc^2$$
+Leonhard Euler showed that this series equals the Euler product
+
+$$\zeta(s) = \prod_{p \text{ prime}} \frac{1}{1-p^{-s}}= \frac{1}{1-2^{-s}}\cdot\frac{1}{1-3^{-s}}\cdot\frac{1}{1-5^{-s}}\cdot\frac{1}{1-7^{-s}} \cdots \frac{1}{1-p^{-s}} \cdots$$
 </div>
 
 <div latex="true" class="Problem">
-$$E=mc^2$$
+Leonhard Euler showed that this series equals the Euler product
+
+$$\zeta(s) = \prod_{p \text{ prime}} \frac{1}{1-p^{-s}}= \frac{1}{1-2^{-s}}\cdot\frac{1}{1-3^{-s}}\cdot\frac{1}{1-5^{-s}}\cdot\frac{1}{1-7^{-s}} \cdots \frac{1}{1-p^{-s}} \cdots$$
 </div>
 
 <div latex="true" class="Remark">
-$$\nabla \times \mathbf{E} = - \frac{\partial \mathbf{B}}{\partial t}$$
+The Riemann zeta function is defined for complex $s$ with real part greater than $1$ by the absolutely convergent infinite series
+
+$$\zeta(s) = \sum_{n=1}^\infty \frac{1}{n^s} = \frac{1}{1^s} + \frac{1}{2^s} + \frac{1}{3^s} + \cdots.$$
 </div>
 
 <div latex="true" class="Note">
-$$\nabla \times \mathbf{E} = - \frac{\partial \mathbf{B}}{\partial t}$$
+The Riemann zeta function is defined for complex $s$ with real part greater than $1$ by the absolutely convergent infinite series
+
+$$\zeta(s) = \sum_{n=1}^\infty \frac{1}{n^s} = \frac{1}{1^s} + \frac{1}{2^s} + \frac{1}{3^s} + \cdots.$$
 </div>
 
 <div latex="true" class="Case">
-$$\nabla \times \mathbf{E} = - \frac{\partial \mathbf{B}}{\partial t}$$
+The Riemann zeta function is defined for complex $s$ with real part greater than $1$ by the absolutely convergent infinite series
+
+$$\zeta(s) = \sum_{n=1}^\infty \frac{1}{n^s} = \frac{1}{1^s} + \frac{1}{2^s} + \frac{1}{3^s} + \cdots.$$
 </div>
 
 <div latex="true" class="proof">
-$$E=mc^2$$
+Leonhard Euler showed that this series equals the Euler product
+
+$$\zeta(s) = \prod_{p \text{ prime}} \frac{1}{1-p^{-s}}= \frac{1}{1-2^{-s}}\cdot\frac{1}{1-3^{-s}}\cdot\frac{1}{1-5^{-s}}\cdot\frac{1}{1-7^{-s}} \cdots \frac{1}{1-p^{-s}} \cdots$$
 </div>
 
 # Second Heading #
 
 <div latex="true" class="Theorem">
-$$\nabla \times \mathbf{E} = - \frac{\partial \mathbf{B}}{\partial t}$$
+The Riemann zeta function is defined for complex $s$ with real part greater than $1$ by the absolutely convergent infinite series
+
+$$\zeta(s) = \sum_{n=1}^\infty \frac{1}{n^s} = \frac{1}{1^s} + \frac{1}{2^s} + \frac{1}{3^s} + \cdots.$$
 </div>
 
 <div latex="true" class="Lemma">
-$$\nabla \times \mathbf{E} = - \frac{\partial \mathbf{B}}{\partial t}$$
+The Riemann zeta function is defined for complex $s$ with real part greater than $1$ by the absolutely convergent infinite series
+
+$$\zeta(s) = \sum_{n=1}^\infty \frac{1}{n^s} = \frac{1}{1^s} + \frac{1}{2^s} + \frac{1}{3^s} + \cdots.$$
 </div>
 
 <div latex="true" class="Proposition">
-$$\nabla \times \mathbf{E} = - \frac{\partial \mathbf{B}}{\partial t}$$
+The Riemann zeta function is defined for complex $s$ with real part greater than $1$ by the absolutely convergent infinite series
+
+$$\zeta(s) = \sum_{n=1}^\infty \frac{1}{n^s} = \frac{1}{1^s} + \frac{1}{2^s} + \frac{1}{3^s} + \cdots.$$
 </div>
 
 <div latex="true" class="Corollary">
-$$\nabla \times \mathbf{E} = - \frac{\partial \mathbf{B}}{\partial t}$$
+The Riemann zeta function is defined for complex $s$ with real part greater than $1$ by the absolutely convergent infinite series
+
+$$\zeta(s) = \sum_{n=1}^\infty \frac{1}{n^s} = \frac{1}{1^s} + \frac{1}{2^s} + \frac{1}{3^s} + \cdots.$$
 </div>
 
 <div latex="true" class="Definition">
-$$E=mc^2$$
+Leonhard Euler showed that this series equals the Euler product
+
+$$\zeta(s) = \prod_{p \text{ prime}} \frac{1}{1-p^{-s}}= \frac{1}{1-2^{-s}}\cdot\frac{1}{1-3^{-s}}\cdot\frac{1}{1-5^{-s}}\cdot\frac{1}{1-7^{-s}} \cdots \frac{1}{1-p^{-s}} \cdots$$
 </div>
 
 <div latex="true" class="Conjecture">
-$$E=mc^2$$
+Leonhard Euler showed that this series equals the Euler product
+
+$$\zeta(s) = \prod_{p \text{ prime}} \frac{1}{1-p^{-s}}= \frac{1}{1-2^{-s}}\cdot\frac{1}{1-3^{-s}}\cdot\frac{1}{1-5^{-s}}\cdot\frac{1}{1-7^{-s}} \cdots \frac{1}{1-p^{-s}} \cdots$$
 </div>
 
 <div latex="true" class="Example">
-$$E=mc^2$$
+Leonhard Euler showed that this series equals the Euler product
+
+$$\zeta(s) = \prod_{p \text{ prime}} \frac{1}{1-p^{-s}}= \frac{1}{1-2^{-s}}\cdot\frac{1}{1-3^{-s}}\cdot\frac{1}{1-5^{-s}}\cdot\frac{1}{1-7^{-s}} \cdots \frac{1}{1-p^{-s}} \cdots$$
 </div>
 
 <div latex="true" class="Postulate">
-$$E=mc^2$$
+Leonhard Euler showed that this series equals the Euler product
+
+$$\zeta(s) = \prod_{p \text{ prime}} \frac{1}{1-p^{-s}}= \frac{1}{1-2^{-s}}\cdot\frac{1}{1-3^{-s}}\cdot\frac{1}{1-5^{-s}}\cdot\frac{1}{1-7^{-s}} \cdots \frac{1}{1-p^{-s}} \cdots$$
 </div>
 
 <div latex="true" class="Problem">
-$$E=mc^2$$
+Leonhard Euler showed that this series equals the Euler product
+
+$$\zeta(s) = \prod_{p \text{ prime}} \frac{1}{1-p^{-s}}= \frac{1}{1-2^{-s}}\cdot\frac{1}{1-3^{-s}}\cdot\frac{1}{1-5^{-s}}\cdot\frac{1}{1-7^{-s}} \cdots \frac{1}{1-p^{-s}} \cdots$$
 </div>
 
 <div latex="true" class="Remark">
-$$\nabla \times \mathbf{E} = - \frac{\partial \mathbf{B}}{\partial t}$$
+The Riemann zeta function is defined for complex $s$ with real part greater than $1$ by the absolutely convergent infinite series
+
+$$\zeta(s) = \sum_{n=1}^\infty \frac{1}{n^s} = \frac{1}{1^s} + \frac{1}{2^s} + \frac{1}{3^s} + \cdots.$$
 </div>
 
 <div latex="true" class="Note">
-$$\nabla \times \mathbf{E} = - \frac{\partial \mathbf{B}}{\partial t}$$
+The Riemann zeta function is defined for complex $s$ with real part greater than $1$ by the absolutely convergent infinite series
+
+$$\zeta(s) = \sum_{n=1}^\infty \frac{1}{n^s} = \frac{1}{1^s} + \frac{1}{2^s} + \frac{1}{3^s} + \cdots.$$
 </div>
 
 <div latex="true" class="Case">
-$$\nabla \times \mathbf{E} = - \frac{\partial \mathbf{B}}{\partial t}$$
+The Riemann zeta function is defined for complex $s$ with real part greater than $1$ by the absolutely convergent infinite series
+
+$$\zeta(s) = \sum_{n=1}^\infty \frac{1}{n^s} = \frac{1}{1^s} + \frac{1}{2^s} + \frac{1}{3^s} + \cdots.$$
 </div>
 
 <div latex="true" class="proof">
-$$E=mc^2$$
+Leonhard Euler showed that this series equals the Euler product
+
+$$\zeta(s) = \prod_{p \text{ prime}} \frac{1}{1-p^{-s}}= \frac{1}{1-2^{-s}}\cdot\frac{1}{1-3^{-s}}\cdot\frac{1}{1-5^{-s}}\cdot\frac{1}{1-7^{-s}} \cdots \frac{1}{1-p^{-s}} \cdots$$
 </div>
 
 ## Subheading ##
 
 <div latex="true" class="Theorem">
-$$\nabla \times \mathbf{E} = - \frac{\partial \mathbf{B}}{\partial t}$$
+The Riemann zeta function is defined for complex $s$ with real part greater than $1$ by the absolutely convergent infinite series
+
+$$\zeta(s) = \sum_{n=1}^\infty \frac{1}{n^s} = \frac{1}{1^s} + \frac{1}{2^s} + \frac{1}{3^s} + \cdots.$$
 </div>
 
 <div latex="true" class="Lemma">
-$$\nabla \times \mathbf{E} = - \frac{\partial \mathbf{B}}{\partial t}$$
+The Riemann zeta function is defined for complex $s$ with real part greater than $1$ by the absolutely convergent infinite series
+
+$$\zeta(s) = \sum_{n=1}^\infty \frac{1}{n^s} = \frac{1}{1^s} + \frac{1}{2^s} + \frac{1}{3^s} + \cdots.$$
 </div>
 
 <div latex="true" class="Proposition">
-$$\nabla \times \mathbf{E} = - \frac{\partial \mathbf{B}}{\partial t}$$
+The Riemann zeta function is defined for complex $s$ with real part greater than $1$ by the absolutely convergent infinite series
+
+$$\zeta(s) = \sum_{n=1}^\infty \frac{1}{n^s} = \frac{1}{1^s} + \frac{1}{2^s} + \frac{1}{3^s} + \cdots.$$
 </div>
 
 <div latex="true" class="Corollary">
-$$\nabla \times \mathbf{E} = - \frac{\partial \mathbf{B}}{\partial t}$$
+The Riemann zeta function is defined for complex $s$ with real part greater than $1$ by the absolutely convergent infinite series
+
+$$\zeta(s) = \sum_{n=1}^\infty \frac{1}{n^s} = \frac{1}{1^s} + \frac{1}{2^s} + \frac{1}{3^s} + \cdots.$$
 </div>
 
 <div latex="true" class="Definition">
-$$E=mc^2$$
+Leonhard Euler showed that this series equals the Euler product
+
+$$\zeta(s) = \prod_{p \text{ prime}} \frac{1}{1-p^{-s}}= \frac{1}{1-2^{-s}}\cdot\frac{1}{1-3^{-s}}\cdot\frac{1}{1-5^{-s}}\cdot\frac{1}{1-7^{-s}} \cdots \frac{1}{1-p^{-s}} \cdots$$
 </div>
 
 <div latex="true" class="Conjecture">
-$$E=mc^2$$
+Leonhard Euler showed that this series equals the Euler product
+
+$$\zeta(s) = \prod_{p \text{ prime}} \frac{1}{1-p^{-s}}= \frac{1}{1-2^{-s}}\cdot\frac{1}{1-3^{-s}}\cdot\frac{1}{1-5^{-s}}\cdot\frac{1}{1-7^{-s}} \cdots \frac{1}{1-p^{-s}} \cdots$$
 </div>
 
 <div latex="true" class="Example">
-$$E=mc^2$$
+Leonhard Euler showed that this series equals the Euler product
+
+$$\zeta(s) = \prod_{p \text{ prime}} \frac{1}{1-p^{-s}}= \frac{1}{1-2^{-s}}\cdot\frac{1}{1-3^{-s}}\cdot\frac{1}{1-5^{-s}}\cdot\frac{1}{1-7^{-s}} \cdots \frac{1}{1-p^{-s}} \cdots$$
 </div>
 
 <div latex="true" class="Postulate">
-$$E=mc^2$$
+Leonhard Euler showed that this series equals the Euler product
+
+$$\zeta(s) = \prod_{p \text{ prime}} \frac{1}{1-p^{-s}}= \frac{1}{1-2^{-s}}\cdot\frac{1}{1-3^{-s}}\cdot\frac{1}{1-5^{-s}}\cdot\frac{1}{1-7^{-s}} \cdots \frac{1}{1-p^{-s}} \cdots$$
 </div>
 
 <div latex="true" class="Problem">
-$$E=mc^2$$
+Leonhard Euler showed that this series equals the Euler product
+
+$$\zeta(s) = \prod_{p \text{ prime}} \frac{1}{1-p^{-s}}= \frac{1}{1-2^{-s}}\cdot\frac{1}{1-3^{-s}}\cdot\frac{1}{1-5^{-s}}\cdot\frac{1}{1-7^{-s}} \cdots \frac{1}{1-p^{-s}} \cdots$$
 </div>
 
 <div latex="true" class="Remark">
-$$\nabla \times \mathbf{E} = - \frac{\partial \mathbf{B}}{\partial t}$$
+The Riemann zeta function is defined for complex $s$ with real part greater than $1$ by the absolutely convergent infinite series
+
+$$\zeta(s) = \sum_{n=1}^\infty \frac{1}{n^s} = \frac{1}{1^s} + \frac{1}{2^s} + \frac{1}{3^s} + \cdots.$$
 </div>
 
 <div latex="true" class="Note">
-$$\nabla \times \mathbf{E} = - \frac{\partial \mathbf{B}}{\partial t}$$
+The Riemann zeta function is defined for complex $s$ with real part greater than $1$ by the absolutely convergent infinite series
+
+$$\zeta(s) = \sum_{n=1}^\infty \frac{1}{n^s} = \frac{1}{1^s} + \frac{1}{2^s} + \frac{1}{3^s} + \cdots.$$
 </div>
 
 <div latex="true" class="Case">
-$$\nabla \times \mathbf{E} = - \frac{\partial \mathbf{B}}{\partial t}$$
+The Riemann zeta function is defined for complex $s$ with real part greater than $1$ by the absolutely convergent infinite series
+
+$$\zeta(s) = \sum_{n=1}^\infty \frac{1}{n^s} = \frac{1}{1^s} + \frac{1}{2^s} + \frac{1}{3^s} + \cdots.$$
 </div>
 
 <div latex="true" class="proof">
-$$E=mc^2$$
+Leonhard Euler showed that this series equals the Euler product
+
+$$\zeta(s) = \prod_{p \text{ prime}} \frac{1}{1-p^{-s}}= \frac{1}{1-2^{-s}}\cdot\frac{1}{1-3^{-s}}\cdot\frac{1}{1-5^{-s}}\cdot\frac{1}{1-7^{-s}} \cdots \frac{1}{1-p^{-s}} \cdots$$
 </div>

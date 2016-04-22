@@ -37,6 +37,8 @@ See the outputs in:
 - <https://ickc.github.io/pandoc-amsthm/index.html>
 - <https://ickc.github.io/pandoc-amsthm/index.pdf>
 
+The examples in the demo copied from <[Riemann hypothesis - Wikipedia, the free encyclopedia](https://en.wikipedia.org/wiki/Riemann_hypothesis)>
+
 # Notes #
 
 The required LaTeX codes in the preamble and the CSS in HTML are provided in the template. So no other things are needed. The only non-official things are the custom templates and the filter. I am hoping both can make into the official pandoc.
