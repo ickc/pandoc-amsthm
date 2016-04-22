@@ -1,0 +1,410 @@
+\documentclass[english,oneside, article]{memoir}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{amsthm}
+\theoremstyle{plain}
+\newtheorem{Theorem}{Theorem}[chapter]
+\newtheorem*{Lemma}{Lemma}
+\newtheorem*{Proposition}{Proposition}
+\newtheorem*{Corollary}{Corollary}
+\theoremstyle{definition}
+\newtheorem{Definition}{Definition}[chapter]
+\newtheorem{Conjecture}{Conjecture}[chapter]
+\newtheorem{Example}{Example}[chapter]
+\newtheorem{Postulate}{Postulate}[chapter]
+\newtheorem{Problem}{Problem}[chapter]
+\theoremstyle{remark}
+\newtheorem{Case}{Case}[chapter]
+\newtheorem*{Remark}{Remark}
+\newtheorem*{Note}{Note}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage{hyperref}
+\PassOptionsToPackage{usenames,dvipsnames}{color} % color is loaded by hyperref
+\hypersetup{unicode=true,
+            pdftitle={Pandoc with Amsthm Defined in YAML Front Matter},
+            pdfauthor={Kolen Cheung},
+            pdfkeywords={pandoc, amsthm, LaTeX, yaml},
+            colorlinks=true,
+            linkcolor=Maroon,
+            citecolor=Blue,
+            urlcolor=Blue,
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[shorthands=off,main=english]{babel}
+\else
+  \usepackage{polyglossia}
+  \setmainlanguage[]{english}
+\fi
+\IfFileExists{parskip.sty}{%
+\usepackage{parskip}
+}{% else
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{0}
+% Redefines (sub)paragraphs to behave more like sections
+\ifx\paragraph\undefined\else
+\let\oldparagraph\paragraph
+\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+\let\oldsubparagraph\subparagraph
+\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+\title{Pandoc with Amsthm Defined in YAML Front Matter}
+\author{Kolen Cheung}
+\date{2016-04-21}
+
+\begin{document}
+\maketitle
+
+{
+\hypersetup{linkcolor=black}
+\setcounter{tocdepth}{5}
+\tableofcontents
+}
+\chapter{First Heading}\label{first-heading}
+
+\begin{Theorem}
+
+\[\nabla \times \mathbf{E} = - \frac{\partial \mathbf{B}}{\partial t}\]
+
+\end{Theorem}
+
+\begin{Lemma}
+
+\[\nabla \times \mathbf{E} = - \frac{\partial \mathbf{B}}{\partial t}\]
+
+\end{Lemma}
+
+\begin{Proposition}
+
+\[\nabla \times \mathbf{E} = - \frac{\partial \mathbf{B}}{\partial t}\]
+
+\end{Proposition}
+
+\begin{Corollary}
+
+\[\nabla \times \mathbf{E} = - \frac{\partial \mathbf{B}}{\partial t}\]
+
+\end{Corollary}
+
+\begin{Definition}
+
+\[E=mc^2\]
+
+\end{Definition}
+
+\begin{Conjecture}
+
+\[E=mc^2\]
+
+\end{Conjecture}
+
+\begin{Example}
+
+\[E=mc^2\]
+
+\end{Example}
+
+\begin{Postulate}
+
+\[E=mc^2\]
+
+\end{Postulate}
+
+\begin{Problem}
+
+\[E=mc^2\]
+
+\end{Problem}
+
+\begin{Remark}
+
+\[\nabla \times \mathbf{E} = - \frac{\partial \mathbf{B}}{\partial t}\]
+
+\end{Remark}
+
+\begin{Note}
+
+\[\nabla \times \mathbf{E} = - \frac{\partial \mathbf{B}}{\partial t}\]
+
+\end{Note}
+
+\begin{Case}
+
+\[\nabla \times \mathbf{E} = - \frac{\partial \mathbf{B}}{\partial t}\]
+
+\end{Case}
+
+\begin{proof}
+
+\[E=mc^2\]
+
+\end{proof}
+
+\textbf{Repeating once:}
+
+\begin{Theorem}
+
+\[\nabla \times \mathbf{E} = - \frac{\partial \mathbf{B}}{\partial t}\]
+
+\end{Theorem}
+
+\begin{Lemma}
+
+\[\nabla \times \mathbf{E} = - \frac{\partial \mathbf{B}}{\partial t}\]
+
+\end{Lemma}
+
+\begin{Proposition}
+
+\[\nabla \times \mathbf{E} = - \frac{\partial \mathbf{B}}{\partial t}\]
+
+\end{Proposition}
+
+\begin{Corollary}
+
+\[\nabla \times \mathbf{E} = - \frac{\partial \mathbf{B}}{\partial t}\]
+
+\end{Corollary}
+
+\begin{Definition}
+
+\[E=mc^2\]
+
+\end{Definition}
+
+\begin{Conjecture}
+
+\[E=mc^2\]
+
+\end{Conjecture}
+
+\begin{Example}
+
+\[E=mc^2\]
+
+\end{Example}
+
+\begin{Postulate}
+
+\[E=mc^2\]
+
+\end{Postulate}
+
+\begin{Problem}
+
+\[E=mc^2\]
+
+\end{Problem}
+
+\begin{Remark}
+
+\[\nabla \times \mathbf{E} = - \frac{\partial \mathbf{B}}{\partial t}\]
+
+\end{Remark}
+
+\begin{Note}
+
+\[\nabla \times \mathbf{E} = - \frac{\partial \mathbf{B}}{\partial t}\]
+
+\end{Note}
+
+\begin{Case}
+
+\[\nabla \times \mathbf{E} = - \frac{\partial \mathbf{B}}{\partial t}\]
+
+\end{Case}
+
+\begin{proof}
+
+\[E=mc^2\]
+
+\end{proof}
+
+\chapter{Second Heading}\label{second-heading}
+
+\begin{Theorem}
+
+\[\nabla \times \mathbf{E} = - \frac{\partial \mathbf{B}}{\partial t}\]
+
+\end{Theorem}
+
+\begin{Lemma}
+
+\[\nabla \times \mathbf{E} = - \frac{\partial \mathbf{B}}{\partial t}\]
+
+\end{Lemma}
+
+\begin{Proposition}
+
+\[\nabla \times \mathbf{E} = - \frac{\partial \mathbf{B}}{\partial t}\]
+
+\end{Proposition}
+
+\begin{Corollary}
+
+\[\nabla \times \mathbf{E} = - \frac{\partial \mathbf{B}}{\partial t}\]
+
+\end{Corollary}
+
+\begin{Definition}
+
+\[E=mc^2\]
+
+\end{Definition}
+
+\begin{Conjecture}
+
+\[E=mc^2\]
+
+\end{Conjecture}
+
+\begin{Example}
+
+\[E=mc^2\]
+
+\end{Example}
+
+\begin{Postulate}
+
+\[E=mc^2\]
+
+\end{Postulate}
+
+\begin{Problem}
+
+\[E=mc^2\]
+
+\end{Problem}
+
+\begin{Remark}
+
+\[\nabla \times \mathbf{E} = - \frac{\partial \mathbf{B}}{\partial t}\]
+
+\end{Remark}
+
+\begin{Note}
+
+\[\nabla \times \mathbf{E} = - \frac{\partial \mathbf{B}}{\partial t}\]
+
+\end{Note}
+
+\begin{Case}
+
+\[\nabla \times \mathbf{E} = - \frac{\partial \mathbf{B}}{\partial t}\]
+
+\end{Case}
+
+\begin{proof}
+
+\[E=mc^2\]
+
+\end{proof}
+
+\section{Subheading}\label{subheading}
+
+\begin{Theorem}
+
+\[\nabla \times \mathbf{E} = - \frac{\partial \mathbf{B}}{\partial t}\]
+
+\end{Theorem}
+
+\begin{Lemma}
+
+\[\nabla \times \mathbf{E} = - \frac{\partial \mathbf{B}}{\partial t}\]
+
+\end{Lemma}
+
+\begin{Proposition}
+
+\[\nabla \times \mathbf{E} = - \frac{\partial \mathbf{B}}{\partial t}\]
+
+\end{Proposition}
+
+\begin{Corollary}
+
+\[\nabla \times \mathbf{E} = - \frac{\partial \mathbf{B}}{\partial t}\]
+
+\end{Corollary}
+
+\begin{Definition}
+
+\[E=mc^2\]
+
+\end{Definition}
+
+\begin{Conjecture}
+
+\[E=mc^2\]
+
+\end{Conjecture}
+
+\begin{Example}
+
+\[E=mc^2\]
+
+\end{Example}
+
+\begin{Postulate}
+
+\[E=mc^2\]
+
+\end{Postulate}
+
+\begin{Problem}
+
+\[E=mc^2\]
+
+\end{Problem}
+
+\begin{Remark}
+
+\[\nabla \times \mathbf{E} = - \frac{\partial \mathbf{B}}{\partial t}\]
+
+\end{Remark}
+
+\begin{Note}
+
+\[\nabla \times \mathbf{E} = - \frac{\partial \mathbf{B}}{\partial t}\]
+
+\end{Note}
+
+\begin{Case}
+
+\[\nabla \times \mathbf{E} = - \frac{\partial \mathbf{B}}{\partial t}\]
+
+\end{Case}
+
+\begin{proof}
+
+\[E=mc^2\]
+
+\end{proof}
+
+\end{document}

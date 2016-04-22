@@ -1,0 +1,288 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <meta name="author" content="Kolen Cheung" />
+  <meta name="date" content="2016-04-21" />
+  <meta name="keywords" content="pandoc, amsthm, LaTeX, yaml" />
+  <title>Pandoc with Amsthm Defined in YAML Front Matter</title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+  /* CSS counter */
+  body {
+	  counter-reset: Theorem Definition Conjecture Example Postulate Problem Case ;
+  }
+  /* style of "before" */
+  /** before plain or definition **/
+  .Theorem:before,.Lemma:before,.Proposition:before,.Corollary:before,.Definition:before,.Conjecture:before,.Example:before,.Postulate:before,.Problem:before,.dump:before
+  {
+  	font-weight:700;
+  	font-style:normal
+  }
+  /** before remark or proof **/
+  .Case:before,.Remark:before,.Note:before,.Proof:before
+  {
+  	font-style:italic
+  }
+  /* content of "before" (everything goes here) */
+  .Theorem:before
+  {
+  	counter-increment: Theorem;
+  	content:"Theorem " counter(Theorem) ". "
+  }
+  .Lemma:before
+  {
+  	content:"Lemma."
+  }
+  .Proposition:before
+  {
+  	content:"Proposition."
+  }
+  .Corollary:before
+  {
+  	content:"Corollary."
+  }
+  .Definition:before
+  {
+  	counter-increment: Definition;
+  	content:"Definition " counter(Definition) ". "
+  }
+  .Conjecture:before
+  {
+  	counter-increment: Conjecture;
+  	content:"Conjecture " counter(Conjecture) ". "
+  }
+  .Example:before
+  {
+  	counter-increment: Example;
+  	content:"Example " counter(Example) ". "
+  }
+  .Postulate:before
+  {
+  	counter-increment: Postulate;
+  	content:"Postulate " counter(Postulate) ". "
+  }
+  .Problem:before
+  {
+  	counter-increment: Problem;
+  	content:"Problem " counter(Problem) ". "
+  }
+  .Case:before
+  {
+  	counter-increment: Case;
+  	content:"Case " counter(Case) ". "
+  }
+  .Remark:before
+  {
+  	content:"Remark."
+  }
+  .Note:before
+  {
+  	content:"Note."
+  }
+  .proof:before
+  {
+  	content:"Proof."
+  }
+  /* main style */
+  /** plain **/
+  .Theorem,.Lemma,.Proposition,.Corollary,,.dump
+  {
+  	display:block;
+  	margin:12px 0;
+  	font-style:italic
+  }
+  /** definition, remark or proof **/
+  .Definition,.Conjecture,.Example,.Postulate,.Problem,.Case,.Remark,.Note,,.proof
+  {
+  	display:block;
+  	margin:12px 0;
+  	font-style:normal
+  }
+  /* after proof */
+  .proof:after
+  {
+  	content:"\25FB";
+  	float:right
+  }
+  </style>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+</head>
+<body>
+<div id="header">
+<h1 class="title">Pandoc with Amsthm Defined in YAML Front Matter</h1>
+<h2 class="author">Kolen Cheung</h2>
+<h3 class="date">2016-04-21</h3>
+</div>
+<div id="TOC">
+<ul>
+<li><a href="#first-heading">First Heading</a></li>
+<li><a href="#second-heading">Second Heading</a><ul>
+<li><a href="#subheading">Subheading</a></li>
+</ul></li>
+</ul>
+</div>
+<h1 id="first-heading">First Heading</h1>
+<div class="Theorem" latex="true">
+<p><span class="math display">\[\nabla \times \mathbf{E} = - \frac{\partial \mathbf{B}}{\partial t}\]</span></p>
+</div>
+<div class="Lemma" latex="true">
+<p><span class="math display">\[\nabla \times \mathbf{E} = - \frac{\partial \mathbf{B}}{\partial t}\]</span></p>
+</div>
+<div class="Proposition" latex="true">
+<p><span class="math display">\[\nabla \times \mathbf{E} = - \frac{\partial \mathbf{B}}{\partial t}\]</span></p>
+</div>
+<div class="Corollary" latex="true">
+<p><span class="math display">\[\nabla \times \mathbf{E} = - \frac{\partial \mathbf{B}}{\partial t}\]</span></p>
+</div>
+<div class="Definition" latex="true">
+<p><span class="math display">\[E=mc^2\]</span></p>
+</div>
+<div class="Conjecture" latex="true">
+<p><span class="math display">\[E=mc^2\]</span></p>
+</div>
+<div class="Example" latex="true">
+<p><span class="math display">\[E=mc^2\]</span></p>
+</div>
+<div class="Postulate" latex="true">
+<p><span class="math display">\[E=mc^2\]</span></p>
+</div>
+<div class="Problem" latex="true">
+<p><span class="math display">\[E=mc^2\]</span></p>
+</div>
+<div class="Remark" latex="true">
+<p><span class="math display">\[\nabla \times \mathbf{E} = - \frac{\partial \mathbf{B}}{\partial t}\]</span></p>
+</div>
+<div class="Note" latex="true">
+<p><span class="math display">\[\nabla \times \mathbf{E} = - \frac{\partial \mathbf{B}}{\partial t}\]</span></p>
+</div>
+<div class="Case" latex="true">
+<p><span class="math display">\[\nabla \times \mathbf{E} = - \frac{\partial \mathbf{B}}{\partial t}\]</span></p>
+</div>
+<div class="proof" latex="true">
+<p><span class="math display">\[E=mc^2\]</span></p>
+</div>
+<p><strong>Repeating once:</strong></p>
+<div class="Theorem" latex="true">
+<p><span class="math display">\[\nabla \times \mathbf{E} = - \frac{\partial \mathbf{B}}{\partial t}\]</span></p>
+</div>
+<div class="Lemma" latex="true">
+<p><span class="math display">\[\nabla \times \mathbf{E} = - \frac{\partial \mathbf{B}}{\partial t}\]</span></p>
+</div>
+<div class="Proposition" latex="true">
+<p><span class="math display">\[\nabla \times \mathbf{E} = - \frac{\partial \mathbf{B}}{\partial t}\]</span></p>
+</div>
+<div class="Corollary" latex="true">
+<p><span class="math display">\[\nabla \times \mathbf{E} = - \frac{\partial \mathbf{B}}{\partial t}\]</span></p>
+</div>
+<div class="Definition" latex="true">
+<p><span class="math display">\[E=mc^2\]</span></p>
+</div>
+<div class="Conjecture" latex="true">
+<p><span class="math display">\[E=mc^2\]</span></p>
+</div>
+<div class="Example" latex="true">
+<p><span class="math display">\[E=mc^2\]</span></p>
+</div>
+<div class="Postulate" latex="true">
+<p><span class="math display">\[E=mc^2\]</span></p>
+</div>
+<div class="Problem" latex="true">
+<p><span class="math display">\[E=mc^2\]</span></p>
+</div>
+<div class="Remark" latex="true">
+<p><span class="math display">\[\nabla \times \mathbf{E} = - \frac{\partial \mathbf{B}}{\partial t}\]</span></p>
+</div>
+<div class="Note" latex="true">
+<p><span class="math display">\[\nabla \times \mathbf{E} = - \frac{\partial \mathbf{B}}{\partial t}\]</span></p>
+</div>
+<div class="Case" latex="true">
+<p><span class="math display">\[\nabla \times \mathbf{E} = - \frac{\partial \mathbf{B}}{\partial t}\]</span></p>
+</div>
+<div class="proof" latex="true">
+<p><span class="math display">\[E=mc^2\]</span></p>
+</div>
+<h1 id="second-heading">Second Heading</h1>
+<div class="Theorem" latex="true">
+<p><span class="math display">\[\nabla \times \mathbf{E} = - \frac{\partial \mathbf{B}}{\partial t}\]</span></p>
+</div>
+<div class="Lemma" latex="true">
+<p><span class="math display">\[\nabla \times \mathbf{E} = - \frac{\partial \mathbf{B}}{\partial t}\]</span></p>
+</div>
+<div class="Proposition" latex="true">
+<p><span class="math display">\[\nabla \times \mathbf{E} = - \frac{\partial \mathbf{B}}{\partial t}\]</span></p>
+</div>
+<div class="Corollary" latex="true">
+<p><span class="math display">\[\nabla \times \mathbf{E} = - \frac{\partial \mathbf{B}}{\partial t}\]</span></p>
+</div>
+<div class="Definition" latex="true">
+<p><span class="math display">\[E=mc^2\]</span></p>
+</div>
+<div class="Conjecture" latex="true">
+<p><span class="math display">\[E=mc^2\]</span></p>
+</div>
+<div class="Example" latex="true">
+<p><span class="math display">\[E=mc^2\]</span></p>
+</div>
+<div class="Postulate" latex="true">
+<p><span class="math display">\[E=mc^2\]</span></p>
+</div>
+<div class="Problem" latex="true">
+<p><span class="math display">\[E=mc^2\]</span></p>
+</div>
+<div class="Remark" latex="true">
+<p><span class="math display">\[\nabla \times \mathbf{E} = - \frac{\partial \mathbf{B}}{\partial t}\]</span></p>
+</div>
+<div class="Note" latex="true">
+<p><span class="math display">\[\nabla \times \mathbf{E} = - \frac{\partial \mathbf{B}}{\partial t}\]</span></p>
+</div>
+<div class="Case" latex="true">
+<p><span class="math display">\[\nabla \times \mathbf{E} = - \frac{\partial \mathbf{B}}{\partial t}\]</span></p>
+</div>
+<div class="proof" latex="true">
+<p><span class="math display">\[E=mc^2\]</span></p>
+</div>
+<h2 id="subheading">Subheading</h2>
+<div class="Theorem" latex="true">
+<p><span class="math display">\[\nabla \times \mathbf{E} = - \frac{\partial \mathbf{B}}{\partial t}\]</span></p>
+</div>
+<div class="Lemma" latex="true">
+<p><span class="math display">\[\nabla \times \mathbf{E} = - \frac{\partial \mathbf{B}}{\partial t}\]</span></p>
+</div>
+<div class="Proposition" latex="true">
+<p><span class="math display">\[\nabla \times \mathbf{E} = - \frac{\partial \mathbf{B}}{\partial t}\]</span></p>
+</div>
+<div class="Corollary" latex="true">
+<p><span class="math display">\[\nabla \times \mathbf{E} = - \frac{\partial \mathbf{B}}{\partial t}\]</span></p>
+</div>
+<div class="Definition" latex="true">
+<p><span class="math display">\[E=mc^2\]</span></p>
+</div>
+<div class="Conjecture" latex="true">
+<p><span class="math display">\[E=mc^2\]</span></p>
+</div>
+<div class="Example" latex="true">
+<p><span class="math display">\[E=mc^2\]</span></p>
+</div>
+<div class="Postulate" latex="true">
+<p><span class="math display">\[E=mc^2\]</span></p>
+</div>
+<div class="Problem" latex="true">
+<p><span class="math display">\[E=mc^2\]</span></p>
+</div>
+<div class="Remark" latex="true">
+<p><span class="math display">\[\nabla \times \mathbf{E} = - \frac{\partial \mathbf{B}}{\partial t}\]</span></p>
+</div>
+<div class="Note" latex="true">
+<p><span class="math display">\[\nabla \times \mathbf{E} = - \frac{\partial \mathbf{B}}{\partial t}\]</span></p>
+</div>
+<div class="Case" latex="true">
+<p><span class="math display">\[\nabla \times \mathbf{E} = - \frac{\partial \mathbf{B}}{\partial t}\]</span></p>
+</div>
+<div class="proof" latex="true">
+<p><span class="math display">\[E=mc^2\]</span></p>
+</div>
+</body>
+</html>
