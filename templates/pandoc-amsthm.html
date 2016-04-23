@@ -22,58 +22,58 @@ $if(amsthm)$
   <style type="text/css">
   /* CSS counter */
   body {
-	  counter-reset: $for(amsthm.plain.numbered)$$amsthm.plain.numbered$ $endfor$$for(amsthm.definition.numbered)$$amsthm.definition.numbered$ $endfor$$for(amsthm.remark.numbered)$$amsthm.remark.numbered$ $endfor$;
+	  counter-reset: $for(amsthm.plain)$$amsthm.plain$ $endfor$$for(amsthm.definition)$$amsthm.definition$ $endfor$$for(amsthm.remark)$$amsthm.remark$ $endfor$;
   }
   /* style of "before" */
   /** before plain or definition **/
-  $for(amsthm.plain.numbered)$.$amsthm.plain.numbered$:before,$endfor$$for(amsthm.plain.unnumbered)$.$amsthm.plain.unnumbered$:before,$endfor$$for(amsthm.definition.numbered)$.$amsthm.definition.numbered$:before,$endfor$$for(amsthm.definition.unnumbered)$.$amsthm.definition.unnumbered$:before,$endfor$.dump:before
+  $for(amsthm.plain)$.$amsthm.plain$:before,$endfor$$for(amsthm.plain-unnumbered)$.$amsthm.plain-unnumbered$:before,$endfor$$for(amsthm.definition)$.$amsthm.definition$:before,$endfor$$for(amsthm.definition-unnumbered)$.$amsthm.definition-unnumbered$:before,$endfor$.dump:before
   {
   	font-weight:700;
   	font-style:normal
   }
   /** before remark or proof **/
-  $for(amsthm.remark.numbered)$.$amsthm.remark.numbered$:before,$endfor$$for(amsthm.remark.unnumbered)$.$amsthm.remark.unnumbered$:before,$endfor$.Proof:before
+  $for(amsthm.remark)$.$amsthm.remark$:before,$endfor$$for(amsthm.remark-unnumbered)$.$amsthm.remark-unnumbered$:before,$endfor$.Proof:before
   {
   	font-style:italic
   }
   /* content of "before" (everything goes here) */
-$for(amsthm.plain.numbered)$
-  .$amsthm.plain.numbered$:before
+$for(amsthm.plain)$
+  .$amsthm.plain$:before
   {
-  	counter-increment: $amsthm.plain.numbered$;
-  	content:"$amsthm.plain.numbered$ " counter($amsthm.plain.numbered$) ". "
+  	counter-increment: $amsthm.plain$;
+  	content:"$amsthm.plain$ " counter($amsthm.plain$) ". "
   }
 $endfor$
-$for(amsthm.plain.unnumbered)$
-  .$amsthm.plain.unnumbered$:before
+$for(amsthm.plain-unnumbered)$
+  .$amsthm.plain-unnumbered$:before
   {
-  	content:"$amsthm.plain.unnumbered$."
+  	content:"$amsthm.plain-unnumbered$."
   }
 $endfor$
-$for(amsthm.definition.numbered)$
-  .$amsthm.definition.numbered$:before
+$for(amsthm.definition)$
+  .$amsthm.definition$:before
   {
-  	counter-increment: $amsthm.definition.numbered$;
-  	content:"$amsthm.definition.numbered$ " counter($amsthm.definition.numbered$) ". "
+  	counter-increment: $amsthm.definition$;
+  	content:"$amsthm.definition$ " counter($amsthm.definition$) ". "
   }
 $endfor$
-$for(amsthm.definition.unnumbered)$
-  .$amsthm.definition.unnumbered$:before
+$for(amsthm.definition-unnumbered)$
+  .$amsthm.definition-unnumbered$:before
   {
-  	content:"$amsthm.definition.unnumbered$."
+  	content:"$amsthm.definition-unnumbered$."
   }
 $endfor$
-$for(amsthm.remark.numbered)$
-  .$amsthm.remark.numbered$:before
+$for(amsthm.remark)$
+  .$amsthm.remark$:before
   {
-  	counter-increment: $amsthm.remark.numbered$;
-  	content:"$amsthm.remark.numbered$ " counter($amsthm.remark.numbered$) ". "
+  	counter-increment: $amsthm.remark$;
+  	content:"$amsthm.remark$ " counter($amsthm.remark$) ". "
   }
 $endfor$
-$for(amsthm.remark.unnumbered)$
-  .$amsthm.remark.unnumbered$:before
+$for(amsthm.remark-unnumbered)$
+  .$amsthm.remark-unnumbered$:before
   {
-  	content:"$amsthm.remark.unnumbered$."
+  	content:"$amsthm.remark-unnumbered$."
   }
 $endfor$
   .proof:before
@@ -82,14 +82,14 @@ $endfor$
   }
   /* main style */
   /** plain **/
-  $for(amsthm.plain.numbered)$.$amsthm.plain.numbered$,$endfor$$for(amsthm.plain.unnumbered)$.$amsthm.plain.unnumbered$,$endfor$,.dump
+  $for(amsthm.plain)$.$amsthm.plain$,$endfor$$for(amsthm.plain-unnumbered)$.$amsthm.plain-unnumbered$,$endfor$,.dump
   {
   	display:block;
   	margin:12px 0;
   	font-style:italic
   }
   /** definition, remark or proof **/
-  $for(amsthm.definition.numbered)$.$amsthm.definition.numbered$,$endfor$$for(amsthm.definition.unnumbered)$.$amsthm.definition.unnumbered$,$endfor$$for(amsthm.remark.numbered)$.$amsthm.remark.numbered$,$endfor$$for(amsthm.remark.unnumbered)$.$amsthm.remark.unnumbered$,$endfor$,.proof
+  $for(amsthm.definition)$.$amsthm.definition$,$endfor$$for(amsthm.definition-unnumbered)$.$amsthm.definition-unnumbered$,$endfor$$for(amsthm.remark)$.$amsthm.remark$,$endfor$$for(amsthm.remark-unnumbered)$.$amsthm.remark-unnumbered$,$endfor$,.proof
   {
   	display:block;
   	margin:12px 0;

@@ -1,14 +1,12 @@
 ---
 amsthm:
-  plain:	
-    numbered:	Theorem
-    unnumbered:	[Lemma, Proposition, Corollary]
-  definition:	
-    numbered:	[Definition,Conjecture,Example,Postulate,Problem]
-    unnumbered:	[]
-  remark:	
-    numbered:	[Case]
-    unnumbered:	[Remark,Note]
+  plain:	[Theorem]
+  plain-unnumbered:	[Lemma, Proposition, Corollary]
+  definition:	[Definition,Conjecture,Example,Postulate,Problem]
+  definition-unnumbered:	[]
+  remark:	[Case]
+  remark-unnumbered:	[Remark,Note]
+  proof:	[proof]
   parentcounter:	chapter
 title:	Pandoc with Amsthm Defined in YAML Front Matter
 author:	Kolen Cheung
@@ -23,79 +21,79 @@ colorlinks:	true
 
 # First Heading #
 
-<div latex="true" class="Theorem">
+<div class="Theorem">
 The Riemann zeta function is defined for complex $s$ with real part greater than $1$ by the absolutely convergent infinite series
 
 $$\zeta(s) = \sum_{n=1}^\infty \frac{1}{n^s} = \frac{1}{1^s} + \frac{1}{2^s} + \frac{1}{3^s} + \cdots.$$
 </div>
 
-<div latex="true" class="Lemma">
+<div class="Lemma">
 The Riemann zeta function is defined for complex $s$ with real part greater than $1$ by the absolutely convergent infinite series
 
 $$\zeta(s) = \sum_{n=1}^\infty \frac{1}{n^s} = \frac{1}{1^s} + \frac{1}{2^s} + \frac{1}{3^s} + \cdots.$$
 </div>
 
-<div latex="true" class="Proposition">
+<div class="Proposition">
 The Riemann zeta function is defined for complex $s$ with real part greater than $1$ by the absolutely convergent infinite series
 
 $$\zeta(s) = \sum_{n=1}^\infty \frac{1}{n^s} = \frac{1}{1^s} + \frac{1}{2^s} + \frac{1}{3^s} + \cdots.$$
 </div>
 
-<div latex="true" class="Corollary">
+<div class="Corollary">
 The Riemann zeta function is defined for complex $s$ with real part greater than $1$ by the absolutely convergent infinite series
 
 $$\zeta(s) = \sum_{n=1}^\infty \frac{1}{n^s} = \frac{1}{1^s} + \frac{1}{2^s} + \frac{1}{3^s} + \cdots.$$
 </div>
 
-<div latex="true" class="Definition">
+<div class="Definition">
 Leonhard Euler showed that this series equals the Euler product
 
 $$\zeta(s) = \prod_{p \text{ prime}} \frac{1}{1-p^{-s}}= \frac{1}{1-2^{-s}}\cdot\frac{1}{1-3^{-s}}\cdot\frac{1}{1-5^{-s}}\cdot\frac{1}{1-7^{-s}} \cdots \frac{1}{1-p^{-s}} \cdots$$
 </div>
 
-<div latex="true" class="Conjecture">
+<div class="Conjecture">
 Leonhard Euler showed that this series equals the Euler product
 
 $$\zeta(s) = \prod_{p \text{ prime}} \frac{1}{1-p^{-s}}= \frac{1}{1-2^{-s}}\cdot\frac{1}{1-3^{-s}}\cdot\frac{1}{1-5^{-s}}\cdot\frac{1}{1-7^{-s}} \cdots \frac{1}{1-p^{-s}} \cdots$$
 </div>
 
-<div latex="true" class="Example">
+<div class="Example">
 Leonhard Euler showed that this series equals the Euler product
 
 $$\zeta(s) = \prod_{p \text{ prime}} \frac{1}{1-p^{-s}}= \frac{1}{1-2^{-s}}\cdot\frac{1}{1-3^{-s}}\cdot\frac{1}{1-5^{-s}}\cdot\frac{1}{1-7^{-s}} \cdots \frac{1}{1-p^{-s}} \cdots$$
 </div>
 
-<div latex="true" class="Postulate">
+<div class="Postulate">
 Leonhard Euler showed that this series equals the Euler product
 
 $$\zeta(s) = \prod_{p \text{ prime}} \frac{1}{1-p^{-s}}= \frac{1}{1-2^{-s}}\cdot\frac{1}{1-3^{-s}}\cdot\frac{1}{1-5^{-s}}\cdot\frac{1}{1-7^{-s}} \cdots \frac{1}{1-p^{-s}} \cdots$$
 </div>
 
-<div latex="true" class="Problem">
+<div class="Problem">
 Leonhard Euler showed that this series equals the Euler product
 
 $$\zeta(s) = \prod_{p \text{ prime}} \frac{1}{1-p^{-s}}= \frac{1}{1-2^{-s}}\cdot\frac{1}{1-3^{-s}}\cdot\frac{1}{1-5^{-s}}\cdot\frac{1}{1-7^{-s}} \cdots \frac{1}{1-p^{-s}} \cdots$$
 </div>
 
-<div latex="true" class="Remark">
+<div class="Remark">
 The Riemann zeta function is defined for complex $s$ with real part greater than $1$ by the absolutely convergent infinite series
 
 $$\zeta(s) = \sum_{n=1}^\infty \frac{1}{n^s} = \frac{1}{1^s} + \frac{1}{2^s} + \frac{1}{3^s} + \cdots.$$
 </div>
 
-<div latex="true" class="Note">
+<div class="Note">
 The Riemann zeta function is defined for complex $s$ with real part greater than $1$ by the absolutely convergent infinite series
 
 $$\zeta(s) = \sum_{n=1}^\infty \frac{1}{n^s} = \frac{1}{1^s} + \frac{1}{2^s} + \frac{1}{3^s} + \cdots.$$
 </div>
 
-<div latex="true" class="Case">
+<div class="Case">
 The Riemann zeta function is defined for complex $s$ with real part greater than $1$ by the absolutely convergent infinite series
 
 $$\zeta(s) = \sum_{n=1}^\infty \frac{1}{n^s} = \frac{1}{1^s} + \frac{1}{2^s} + \frac{1}{3^s} + \cdots.$$
 </div>
 
-<div latex="true" class="proof">
+<div class="proof">
 Leonhard Euler showed that this series equals the Euler product
 
 $$\zeta(s) = \prod_{p \text{ prime}} \frac{1}{1-p^{-s}}= \frac{1}{1-2^{-s}}\cdot\frac{1}{1-3^{-s}}\cdot\frac{1}{1-5^{-s}}\cdot\frac{1}{1-7^{-s}} \cdots \frac{1}{1-p^{-s}} \cdots$$
@@ -103,79 +101,79 @@ $$\zeta(s) = \prod_{p \text{ prime}} \frac{1}{1-p^{-s}}= \frac{1}{1-2^{-s}}\cdot
 
 **Repeating once:**
 
-<div latex="true" class="Theorem">
+<div class="Theorem">
 The Riemann zeta function is defined for complex $s$ with real part greater than $1$ by the absolutely convergent infinite series
 
 $$\zeta(s) = \sum_{n=1}^\infty \frac{1}{n^s} = \frac{1}{1^s} + \frac{1}{2^s} + \frac{1}{3^s} + \cdots.$$
 </div>
 
-<div latex="true" class="Lemma">
+<div class="Lemma">
 The Riemann zeta function is defined for complex $s$ with real part greater than $1$ by the absolutely convergent infinite series
 
 $$\zeta(s) = \sum_{n=1}^\infty \frac{1}{n^s} = \frac{1}{1^s} + \frac{1}{2^s} + \frac{1}{3^s} + \cdots.$$
 </div>
 
-<div latex="true" class="Proposition">
+<div class="Proposition">
 The Riemann zeta function is defined for complex $s$ with real part greater than $1$ by the absolutely convergent infinite series
 
 $$\zeta(s) = \sum_{n=1}^\infty \frac{1}{n^s} = \frac{1}{1^s} + \frac{1}{2^s} + \frac{1}{3^s} + \cdots.$$
 </div>
 
-<div latex="true" class="Corollary">
+<div class="Corollary">
 The Riemann zeta function is defined for complex $s$ with real part greater than $1$ by the absolutely convergent infinite series
 
 $$\zeta(s) = \sum_{n=1}^\infty \frac{1}{n^s} = \frac{1}{1^s} + \frac{1}{2^s} + \frac{1}{3^s} + \cdots.$$
 </div>
 
-<div latex="true" class="Definition">
+<div class="Definition">
 Leonhard Euler showed that this series equals the Euler product
 
 $$\zeta(s) = \prod_{p \text{ prime}} \frac{1}{1-p^{-s}}= \frac{1}{1-2^{-s}}\cdot\frac{1}{1-3^{-s}}\cdot\frac{1}{1-5^{-s}}\cdot\frac{1}{1-7^{-s}} \cdots \frac{1}{1-p^{-s}} \cdots$$
 </div>
 
-<div latex="true" class="Conjecture">
+<div class="Conjecture">
 Leonhard Euler showed that this series equals the Euler product
 
 $$\zeta(s) = \prod_{p \text{ prime}} \frac{1}{1-p^{-s}}= \frac{1}{1-2^{-s}}\cdot\frac{1}{1-3^{-s}}\cdot\frac{1}{1-5^{-s}}\cdot\frac{1}{1-7^{-s}} \cdots \frac{1}{1-p^{-s}} \cdots$$
 </div>
 
-<div latex="true" class="Example">
+<div class="Example">
 Leonhard Euler showed that this series equals the Euler product
 
 $$\zeta(s) = \prod_{p \text{ prime}} \frac{1}{1-p^{-s}}= \frac{1}{1-2^{-s}}\cdot\frac{1}{1-3^{-s}}\cdot\frac{1}{1-5^{-s}}\cdot\frac{1}{1-7^{-s}} \cdots \frac{1}{1-p^{-s}} \cdots$$
 </div>
 
-<div latex="true" class="Postulate">
+<div class="Postulate">
 Leonhard Euler showed that this series equals the Euler product
 
 $$\zeta(s) = \prod_{p \text{ prime}} \frac{1}{1-p^{-s}}= \frac{1}{1-2^{-s}}\cdot\frac{1}{1-3^{-s}}\cdot\frac{1}{1-5^{-s}}\cdot\frac{1}{1-7^{-s}} \cdots \frac{1}{1-p^{-s}} \cdots$$
 </div>
 
-<div latex="true" class="Problem">
+<div class="Problem">
 Leonhard Euler showed that this series equals the Euler product
 
 $$\zeta(s) = \prod_{p \text{ prime}} \frac{1}{1-p^{-s}}= \frac{1}{1-2^{-s}}\cdot\frac{1}{1-3^{-s}}\cdot\frac{1}{1-5^{-s}}\cdot\frac{1}{1-7^{-s}} \cdots \frac{1}{1-p^{-s}} \cdots$$
 </div>
 
-<div latex="true" class="Remark">
+<div class="Remark">
 The Riemann zeta function is defined for complex $s$ with real part greater than $1$ by the absolutely convergent infinite series
 
 $$\zeta(s) = \sum_{n=1}^\infty \frac{1}{n^s} = \frac{1}{1^s} + \frac{1}{2^s} + \frac{1}{3^s} + \cdots.$$
 </div>
 
-<div latex="true" class="Note">
+<div class="Note">
 The Riemann zeta function is defined for complex $s$ with real part greater than $1$ by the absolutely convergent infinite series
 
 $$\zeta(s) = \sum_{n=1}^\infty \frac{1}{n^s} = \frac{1}{1^s} + \frac{1}{2^s} + \frac{1}{3^s} + \cdots.$$
 </div>
 
-<div latex="true" class="Case">
+<div class="Case">
 The Riemann zeta function is defined for complex $s$ with real part greater than $1$ by the absolutely convergent infinite series
 
 $$\zeta(s) = \sum_{n=1}^\infty \frac{1}{n^s} = \frac{1}{1^s} + \frac{1}{2^s} + \frac{1}{3^s} + \cdots.$$
 </div>
 
-<div latex="true" class="proof">
+<div class="proof">
 Leonhard Euler showed that this series equals the Euler product
 
 $$\zeta(s) = \prod_{p \text{ prime}} \frac{1}{1-p^{-s}}= \frac{1}{1-2^{-s}}\cdot\frac{1}{1-3^{-s}}\cdot\frac{1}{1-5^{-s}}\cdot\frac{1}{1-7^{-s}} \cdots \frac{1}{1-p^{-s}} \cdots$$
@@ -183,79 +181,79 @@ $$\zeta(s) = \prod_{p \text{ prime}} \frac{1}{1-p^{-s}}= \frac{1}{1-2^{-s}}\cdot
 
 # Second Heading #
 
-<div latex="true" class="Theorem">
+<div class="Theorem">
 The Riemann zeta function is defined for complex $s$ with real part greater than $1$ by the absolutely convergent infinite series
 
 $$\zeta(s) = \sum_{n=1}^\infty \frac{1}{n^s} = \frac{1}{1^s} + \frac{1}{2^s} + \frac{1}{3^s} + \cdots.$$
 </div>
 
-<div latex="true" class="Lemma">
+<div class="Lemma">
 The Riemann zeta function is defined for complex $s$ with real part greater than $1$ by the absolutely convergent infinite series
 
 $$\zeta(s) = \sum_{n=1}^\infty \frac{1}{n^s} = \frac{1}{1^s} + \frac{1}{2^s} + \frac{1}{3^s} + \cdots.$$
 </div>
 
-<div latex="true" class="Proposition">
+<div class="Proposition">
 The Riemann zeta function is defined for complex $s$ with real part greater than $1$ by the absolutely convergent infinite series
 
 $$\zeta(s) = \sum_{n=1}^\infty \frac{1}{n^s} = \frac{1}{1^s} + \frac{1}{2^s} + \frac{1}{3^s} + \cdots.$$
 </div>
 
-<div latex="true" class="Corollary">
+<div class="Corollary">
 The Riemann zeta function is defined for complex $s$ with real part greater than $1$ by the absolutely convergent infinite series
 
 $$\zeta(s) = \sum_{n=1}^\infty \frac{1}{n^s} = \frac{1}{1^s} + \frac{1}{2^s} + \frac{1}{3^s} + \cdots.$$
 </div>
 
-<div latex="true" class="Definition">
+<div class="Definition">
 Leonhard Euler showed that this series equals the Euler product
 
 $$\zeta(s) = \prod_{p \text{ prime}} \frac{1}{1-p^{-s}}= \frac{1}{1-2^{-s}}\cdot\frac{1}{1-3^{-s}}\cdot\frac{1}{1-5^{-s}}\cdot\frac{1}{1-7^{-s}} \cdots \frac{1}{1-p^{-s}} \cdots$$
 </div>
 
-<div latex="true" class="Conjecture">
+<div class="Conjecture">
 Leonhard Euler showed that this series equals the Euler product
 
 $$\zeta(s) = \prod_{p \text{ prime}} \frac{1}{1-p^{-s}}= \frac{1}{1-2^{-s}}\cdot\frac{1}{1-3^{-s}}\cdot\frac{1}{1-5^{-s}}\cdot\frac{1}{1-7^{-s}} \cdots \frac{1}{1-p^{-s}} \cdots$$
 </div>
 
-<div latex="true" class="Example">
+<div class="Example">
 Leonhard Euler showed that this series equals the Euler product
 
 $$\zeta(s) = \prod_{p \text{ prime}} \frac{1}{1-p^{-s}}= \frac{1}{1-2^{-s}}\cdot\frac{1}{1-3^{-s}}\cdot\frac{1}{1-5^{-s}}\cdot\frac{1}{1-7^{-s}} \cdots \frac{1}{1-p^{-s}} \cdots$$
 </div>
 
-<div latex="true" class="Postulate">
+<div class="Postulate">
 Leonhard Euler showed that this series equals the Euler product
 
 $$\zeta(s) = \prod_{p \text{ prime}} \frac{1}{1-p^{-s}}= \frac{1}{1-2^{-s}}\cdot\frac{1}{1-3^{-s}}\cdot\frac{1}{1-5^{-s}}\cdot\frac{1}{1-7^{-s}} \cdots \frac{1}{1-p^{-s}} \cdots$$
 </div>
 
-<div latex="true" class="Problem">
+<div class="Problem">
 Leonhard Euler showed that this series equals the Euler product
 
 $$\zeta(s) = \prod_{p \text{ prime}} \frac{1}{1-p^{-s}}= \frac{1}{1-2^{-s}}\cdot\frac{1}{1-3^{-s}}\cdot\frac{1}{1-5^{-s}}\cdot\frac{1}{1-7^{-s}} \cdots \frac{1}{1-p^{-s}} \cdots$$
 </div>
 
-<div latex="true" class="Remark">
+<div class="Remark">
 The Riemann zeta function is defined for complex $s$ with real part greater than $1$ by the absolutely convergent infinite series
 
 $$\zeta(s) = \sum_{n=1}^\infty \frac{1}{n^s} = \frac{1}{1^s} + \frac{1}{2^s} + \frac{1}{3^s} + \cdots.$$
 </div>
 
-<div latex="true" class="Note">
+<div class="Note">
 The Riemann zeta function is defined for complex $s$ with real part greater than $1$ by the absolutely convergent infinite series
 
 $$\zeta(s) = \sum_{n=1}^\infty \frac{1}{n^s} = \frac{1}{1^s} + \frac{1}{2^s} + \frac{1}{3^s} + \cdots.$$
 </div>
 
-<div latex="true" class="Case">
+<div class="Case">
 The Riemann zeta function is defined for complex $s$ with real part greater than $1$ by the absolutely convergent infinite series
 
 $$\zeta(s) = \sum_{n=1}^\infty \frac{1}{n^s} = \frac{1}{1^s} + \frac{1}{2^s} + \frac{1}{3^s} + \cdots.$$
 </div>
 
-<div latex="true" class="proof">
+<div class="proof">
 Leonhard Euler showed that this series equals the Euler product
 
 $$\zeta(s) = \prod_{p \text{ prime}} \frac{1}{1-p^{-s}}= \frac{1}{1-2^{-s}}\cdot\frac{1}{1-3^{-s}}\cdot\frac{1}{1-5^{-s}}\cdot\frac{1}{1-7^{-s}} \cdots \frac{1}{1-p^{-s}} \cdots$$
@@ -263,79 +261,79 @@ $$\zeta(s) = \prod_{p \text{ prime}} \frac{1}{1-p^{-s}}= \frac{1}{1-2^{-s}}\cdot
 
 ## Subheading ##
 
-<div latex="true" class="Theorem">
+<div class="Theorem">
 The Riemann zeta function is defined for complex $s$ with real part greater than $1$ by the absolutely convergent infinite series
 
 $$\zeta(s) = \sum_{n=1}^\infty \frac{1}{n^s} = \frac{1}{1^s} + \frac{1}{2^s} + \frac{1}{3^s} + \cdots.$$
 </div>
 
-<div latex="true" class="Lemma">
+<div class="Lemma">
 The Riemann zeta function is defined for complex $s$ with real part greater than $1$ by the absolutely convergent infinite series
 
 $$\zeta(s) = \sum_{n=1}^\infty \frac{1}{n^s} = \frac{1}{1^s} + \frac{1}{2^s} + \frac{1}{3^s} + \cdots.$$
 </div>
 
-<div latex="true" class="Proposition">
+<div class="Proposition">
 The Riemann zeta function is defined for complex $s$ with real part greater than $1$ by the absolutely convergent infinite series
 
 $$\zeta(s) = \sum_{n=1}^\infty \frac{1}{n^s} = \frac{1}{1^s} + \frac{1}{2^s} + \frac{1}{3^s} + \cdots.$$
 </div>
 
-<div latex="true" class="Corollary">
+<div class="Corollary">
 The Riemann zeta function is defined for complex $s$ with real part greater than $1$ by the absolutely convergent infinite series
 
 $$\zeta(s) = \sum_{n=1}^\infty \frac{1}{n^s} = \frac{1}{1^s} + \frac{1}{2^s} + \frac{1}{3^s} + \cdots.$$
 </div>
 
-<div latex="true" class="Definition">
+<div class="Definition">
 Leonhard Euler showed that this series equals the Euler product
 
 $$\zeta(s) = \prod_{p \text{ prime}} \frac{1}{1-p^{-s}}= \frac{1}{1-2^{-s}}\cdot\frac{1}{1-3^{-s}}\cdot\frac{1}{1-5^{-s}}\cdot\frac{1}{1-7^{-s}} \cdots \frac{1}{1-p^{-s}} \cdots$$
 </div>
 
-<div latex="true" class="Conjecture">
+<div class="Conjecture">
 Leonhard Euler showed that this series equals the Euler product
 
 $$\zeta(s) = \prod_{p \text{ prime}} \frac{1}{1-p^{-s}}= \frac{1}{1-2^{-s}}\cdot\frac{1}{1-3^{-s}}\cdot\frac{1}{1-5^{-s}}\cdot\frac{1}{1-7^{-s}} \cdots \frac{1}{1-p^{-s}} \cdots$$
 </div>
 
-<div latex="true" class="Example">
+<div class="Example">
 Leonhard Euler showed that this series equals the Euler product
 
 $$\zeta(s) = \prod_{p \text{ prime}} \frac{1}{1-p^{-s}}= \frac{1}{1-2^{-s}}\cdot\frac{1}{1-3^{-s}}\cdot\frac{1}{1-5^{-s}}\cdot\frac{1}{1-7^{-s}} \cdots \frac{1}{1-p^{-s}} \cdots$$
 </div>
 
-<div latex="true" class="Postulate">
+<div class="Postulate">
 Leonhard Euler showed that this series equals the Euler product
 
 $$\zeta(s) = \prod_{p \text{ prime}} \frac{1}{1-p^{-s}}= \frac{1}{1-2^{-s}}\cdot\frac{1}{1-3^{-s}}\cdot\frac{1}{1-5^{-s}}\cdot\frac{1}{1-7^{-s}} \cdots \frac{1}{1-p^{-s}} \cdots$$
 </div>
 
-<div latex="true" class="Problem">
+<div class="Problem">
 Leonhard Euler showed that this series equals the Euler product
 
 $$\zeta(s) = \prod_{p \text{ prime}} \frac{1}{1-p^{-s}}= \frac{1}{1-2^{-s}}\cdot\frac{1}{1-3^{-s}}\cdot\frac{1}{1-5^{-s}}\cdot\frac{1}{1-7^{-s}} \cdots \frac{1}{1-p^{-s}} \cdots$$
 </div>
 
-<div latex="true" class="Remark">
+<div class="Remark">
 The Riemann zeta function is defined for complex $s$ with real part greater than $1$ by the absolutely convergent infinite series
 
 $$\zeta(s) = \sum_{n=1}^\infty \frac{1}{n^s} = \frac{1}{1^s} + \frac{1}{2^s} + \frac{1}{3^s} + \cdots.$$
 </div>
 
-<div latex="true" class="Note">
+<div class="Note">
 The Riemann zeta function is defined for complex $s$ with real part greater than $1$ by the absolutely convergent infinite series
 
 $$\zeta(s) = \sum_{n=1}^\infty \frac{1}{n^s} = \frac{1}{1^s} + \frac{1}{2^s} + \frac{1}{3^s} + \cdots.$$
 </div>
 
-<div latex="true" class="Case">
+<div class="Case">
 The Riemann zeta function is defined for complex $s$ with real part greater than $1$ by the absolutely convergent infinite series
 
 $$\zeta(s) = \sum_{n=1}^\infty \frac{1}{n^s} = \frac{1}{1^s} + \frac{1}{2^s} + \frac{1}{3^s} + \cdots.$$
 </div>
 
-<div latex="true" class="proof">
+<div class="proof">
 Leonhard Euler showed that this series equals the Euler product
 
 $$\zeta(s) = \prod_{p \text{ prime}} \frac{1}{1-p^{-s}}= \frac{1}{1-2^{-s}}\cdot\frac{1}{1-3^{-s}}\cdot\frac{1}{1-5^{-s}}\cdot\frac{1}{1-7^{-s}} \cdots \frac{1}{1-p^{-s}} \cdots$$
