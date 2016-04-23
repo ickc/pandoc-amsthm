@@ -1,3 +1,5 @@
+See the repository in [ickc/pandoc-amsthm: provide amsthm environments in pandoc with output in LaTeX and HTML](https://github.com/ickc/pandoc-amsthm).
+  
 # Usage #
 
 Define amsthm environment in YAML front matter, using the templates provided, HTML and LaTeX output using amsthm can be realized.
