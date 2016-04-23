@@ -46,3 +46,5 @@ The examples in the demo copied from <[Riemann hypothesis - Wikipedia, the free 
 # Notes #
 
 The required LaTeX codes in the preamble and the CSS in HTML are provided in the template. So no other things are needed. The only non-official things are the custom templates and the filter. I am hoping both can make into the official pandoc.
+
+There's a script `amsthm-local.sh` to test local installation of the amsthm templates and filters. The templates should be copied to `~/.pandoc/templates/` and the `latexdivs.py` should be copied to one of your PATH.
