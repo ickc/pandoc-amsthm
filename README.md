@@ -40,6 +40,7 @@ Note:
 A **native pandoc Div** with a **class** named as the environment defined in the YAML front matter, with **case-matched**. **Multiple classes are allowed**, as long as no 2 classes of 2 amsthm environment is put together.
 
 For example,
+
 ```html
 <div class="proof">
 A Proof.
