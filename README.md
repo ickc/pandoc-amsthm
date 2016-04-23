@@ -81,3 +81,10 @@ The equations in the example in the demo is copied from [Riemann hypothesis - Wi
 The required LaTeX codes in the preamble and the CSS in HTML are provided in the template. So no other things are needed. The only non-official things are the custom templates and the filter. I wish both can make into the official pandoc language and program.
 
 There's a script `build-local.sh` to test local installation of the amsthm templates and filters. The templates should be copied to `~/.pandoc/templates/` and the `pandoc-amsthm.py` should be copied to one of your PATH.
+
+# Caveats #
+
+In the CSS defined in HTML,
+
+- a `.dump` is used, basically because I have 4 for loops together and I have no way to guarantee it doesn't end with a comma, since any of the array can be empty.
+- The CSS counter is reset by `html`. If you use other CSS, and have other CSS counter set by `html`, you need to change that (`body` is another possible choice). If there's two separately defined CSS counter reset based on the same `html` or `body` then there would be trouble (and they should be combined together).
