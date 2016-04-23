@@ -21,7 +21,7 @@ $endif$
 $if(amsthm)$
   <style type="text/css">
   /* CSS counter */
-  body {
+  html {
 	  counter-reset: $for(amsthm.plain)$$amsthm.plain$ $endfor$$for(amsthm.definition)$$amsthm.definition$ $endfor$$for(amsthm.remark)$$amsthm.remark$ $endfor$;
   }
   /* style of "before" */
