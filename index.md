@@ -1,12 +1,15 @@
 ---
-amsthm:	true
-amsthm-plain:	Theorem
-amsthm-plain-unnumbered:	[Lemma, Proposition, Corollary]
-amsthm-def:	[Definition,Conjecture,Example,Postulate,Problem]
-amsthm-def-unnumbered:	[]
-amsthm-remark:	[Case]
-amsthm-remark-unnumbered:	[Remark,Note]
-amsthm-parentcounter:	chapter
+amsthm:
+  plain:	
+    numbered:	Theorem
+    unnumbered:	[Lemma, Proposition, Corollary]
+  definition:	
+    numbered:	[Definition,Conjecture,Example,Postulate,Problem]
+    unnumbered:	[]
+  remark:	
+    numbered:	[Case]
+    unnumbered:	[Remark,Note]
+  parentcounter:	chapter
 title:	Pandoc with Amsthm Defined in YAML Front Matter
 author:	Kolen Cheung
 date:	2016-04-21

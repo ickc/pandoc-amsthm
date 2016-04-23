@@ -11,15 +11,19 @@ For example,
 ## Example ##
 
 ```yaml
-
-amsthm:	true
-amsthm-plain:	Theorem
-amsthm-plain-unnumbered:	[Lemma, Proposition, Corollary]
-amsthm-def:	[Definition,Conjecture,Example,Postulate,Problem]
-amsthm-def-unnumbered:	[]
-amsthm-remark:	[Case]
-amsthm-remark-unnumbered:	[Remark,Note]
-amsthm-parentcounter:	chapter
+---
+amsthm:
+  plain:	
+    numbered:	Theorem
+    unnumbered:	[Lemma, Proposition, Corollary]
+  definition:	
+    numbered:	[Definition,Conjecture,Example,Postulate,Problem]
+    unnumbered:	[]
+  remark:	
+    numbered:	[Case]
+    unnumbered:	[Remark,Note]
+  parentcounter:	chapter
+---
 ```
 
 Commands to used (see `amsthm.sh`):
