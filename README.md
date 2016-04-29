@@ -84,7 +84,13 @@ There's a script `build-local.sh` to test local installation of the amsthm templ
 
 # Caveats #
 
+## CSS Counter ##
+
 In the CSS defined in HTML,
 
 - a `.dump` is used, basically because I have 4 for loops together and I have no way to guarantee it doesn't end with a comma, since any of the array can be empty.
 - The CSS counter is reset by `html`. If you use other CSS, and have other CSS counter set by `html`, you need to change that (`body` is another possible choice). If there's two separately defined CSS counter reset based on the same `html` or `body` then there would be trouble (and they should be combined together).
+
+## Pandoc-Citeproc ##
+
+Currently if pandoc-citeproc is used before this filter, there's an error. So this filter should be used first.
