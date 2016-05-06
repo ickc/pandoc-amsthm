@@ -22,8 +22,8 @@ def environment(key, value, format, meta):
 
         for environment, definedClasses in getDefined(meta).items():
             # Is the classes correct?
-            if currentClasses >= definedClasses:
-                value[1] = [RawBlock('tex', '\\begin{' + environment + '}')] + content + [RawBlock('tex', '\\end{' + environment + '}')]
+            if currentClasses <= definedClasses:
+                value[1] = [RawBlock('tex', '\\begin{' + ', '.join(set.intersection(currentClasses, definedClasses)) + '}')] + content + [RawBlock('tex', '\\end{' + ', '.join(set.intersection(currentClasses, definedClasses)) + '}')]
                 break
 
 def getDefined(meta):
