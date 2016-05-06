@@ -4,6 +4,7 @@
 A pandoc filter to define amsthm environement through YAML, the use of Div,
 with templates and this filter.
 See detail in https://github.com/ickc/pandoc-amsthm
+Credit: https://github.com/chdemko/pandoc-latex-environment
 """
 
 from pandocfilters import toJSONFilters, RawBlock, stringify
@@ -11,8 +12,8 @@ from pandocfilters import toJSONFilters, RawBlock, stringify
 import re
 
 def environment(key, value, format, meta):
-    # Is it a div?
-    if key == 'Div':
+    # Is it a div and the right format?
+    if key == 'Div' and format == 'latex':
 
         # Get the attributes
         [[id, classes, properties], content] = value
@@ -21,8 +22,8 @@ def environment(key, value, format, meta):
 
         for environment, definedClasses in getDefined(meta).items():
             # Is the classes correct?
-            if currentClasses <= definedClasses:
-                value[1] = [RawBlock('tex', '\\begin{' + ', '.join(set.intersection(currentClasses, definedClasses)) + '}')] + content + [RawBlock('tex', '\\end{' + ', '.join(set.intersection(currentClasses, definedClasses)) + '}')]
+            if currentClasses >= definedClasses:
+                value[1] = [RawBlock('tex', '\\begin{' + environment + '}')] + content + [RawBlock('tex', '\\end{' + environment + '}')]
                 break
 
 def getDefined(meta):
@@ -45,3 +46,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+
