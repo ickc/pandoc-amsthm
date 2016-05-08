@@ -94,3 +94,7 @@ In the CSS defined in HTML,
 ## Pandoc-Citeproc ##
 
 Currently if pandoc-citeproc is used before this filter, there's an error. So this filter should be used first.
+
+# Credit
+
+The Python script used is modified from [chdemko/pandoc-latex-environment: Pandoc filter for adding LaTeX environement on specific div](https://github.com/chdemko/pandoc-latex-environment), which is under [CeCILL-B license](http://www.cecill.info/licences/Licence_CeCILL-B_V1-en.html).
