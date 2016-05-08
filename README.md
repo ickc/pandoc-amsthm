@@ -22,7 +22,7 @@ amsthm:
   remark:	[Case]
   remark-unnumbered:	[Remark,Note]
   proof:	[proof]
-  parentcounter:	chapter
+  parentcounter:	[chapter]
 ---
 ```
 
@@ -31,10 +31,10 @@ Note:
 - proof environment: `proof: [proof]`
 	- the proof variable has to be there, since the amsthm pre-defined it, but we need it there to for the filter to recognize the div to turn it into a LaTeX environment.
 	- It also has to be in **lower case**, to match the pre-definition in the LaTeX amsthm package.
-- even if it is a single element array, it has to be enclosed in `[]` due to how the filter is written e.g. `[Theorem]`,`[Case]`, `[proof]`
+- **even if it is a single element array, it has to be enclosed in `[]`** due to how the filter is written e.g. `[Theorem]`,`[Case]`, `[proof]`
 - `plain, definition, and remark` are the theorem styles provided by amsthm, see [the documentation of amsthm in CTAN](http://ctan.math.washington.edu/tex-archive/macros/latex/required/amscls/doc/amsthdoc.pdf)
 - the suffix `-unnumbered` means unnumbered, otherwise numbered, corresponding to starred and un-starred amsthm environment respectively.
-- `parentcounter` defines the parent counter. Only has effects in LaTeX, such that the counter will reset base on the value you set. e.g. `parentcounter: chapter`. For the possible set of values to choose from, see [the documentation of amsthm in CTAN](http://ctan.math.washington.edu/tex-archive/macros/latex/required/amscls/doc/amsthdoc.pdf).
+- `parentcounter` defines the parent counter. Only has effects in LaTeX, such that the counter will reset base on the value you set. e.g. `parentcounter: chapter`. For the possible set of values to choose from, see [the documentation of amsthm in CTAN](http://ctan.math.washington.edu/tex-archive/macros/latex/required/amscls/doc/amsthdoc.pdf). It can either be enclosed with `[]` or not.
 - For the amsthm environments other than `proof`, **uppercase first letter is recommended**, since it will be displayed as is.
 
 ### Markdown Content ###
@@ -75,6 +75,23 @@ See the outputs in:
 - <https://ickc.github.io/pandoc-amsthm/index.pdf>
 
 The equations in the example in the demo is copied from [Riemann hypothesis - Wikipedia, the free encyclopedia](https://en.wikipedia.org/wiki/Riemann_hypothesis).
+
+## Other Usages
+
+Because of how the filter works, a side benefit/undocumented usage is this:
+
+```yaml
+---
+amsthm:
+  unofficial-use:	[flushright]
+---
+```
+
+```html
+<div align="right" class="flushright">
+This text should flushed to the right.
+</div>
+```
 
 # Notes #
 

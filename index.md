@@ -7,7 +7,8 @@ amsthm:
   remark:	[Case]
   remark-unnumbered:	[Remark, Note]
   proof:	[proof]
-  parentcounter:	chapter
+  parentcounter:	[chapter]
+  unofficial-use:	[flushright]
 title:	Pandoc with Amsthm Defined in YAML Front Matter
 author:	Kolen Cheung
 date:	\today
@@ -347,4 +348,10 @@ This one has 2 amsthm classes, which should be disallowed. In this case the filt
 
 <div class="Theorem boxed">
 This one has multiple classes, where only 1 of them is amsthm class ,this should be valid.
+</div>
+
+# Unofficial Use
+
+<div align="right" class="flushright">
+This text should flushed to the right.
 </div>
