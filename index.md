@@ -2,15 +2,15 @@
 amsthm:
   plain:	[Theorem]
   plain-unnumbered:	[Lemma, Proposition, Corollary]
-  definition:	[Definition,Conjecture,Example,Postulate,Problem]
+  definition:	[Definition, Conjecture, Example, Postulate, Problem]
   definition-unnumbered:	[]
   remark:	[Case]
-  remark-unnumbered:	[Remark,Note]
+  remark-unnumbered:	[Remark, Note]
   proof:	[proof]
   parentcounter:	chapter
 title:	Pandoc with Amsthm Defined in YAML Front Matter
 author:	Kolen Cheung
-date:	2016-04-21
+date:	\today
 keywords:	pandoc, amsthm, LaTeX, yaml
 toc-depth:	5
 lang:	en
@@ -337,4 +337,14 @@ $$\zeta(s) = \sum_{n=1}^\infty \frac{1}{n^s} = \frac{1}{1^s} + \frac{1}{2^s} + \
 Leonhard Euler showed that this series equals the Euler product
 
 $$\zeta(s) = \prod_{p \text{ prime}} \frac{1}{1-p^{-s}}= \frac{1}{1-2^{-s}}\cdot\frac{1}{1-3^{-s}}\cdot\frac{1}{1-5^{-s}}\cdot\frac{1}{1-7^{-s}} \cdots \frac{1}{1-p^{-s}} \cdots$$
+</div>
+
+# Test
+
+<div class="proof Theorem">
+This one has 2 amsthm classes, which should be disallowed.
+</div>
+
+<div class="Theorem boxed">
+This one has multiple classes, where only 1 of them is amsthm class ,this should be valid.
 </div>

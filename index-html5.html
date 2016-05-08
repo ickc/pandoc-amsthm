@@ -5,7 +5,6 @@
   <meta name="generator" content="pandoc">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
   <meta name="author" content="Kolen Cheung">
-  <meta name="dcterms.date" content="2016-04-21">
   <meta name="keywords" content="pandoc, amsthm, LaTeX, yaml">
   <title>Pandoc with Amsthm Defined in YAML Front Matter</title>
   <style type="text/css">code{white-space: pre;}</style>
@@ -117,7 +116,6 @@
 <header>
 <h1 class="title">Pandoc with Amsthm Defined in YAML Front Matter</h1>
 <h2 class="author">Kolen Cheung</h2>
-<h3 class="date">2016-04-21</h3>
 </header>
 <nav id="TOC">
 <ul>
@@ -125,6 +123,7 @@
 <li><a href="#second-heading">Second Heading</a><ul>
 <li><a href="#subheading">Subheading</a></li>
 </ul></li>
+<li><a href="#test">Test</a></li>
 </ul>
 </nav>
 <h1 id="first-heading">First Heading</h1>
@@ -338,6 +337,13 @@
 <div class="proof">
 <p>Leonhard Euler showed that this series equals the Euler product</p>
 <p><span class="math display">\[\zeta(s) = \prod_{p \text{ prime}} \frac{1}{1-p^{-s}}= \frac{1}{1-2^{-s}}\cdot\frac{1}{1-3^{-s}}\cdot\frac{1}{1-5^{-s}}\cdot\frac{1}{1-7^{-s}} \cdots \frac{1}{1-p^{-s}} \cdots\]</span></p>
+</div>
+<h1 id="test">Test</h1>
+<div class="proof Theorem">
+<p>This one has 2 amsthm classes, which should be disallowed.</p>
+</div>
+<div class="Theorem boxed">
+<p>This one has multiple classes, where only 1 of them is amsthm class ,this should be valid.</p>
 </div>
 </body>
 </html>

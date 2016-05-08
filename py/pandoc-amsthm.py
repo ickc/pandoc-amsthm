@@ -21,10 +21,11 @@ def environment(key, value, format, meta):
         currentClasses = set(classes)
 
         for environment, definedClasses in getDefined(meta).items():
-            # Is the classes correct?
-            if currentClasses <= definedClasses:
-                value[1] = [RawBlock('tex', '\\begin{' + ', '.join(set.intersection(currentClasses, definedClasses)) + '}')] + content + [RawBlock('tex', '\\end{' + ', '.join(set.intersection(currentClasses, definedClasses)) + '}')]
-                break
+            for definedClass in definedClasses:
+                # Is the classes correct?
+                if definedClass in currentClasses:
+                    value[1] = [RawBlock('tex', '\\begin{' + definedClass + '}')] + content + [RawBlock('tex', '\\end{' + definedClass + '}')]
+                    break
 
 def getDefined(meta):
     # Return the amsthm environment defined in the meta
