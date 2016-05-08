@@ -342,7 +342,7 @@ $$\zeta(s) = \prod_{p \text{ prime}} \frac{1}{1-p^{-s}}= \frac{1}{1-2^{-s}}\cdot
 # Test
 
 <div class="proof Theorem">
-This one has 2 amsthm classes, which should be disallowed.
+This one has 2 amsthm classes, which should be disallowed. In this case the filter will pick the first valid amsthm class to be the LaTeX environment and ignore the rest.
 </div>
 
 <div class="Theorem boxed">
