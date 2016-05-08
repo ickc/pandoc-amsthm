@@ -1,7 +1,7 @@
-SOURCES=index.md
-COMPILED=index.html index-html5.html index.tex index.pdf
-TEMPLATEPATH=./templates/
-FILTERPATH=./py/
+SOURCES:=index.md
+COMPILED:=index.html index-html5.html index.tex index.pdf
+TEMPLATEPATH:=./templates/
+FILTERPATH:=./py/
 
 all: $(COMPILED)
 
