@@ -7,7 +7,7 @@ amsthm:
   remark:	[Case]
   remark-unnumbered:	[Remark, Note]
   proof:	[proof]
-  parentcounter:	[chapter]
+  parentcounter:	chapter
   unofficial-use:	[flushright]
 title:	Pandoc with Amsthm Defined in YAML Front Matter
 author:	Kolen Cheung

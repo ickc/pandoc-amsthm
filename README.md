@@ -22,7 +22,7 @@ amsthm:
   remark:	[Case]
   remark-unnumbered:	[Remark,Note]
   proof:	[proof]
-  parentcounter:	[chapter]
+  parentcounter:	chapter
 ---
 ```
 
