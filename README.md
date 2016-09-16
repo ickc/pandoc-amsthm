@@ -57,7 +57,7 @@ A boxed theorem if you define so in CSS. (Of course other filters needed if you 
 
 ### Pandoc Commands to Use ###
 
-Commands to used (see `build.sh`):
+Commands to used (see makefile):
 
 ```bash
 pandoc -s --toc --template=./templates/pandoc-amsthm.html --mathjax -o index.html index.md
@@ -97,7 +97,7 @@ This text should flushed to the right.
 
 The required LaTeX codes in the preamble and the CSS in HTML are provided in the template. So no other things are needed. The only non-official things are the custom templates and the filter. I wish both can make into the official pandoc language and program.
 
-There's a script `build-local.sh` to test local installation of the amsthm templates and filters. The templates should be copied to `~/.pandoc/templates/` and the `pandoc-amsthm.py` should be copied to one of your PATH.
+There's a makefile `makefile-local` to test local installation of the amsthm templates and filters. The templates should be copied to `~/.pandoc/templates/` and the `pandoc-amsthm.py` should be copied to one of your PATH.
 
 # Caveats #
 
