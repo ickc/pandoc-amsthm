@@ -23,7 +23,7 @@ amsthm:
   remark-unnumbered:	[Remark,Note]
   proof:	[proof]
   parentcounter:	chapter
----
+...
 ```
 
 Note:
@@ -84,7 +84,7 @@ Because of how the filter works, a side benefit/undocumented usage is this:
 ---
 amsthm:
   unofficial-use:	[flushright]
----
+...
 ```
 
 ```html
