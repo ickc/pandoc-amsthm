@@ -1,3 +1,6 @@
+---
+---
+
 Define amsthm environment in YAML front matter and use it with a native pandoc div in the main document. Using the templates and filter provided, HTML and LaTeX output using amsthm can be realized. See the repository in [ickc/pandoc-amsthm: provide amsthm environments in pandoc with output in LaTeX and HTML](https://github.com/ickc/pandoc-amsthm).
 
 # Usage
@@ -67,9 +70,9 @@ There's also another makefile `makefile-local` to test local installation of the
 
 See the outputs in:
 
-- <https://ickc.github.io/pandoc-amsthm/index-html5.html>
-- <https://ickc.github.io/pandoc-amsthm/index.html>
-- <https://ickc.github.io/pandoc-amsthm/index.pdf>
+- <https://ickc.github.io/pandoc-amsthm/test/test-html5.html>
+- <https://ickc.github.io/pandoc-amsthm/test/test.html>
+- <https://ickc.github.io/pandoc-amsthm/test/test.pdf>
 
 The equations in the example in the demo is copied from [Riemann hypothesis - Wikipedia, the free encyclopedia](https://en.wikipedia.org/wiki/Riemann_hypothesis).
 
