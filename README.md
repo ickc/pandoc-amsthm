@@ -1,6 +1,10 @@
 ---
 ---
 
+Define amsthm environment in YAML front matter and use it with a native pandoc div in the main document. Using the templates and filter provided, HTML and LaTeX output using amsthm can be realized.
+
+Demo are available at <https://ickc.github.io/pandoc-amsthm/>.
+
 # Usage
 
 `pandoc-amsthm` defines a new syntax above pandoc markdown. It is then processed through the use of provided pandoc templates and filter.
@@ -55,10 +59,6 @@ To use the given filter in `bin/`, add `--filter=<pathto>pandoc-amsthm.py` to yo
 There are 2 ways to use the templates. If you do not need to customize the templates, 3 complete templates are provided in `template/` folder. Use the template according to the output format by adding this in your pandoc argument: `--template=<pathto>pandoc-amsthm.<ext>`.
 
 If you need to customize your template (or need other HTML related output not provided here, *e.g.* ePub.), 2 templates are given in `template/include/`. They are fragments only. You need to insert the given fragment into the head or preamble for HTML and LaTeX respectively.
-
-# Demo
-
-Demo are available at <https://ickc.github.io/pandoc-amsthm/>.
 
 # Caveats
 
