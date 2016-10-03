@@ -1,0 +1,99 @@
+  <style type="text/css">
+  /* CSS counter */
+  html {
+	  counter-reset: Theorem Definition Conjecture Example Postulate Problem Case ;
+  }
+  /* style of "before" */
+  /** before plain or definition **/
+  .Theorem:before,.Lemma:before,.Proposition:before,.Corollary:before,.Definition:before,.Conjecture:before,.Example:before,.Postulate:before,.Problem:before,.dump:before
+  {
+  	font-weight:700;
+  	font-style:normal
+  }
+  /** before remark or proof **/
+  .Case:before,.Remark:before,.Note:before,.Proof:before
+  {
+  	font-style:italic
+  }
+  /* content of "before" (everything goes here) */
+  .Theorem:before
+  {
+  	counter-increment: Theorem;
+  	content:"Theorem " counter(Theorem) ". "
+  }
+  .Lemma:before
+  {
+  	content:"Lemma."
+  }
+  .Proposition:before
+  {
+  	content:"Proposition."
+  }
+  .Corollary:before
+  {
+  	content:"Corollary."
+  }
+  .Definition:before
+  {
+  	counter-increment: Definition;
+  	content:"Definition " counter(Definition) ". "
+  }
+  .Conjecture:before
+  {
+  	counter-increment: Conjecture;
+  	content:"Conjecture " counter(Conjecture) ". "
+  }
+  .Example:before
+  {
+  	counter-increment: Example;
+  	content:"Example " counter(Example) ". "
+  }
+  .Postulate:before
+  {
+  	counter-increment: Postulate;
+  	content:"Postulate " counter(Postulate) ". "
+  }
+  .Problem:before
+  {
+  	counter-increment: Problem;
+  	content:"Problem " counter(Problem) ". "
+  }
+  .Case:before
+  {
+  	counter-increment: Case;
+  	content:"Case " counter(Case) ". "
+  }
+  .Remark:before
+  {
+  	content:"Remark."
+  }
+  .Note:before
+  {
+  	content:"Note."
+  }
+  .proof:before
+  {
+  	content:"Proof."
+  }
+  /* main style */
+  /** plain **/
+  .Theorem,.Lemma,.Proposition,.Corollary,,.dump
+  {
+  	display:block;
+  	margin:12px 0;
+  	font-style:italic
+  }
+  /** definition, remark or proof **/
+  .Definition,.Conjecture,.Example,.Postulate,.Problem,.Case,.Remark,.Note,,.proof
+  {
+  	display:block;
+  	margin:12px 0;
+  	font-style:normal
+  }
+  /* after proof */
+  .proof:after
+  {
+  	content:"\25FB";
+  	float:right
+  }
+  </style>
