@@ -15,7 +15,7 @@ So far, only LaTeX and HTML related output are supported.
 
 ### YAML Front Matter
 
-For example^[Given in <template/include/pandoc-amsthm.yml>],
+For example^[Given in [template/include/pandoc-amsthm.yml](template/include/pandoc-amsthm.yml)],
 
 ```yaml
 ---
