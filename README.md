@@ -15,7 +15,7 @@ So far, only LaTeX and HTML related output are supported.
 
 ### YAML Front Matter
 
-For example^[Given in [template/include/pandoc-amsthm.yml](template/include/pandoc-amsthm.yml)],
+For example, as in `template/include/default.yml`,
 
 ```yaml
 ---
@@ -58,7 +58,18 @@ To use the given filter in `bin/`, add `--filter=<pathto>pandoc-amsthm.py` to yo
 
 There are 2 ways to use the templates. If you do not need to customize the templates, 3 complete templates are provided in `template/` folder. Use the template according to the output format by adding this in your pandoc argument: `--template=<pathto>pandoc-amsthm.<ext>`.
 
-If you need to customize your template (or need other HTML related output not provided here, *e.g.* ePub.), 2 templates are given in `template/include/`. They are fragments only. You need to insert the given fragment into the head or preamble for HTML and LaTeX respectively.
+If you need to customize your template (or need other HTML related output not provided here, *e.g.* ePub.), 2 templates named are given in `template/include/pandoc-amsthm.*`. They are fragments only. You need to insert the given fragment into the head or preamble for HTML and LaTeX respectively.
+
+### Sensible Defaults
+
+In issue #3, there is a request on using the default without repeating the YAML front matter every time. It can be done. Using the files in `template/include/default.*`:
+
+```bash
+pandoc -H <PATHTO>default.html <INPUT>.md -o <OUTPUT>.html
+cat <PATHTO>default.yml <INPUT>.md | pandoc -H <PATHTO>default.latex --filter=<PATHTO>pandoc-amsthm.py -o <OUTPUT>.pdf
+```
+
+`template/include/makefile` shows how the defaults are produced.
 
 # Caveats
 
