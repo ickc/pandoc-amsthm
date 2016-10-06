@@ -1,6 +1,6 @@
 \documentclass[english,oneside, article]{memoir}
 \usepackage{lmodern}
-\usepackage{amssymb,amsmath,}
+\usepackage{amssymb,amsmath}
 \usepackage{amsthm}
 \theoremstyle{plain}
 \newtheorem{Theorem}{Theorem}[chapter]
@@ -37,9 +37,9 @@
 \usepackage{microtype}
 \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
 }{}
-\usepackage[unicode=true]{hyperref}
+\usepackage{hyperref}
 \PassOptionsToPackage{usenames,dvipsnames}{color} % color is loaded by hyperref
-\hypersetup{
+\hypersetup{unicode=true,
             pdftitle={Pandoc with Amsthm Defined in YAML Front Matter},
             pdfauthor={Kolen Cheung},
             pdfkeywords={pandoc, amsthm, LaTeX, yaml},
@@ -47,8 +47,7 @@
             linkcolor=Maroon,
             citecolor=Blue,
             urlcolor=Blue,
-            breaklinks=true,
-}
+            breaklinks=true}
 \urlstyle{same}  % don't use monospace font for urls
 \ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
   \usepackage[shorthands=off,main=english]{babel}
@@ -75,12 +74,6 @@
 \let\oldsubparagraph\subparagraph
 \renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
 \fi
-
-% set default figure placement to htbp
-\makeatletter
-\def\fps@figure{htbp}
-\makeatother
-
 
 \title{Pandoc with Amsthm Defined in YAML Front Matter}
 \author{Kolen Cheung}

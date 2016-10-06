@@ -1,11 +1,11 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <meta http-equiv="Content-Style-Type" content="text/css" />
-  <meta name="generator" content="pandoc" />
-  <meta name="author" content="Kolen Cheung" />
-  <meta name="keywords" content="pandoc, amsthm, LaTeX, yaml" />
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <meta name="author" content="Kolen Cheung">
+  <meta name="keywords" content="pandoc, amsthm, LaTeX, yaml">
   <title>Pandoc with Amsthm Defined in YAML Front Matter</title>
   <style type="text/css">code{white-space: pre;}</style>
   <style type="text/css">
@@ -107,35 +107,17 @@
   	float:right
   }
   </style>
-  <script type="text/x-mathjax-config">
-    MathJax.Ajax.config.path["Contrib"] = "https://cdn.mathjax.org/mathjax/contrib";
-    MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
-      MathJax.Hub.Insert(MathJax.InputJax.TeX.Definitions.macros,{
-        cancel: ["Extension","cancel"],
-        bcancel: ["Extension","cancel"],
-        xcancel: ["Extension","cancel"],
-        cancelto: ["Extension","cancel"]
-      });
-    });
-    MathJax.Hub.Config({
-      tex2jax: {
-        inlineMath: [['$','$'], ['\\(','\\)']],
-        processEscapes: true
-      },
-      TeX: {
-        equationNumbers: { autoNumber: "AMS"},
-        extensions: ["[Contrib]/physics/physics.js","[Contrib]/siunitx/siunitx.js"]
-      }
-    });
-  </script>
   <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML-full" type="text/javascript"></script>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
 </head>
 <body>
-<div id="header">
+<header>
 <h1 class="title">Pandoc with Amsthm Defined in YAML Front Matter</h1>
 <h2 class="author">Kolen Cheung</h2>
-</div>
-<div id="TOC">
+</header>
+<nav id="TOC">
 <ul>
 <li><a href="#first-heading">First Heading</a></li>
 <li><a href="#second-heading">Second Heading</a><ul>
@@ -144,7 +126,7 @@
 <li><a href="#test">Test</a></li>
 <li><a href="#unofficial-use">Unofficial Use</a></li>
 </ul>
-</div>
+</nav>
 <h1 id="first-heading">First Heading</h1>
 <div class="Theorem">
 <p>The Riemann zeta function is defined for complex <span class="math inline">\(s\)</span> with real part greater than <span class="math inline">\(1\)</span> by the absolutely convergent infinite series</p>
