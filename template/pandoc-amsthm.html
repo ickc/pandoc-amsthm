@@ -26,13 +26,13 @@ $if(amsthm)$
   }
   /* style of "before" */
   /** before plain or definition **/
-  $for(amsthm.plain)$.$amsthm.plain$:before,$endfor$$for(amsthm.plain-unnumbered)$.$amsthm.plain-unnumbered$:before,$endfor$$for(amsthm.definition)$.$amsthm.definition$:before,$endfor$$for(amsthm.definition-unnumbered)$.$amsthm.definition-unnumbered$:before,$endfor$.dump:before
+  $for(amsthm.plain)$.$amsthm.plain$:before,$endfor$$for(amsthm.plain-unnumbered)$.$amsthm.plain-unnumbered$:before,$endfor$$for(amsthm.definition)$.$amsthm.definition$:before,$endfor$$for(amsthm.definition-unnumbered)$.$amsthm.definition-unnumbered$:before,$endfor$.proof:before
   {
   	font-weight:700;
   	font-style:normal
   }
   /** before remark or proof **/
-  $for(amsthm.remark)$.$amsthm.remark$:before,$endfor$$for(amsthm.remark-unnumbered)$.$amsthm.remark-unnumbered$:before,$endfor$.Proof:before
+  $for(amsthm.remark)$.$amsthm.remark$:before,$endfor$$for(amsthm.remark-unnumbered)$.$amsthm.remark-unnumbered$:before,$endfor$.proof:before
   {
   	font-style:italic
   }
@@ -82,7 +82,7 @@ $endfor$
   }
   /* main style */
   /** plain **/
-  $for(amsthm.plain)$.$amsthm.plain$,$endfor$$for(amsthm.plain-unnumbered)$.$amsthm.plain-unnumbered$,$endfor$,.dump
+  $for(amsthm.plain)$.$amsthm.plain$,$endfor$$for(amsthm.plain-unnumbered)$.$amsthm.plain-unnumbered$,$endfor$,.proof
   {
   	display:block;
   	margin:12px 0;
