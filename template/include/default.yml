@@ -1,11 +1,24 @@
 ---
 amsthm:
-  plain:	[Theorem]
-  plain-unnumbered:	[Lemma, Proposition, Corollary]
-  definition:	[Definition,Conjecture,Example,Postulate,Problem]
-  definition-unnumbered:	[]
-  remark:	[Case]
-  remark-unnumbered:	[Remark,Note]
-  proof:	[proof]
-  parentcounter:	[chapter]
+  plain:
+  - Theorem
+  plain-unnumbered:
+  - Lemma
+  - Proposition
+  - Corollary
+  definition:
+  - Definition
+  - Conjecture
+  - Example
+  - Postulate
+  - Problem
+  remark:
+  - Case
+  remark-unnumbered:
+  - Remark
+  - Note
+  proof:
+  - proof
+  parentcounter:
+  - chapter
 ...

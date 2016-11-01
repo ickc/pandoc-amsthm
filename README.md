@@ -20,25 +20,51 @@ For example, as in `template/include/default.yml`,
 ```yaml
 ---
 amsthm:
-  plain:	[Theorem]
-  plain-unnumbered:	[Lemma, Proposition, Corollary]
-  definition:	[Definition,Conjecture,Example,Postulate,Problem]
-  definition-unnumbered:	[]
-  remark:	[Case]
-  remark-unnumbered:	[Remark,Note]
-  proof:	[proof]
-  parentcounter:	[chapter]
+  plain:
+  - Theorem
+  plain-unnumbered:
+  - Lemma
+  - Proposition
+  - Corollary
+  definition:
+  - Definition
+  - Conjecture
+  - Example
+  - Postulate
+  - Problem
+  remark:
+  - Case
+  remark-unnumbered:
+  - Remark
+  - Note
+  proof:
+  - proof
+  parentcounter:
+  - chapter
 ...
 ```
 
 Notes:
 
-- `proof:	[proof]` is mandatory ^[because amsthm predefines it.]
-- Enclosing with `[...]` is mandatory
-- `parentcounter` is optional, common choices are `chapter`, `section`. Depending on the document class, it can be `part`, `chapter`, `section`, `subsection`, `subsubsection`, `paragraph`, `subparagraph`.
+- `proof:` & `  - [proof]` is mandatory ^[because amsthm predefines it.]
+- `parentcounter` is optional, common choices are `chapter`, `section`. Depending on the document class, it can be `part`, `chapter`, `section`, `subsection`, `subsubsection`, `paragraph`, `subparagraph`. It only affects LaTeX output.
 - `plain, definition, and remark` are the theorem styles provided by amsthm.
-- the suffix `-unnumbered` means unnumbered, otherwise numbered
-- First letter of the amsthm environment should be capitalized, except for `proof`.
+- the suffix `-unnumbered` means unnumbered, otherwise numbered. (i.e.\ you can also use `definition-unnumbered`)
+- First letter of the amsthm environment should be capitalized (they will be printed as is in HTML), except for `proof`, which has to be in lower case (to match the pre-defined amsthm proof environment).
+- The above YAML is equivalent to
+    ```
+	---
+	amsthm:
+	  plain:	[Theorem]
+	  plain-unnumbered:	[Lemma, Proposition, Corollary]
+	  definition:	[Definition,Conjecture,Example,Postulate,Problem]
+	  definition-unnumbered:	[]
+	  remark:	[Case]
+	  remark-unnumbered:	[Remark,Note]
+	  proof:	[proof]
+	  parentcounter:	[chapter]
+	...
+	```
 
 ### Amsthm environment
 
