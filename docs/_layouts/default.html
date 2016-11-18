@@ -1,0 +1,24 @@
+---
+layout: compress
+---
+<!DOCTYPE html>
+<html>
+    <head>
+		{% if jekyll.environment != "development" %}<script>
+		  var host = "{{ site.domain }}";
+		  if ((host == window.location.host) && (window.location.protocol != "https:"))
+		    window.location.protocol = "https";
+		</script>{% endif %}
+		<meta charset="UTF-8">
+		<link rel="canonical" href="{{ site.url }}{{ site.baseurl }}{{ page.url }}" />
+		<title>{{ site.name }}{% if page.title %} - {{ page.title }} {% endif%}</title>
+		{% if page.description %}<meta name="description" content="{{ page.description }}">{% endif %}
+    <link rel="stylesheet" type="text/css" href="https://ickc.github.io/multimarkdown-latex-css/combined-css/multimarkdown-latex.css">
+		<style type="text/css">
+			{% include Grump.css %}
+		</style>
+    </head>
+	<div id="wrapper">
+		{{content}}
+	</div>
+</html>

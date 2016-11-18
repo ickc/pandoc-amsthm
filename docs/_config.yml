@@ -1,0 +1,35 @@
+full_rebuild: true
+name: "provide a syntax to use amsthm environments in pandoc, with output in LaTeX and HTML"
+description: "andoc-amsthm defines a new syntax above pandoc markdown. It is then processed through the use of provided pandoc templates and filter."
+domain: ickc.github.io #If you want to force HTTPS, put down the domain without the http: e.g. example.com
+url: https://ickc.github.io #place url
+baseurl: /pandoc-amsthm #place folder name if site is served in subfolder
+author: #For jekyll-feed
+  name: "Kolen"
+  email: christian.kolen@gmail.com
+  uri: https://ickc.github.io/about/
+
+encoding: utf-8
+defaults:
+  -
+    scope:
+      path: ""
+      type: "pages"
+    values:
+      layout: "default"
+
+gems:
+  - jekyll-sitemap
+
+sass:
+  style: compressed
+
+compress_html:
+  clippings: all
+  comments: ["<!-- ", " -->"]
+  endings: [html, head, body, dt, dd, p, rt, rp, optgroup, option, caption]
+  ignore:
+    envs: [development]
+  blanklines: false
+  profile: false
+  startings: [html, head, body]
