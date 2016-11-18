@@ -5,8 +5,8 @@ HTML5:=test-html5.html
 TeX:=test.tex
 PDF:=test.pdf
 
-TEMPLATEPATH:=../template/
-FILTERPATH:=../bin/
+TEMPLATEPATH:=../../template/
+FILTERPATH:=../../bin/
 
 all: $(HTML) $(HTML5) $(TeX) $(PDF)
 
