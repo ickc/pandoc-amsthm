@@ -1,0 +1,50 @@
+\documentclass{memoir}
+
+\usepackage{lmodern, amssymb, amsmath, amsthm}
+
+\begin{document}
+
+\theoremstyle{plain}
+\newtheorem{Theorem}{Theorem}[chapter]
+\newtheorem*{With Space}{With Space}
+\newtheorem{Lemma}[Theorem]{Lemma}
+
+\theoremstyle{definition}
+\newtheorem{Definition}{Definition}[chapter]
+
+\theoremstyle{remark}
+\newtheorem{Case}{Case}[chapter]
+
+\begin{Theorem}[within parenthesis]
+plain theoremstyle here
+\end{Theorem}
+
+\begin{Theorem}\label{simplestEquation}
+Label and reference:
+
+$$E=mc^2$$
+\end{Theorem}
+
+From the \ref{simplestEquation}, we see that...
+
+\begin{With Space}[within parenthesis]
+Environment name has a space, and is unnumbered.
+\end{With Space}
+
+\begin{Lemma}[within parenthesis]
+This one share counter with Theorem
+\end{Lemma}
+
+\begin{Definition}[within parenthesis]
+definition theoremstyle here
+\end{Definition}
+
+\begin{Case}[within parenthesis]
+remark theoremstyle here
+\end{Case}
+
+\begin{proof}[Proof of the Main Theorem]
+Predefined proof theoremstyle here
+\end{proof}
+
+\end{document}

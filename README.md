@@ -1,5 +1,11 @@
 Complete rewrite:
 
+# Model
+
+- `model-source.md`: the syntax
+- `model-latex.tex`: the output the filter should output from `model-source.md`, when the output format is LaTeX
+- `model-target.md`: the output the filter should output from `model-source.md`, when the output format is not LaTeX
+
 # Todo
 
 - YAML syntax and parsing
