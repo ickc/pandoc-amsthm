@@ -18,11 +18,13 @@ def parse_metadata(eachStyle):
     counter: a dictionary with keys as the shared counter, and values as the counter (int), initialized as 0
     shared_environments: a dictionary with keys as the shared counter, and values as all other environments using this counter
     """
+    # initialize
     environments = set()
     unnumbered = set()
     counter_dict = {}
     counter = {}
     shared_environments = {}
+    # parsing
     for environment in eachStyle:
         # check if it is a dict: hence numbered environments with shared counters
         if isinstance(environment, dict):
@@ -66,10 +68,12 @@ def get_metadata(doc):
     - header level mapping to part/chapter/section @todo
     """
     amsthm_metadata = doc.get_metadata('amsthm')
+    # parse each styles
     all_parsed_metadata = {}
     amsthm_style = ('plain', 'definition', 'remark')
     for i in amsthm_style:
         all_parsed_metadata[i] = parse_metadata(amsthm_metadata[i])
+    # store output in doc
     # (0, 1, 2, 3, 4) corresponds to (environments, unnumbered, counter_dict, counter, shared_environments)
     doc.environments = set().union(*[all_parsed_metadata[i][0] for i in amsthm_style])
     doc.unnumbered = set().union(*[all_parsed_metadata[i][1] for i in amsthm_style])
@@ -77,7 +81,9 @@ def get_metadata(doc):
     doc.counter = dict(ChainMap(*[all_parsed_metadata[i][3] for i in amsthm_style]))
     doc.shared_environments = dict(ChainMap(*[all_parsed_metadata[i][4] for i in amsthm_style]))
     doc.style = {i: all_parsed_metadata[i][0] for i in amsthm_style}
-    
+    # get parent counter
+    doc.parentcounter = amsthm_metadata['parentcounter']
+
 
 def amsthm(elem, doc):
     print('doc.environments:', doc.environments)
@@ -86,6 +92,7 @@ def amsthm(elem, doc):
     print('doc.counter:', doc.counter)
     print('doc.shared_environments:', doc.shared_environments)
     print('doc.style:', doc.style)
+    print('doc.parentcounter:', doc.parentcounter)
 #     print(doc.get_metadata(''))
 #     k,v = dict(doc.get_metadata('amsthm.plain'))
 #     print(k, v)
