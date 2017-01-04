@@ -1,1 +1,5 @@
 .ipynb_checkpoints/
+
+# iPython temp files
+tests/demo.md
+test.py
