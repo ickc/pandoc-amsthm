@@ -1,31 +1,30 @@
-\documentclass{memoir}
-
-\usepackage{lmodern, amssymb, amsmath, amsthm}
-
-\begin{document}
-
 \theoremstyle{plain}
 \newtheorem{Theorem}{Theorem}[chapter]
-\newtheorem*{With Space}{With Space}
 \newtheorem{Lemma}[Theorem]{Lemma}
-
+\newtheorem{Corollary}[Theorem]{Corollary}
+\newtheorem{Proposition}{Proposition}[chapter]
+\newtheorem{Conjecture}[Proposition]{Conjecture}
+\newtheorem*{With Space}{With Space}
+\newtheorem{WithoutSpace}{WithoutSpace}[chapter]
 \theoremstyle{definition}
 \newtheorem{Definition}{Definition}[chapter]
-
 \theoremstyle{remark}
 \newtheorem{Case}{Case}[chapter]
+
+\chapter{Demo}\label{demo}
 
 \begin{Theorem}[within parenthesis]
 plain theoremstyle here
 \end{Theorem}
 
 \begin{Theorem}\label{simplestEquation}
+\hypertarget{simplestEquation}{}
 Label and reference:
 
-$$E=mc^2$$
+\[E=mc^2\]
 \end{Theorem}
 
-From the \ref{simplestEquation}, we see that...
+From the \ref{simplestEquation}, we see that\ldots{}
 
 \begin{With Space}[within parenthesis]
 Environment name has a space, and is unnumbered.
@@ -46,5 +45,3 @@ remark theoremstyle here
 \begin{proof}[Proof of the Main Theorem]
 Predefined proof theoremstyle here
 \end{proof}
-
-\end{document}
