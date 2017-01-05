@@ -5,8 +5,7 @@ Complete rewrite:
 Test with this:
 
 ```bash
-pandoc --top-level-division=chapter tests/demo.md -F ./amsthm.py -o
-tests/demo.pdf
+pandoc --top-level-division=chapter tests/model-source.md -F ./amsthm.py -o tests/model-source.pdf
 ```
 
 # Model
