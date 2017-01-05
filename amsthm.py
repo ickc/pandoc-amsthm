@@ -129,8 +129,7 @@ def prepare(doc):
 
 def amsthm(elem, doc):
     # when output format is LaTeX, all div is converted into native LaTeX amsthm environments
-    if True:
-#     if doc.format == 'latex':
+    if doc.format == 'latex':
         # check if it is a Div, and the class is an amsthm environment
         if isinstance(elem, pf.Div):
             environment = set.intersection(doc.environments_nospace, set(elem.classes))
