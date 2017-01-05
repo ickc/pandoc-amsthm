@@ -64,6 +64,7 @@ def get_metadata(doc):
     Getting the metadata:
 
     - doc.environments: set of all environments for matching the div
+        - doc.environments_nospace: replace space with underscore for strings in the above set
     - doc.unnumbered: set of unnumbered environments for checking if counter is needed
     - doc.counter_dict: dict to lookup the shared counter for each environment
     - doc.counter: dict of shared counters
@@ -71,6 +72,11 @@ def get_metadata(doc):
     - doc.standalone_environments: a set of standalone environments (that do not share its counter)
     - doc.style: dicts of plain, definition, remark
     - header level mapping to part/chapter/section @todo
+    
+    Note:
+    
+    - proof environment is predefined in amsthm, and is manually added to doc.environments and doc.unnumbered.
+    - doc.unnumbered, doc.shared_environments, and doc.standalone_environments are mutually exclusive (the 3 different possible syntax in YAML).
     """
     amsthm_metadata = doc.get_metadata('amsthm')
     # parse each styles
@@ -80,8 +86,9 @@ def get_metadata(doc):
         all_parsed_metadata[i] = parse_metadata(amsthm_metadata[i])
     # store output in doc
     # (0, 1, 2, 3, 4, 5) corresponds to (environments, unnumbered, counter_dict, counter, shared_environments, standalone_environments)
-    doc.environments = set().union(*[all_parsed_metadata[i][0] for i in amsthm_style])
-    doc.unnumbered = set().union(*[all_parsed_metadata[i][1] for i in amsthm_style])
+    doc.environments = set().union(*[all_parsed_metadata[i][0] for i in amsthm_style], {'proof'})
+    doc.environments_nospace = {i.replace(' ', '_') for i in doc.environments}
+    doc.unnumbered = set().union(*[all_parsed_metadata[i][1] for i in amsthm_style], {'proof'})
     doc.counter_dict = dict(ChainMap(*[all_parsed_metadata[i][2] for i in amsthm_style]))
     doc.counter = dict(ChainMap(*[all_parsed_metadata[i][3] for i in amsthm_style]))
     doc.shared_environments = dict(ChainMap(*[all_parsed_metadata[i][4] for i in amsthm_style]))
@@ -121,24 +128,29 @@ def prepare(doc):
 
 
 def amsthm(elem, doc):
-    pass
-
-
-def finalize(doc):
-#     print('doc.environments:', doc.environments)
-#     print('doc.unnumbered:', doc.unnumbered)
-#     print('doc.counter_dict:', doc.counter_dict)
-#     print('doc.counter:', doc.counter)
-#     print('doc.shared_environments:', doc.shared_environments)
-#     print('doc.style:', doc.style)
-#     print('doc.parentcounter:', doc.parentcounter)
-    pass
+    # when output format is LaTeX, all div is converted into native LaTeX amsthm environments
+    if True:
+#     if doc.format == 'latex':
+        # check if it is a Div, and the class is an amsthm environment
+        if isinstance(elem, pf.Div):
+            environment = set.intersection(doc.environments_nospace, set(elem.classes))
+            if environment:
+                environment = environment.pop().replace('_', ' ')
+                div_content = pf.convert_text(elem, input_format='panflute', output_format='latex')
+                info = elem.attributes.get('info', None)
+                id = elem.identifier
+                latex_amsthm_env = []
+                env_begin = r'\begin{' + environment + '}'
+                if info:
+                    env_begin += r'[' + info + ']'
+                if id:
+                    env_begin += r'\label{' + id + '}'
+                return pf.RawBlock(env_begin + '\n' + div_content + '\n' + r'\end{' + environment + '}', format='latex')
 
 
 def main(doc=None):
     return pf.run_filter(amsthm,
                          prepare=prepare,
-                         finalize=finalize,
                          doc=doc) 
 
 
