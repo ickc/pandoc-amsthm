@@ -1,21 +1,25 @@
 ---
+fontfamily: lmodern, amsthm
 amsthm:
   plain:
-  - Theorem: Lemma
+  - Theorem: [Lemma, Corollary]
   - With Space*
+  - Proposition: Conjecture
+  - WithoutSpace
   definition:
   - Definition
   remark:
   - Case
-  parentcounter:
-  - chapter
+  parentcounter: chapter
 ...
+
+# Demo
 
 <div class="Theorem" info="within parenthesis">
 plain theoremstyle here
 </div>
 
-<div class="Theorem" id="simplestEquation"}
+<div class="Theorem" id="simplestEquation">
 Label and reference:
 
 $$E=mc^2$$
@@ -23,7 +27,7 @@ $$E=mc^2$$
 
 From the \ref{simplestEquation}, we see that...
 
-<div class="With Space" info="within parenthesis">
+<div class="With_Space" info="within parenthesis">
 Environment name has a space, and is unnumbered.
 </div>
 
