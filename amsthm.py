@@ -4,8 +4,9 @@ Pandoc filter using panflute
 """
 
 from collections import OrderedDict, ChainMap
-import panflute as pf
 import json
+import panflute as pf
+import sys
 
 
 def parse_metadata(eachStyle):
@@ -121,36 +122,40 @@ def define_latex_enviroments(doc):
                         latex_amsthm_def += [r'\newtheorem{' + shared + '}['+ i + ']{' + shared + '}']
     doc.content.insert(0, pf.RawBlock('\n'.join(latex_amsthm_def), format='latex'))
 
-def prepare(doc):
-    get_metadata(doc)
-    if doc.format == 'latex':
-        define_latex_enviroments(doc)
-
 
 def amsthm(elem, doc):
-    # when output format is LaTeX, all div is converted into native LaTeX amsthm environments
-    if doc.format == 'latex':
-        # check if it is a Div, and the class is an amsthm environment
-        if isinstance(elem, pf.Div):
-            environment = set.intersection(doc.environments_nospace, set(elem.classes))
-            if environment:
-                environment = environment.pop().replace('_', ' ')
-                div_content = pf.convert_text(elem, input_format='panflute', output_format='latex')
-                info = elem.attributes.get('info', None)
-                id = elem.identifier
-                latex_amsthm_env = []
-                env_begin = r'\begin{' + environment + '}'
-                if info:
-                    env_begin += r'[' + info + ']'
-                if id:
-                    env_begin += r'\label{' + id + '}'
-                return pf.RawBlock(env_begin + '\n' + div_content + '\n' + r'\end{' + environment + '}', format='latex')
+    pass
 
+
+def amsthm_latex(elem, doc):
+    """when output format is LaTeX, all div is converted into native LaTeX amsthm environments"""
+    # check if it is a Div, and the class is an amsthm environment
+    if isinstance(elem, pf.Div):
+        environment = set.intersection(doc.environments_nospace, set(elem.classes))
+        if environment:
+            environment = environment.pop().replace('_', ' ')
+            div_content = pf.convert_text(elem, input_format='panflute', output_format='latex')
+            info = elem.attributes.get('info', None)
+            id = elem.identifier
+            latex_amsthm_env = []
+            env_begin = r'\begin{' + environment + '}'
+            if info:
+                env_begin += r'[' + info + ']'
+            if id:
+                env_begin += r'\label{' + id + '}'
+            return pf.RawBlock(env_begin + '\n' + div_content + '\n' + r'\end{' + environment + '}', format='latex')
 
 def main(doc=None):
-    return pf.run_filter(amsthm,
-                         prepare=prepare,
-                         doc=doc) 
+    # check output format from the arg passed by pandoc. It can have no arg, hence the ``[-1]``.
+    if sys.argv[-1] in {'latex', 'beamer'}:
+        return pf.run_filter(amsthm_latex,
+                             prepare=get_metadata,
+                             finalize=define_latex_enviroments,
+                             doc=doc)
+    else:
+        return pf.run_filter(amsthm,
+                             prepare=get_metadata,
+                             doc=doc)
 
 
 if __name__ == '__main__':
