@@ -14,7 +14,7 @@ tests/model-latex.pdf: tests/model-latex.tex
 	cd tests && latexmk -pdf model-latex.tex
 
 tests/model-target.pdf: tests/model-target.md
-	pandoc --latex-engine=xelatex -s -o $@ $<
+	pandoc --pdf-engine=xelatex -s -o $@ $<
 
 tests/model-target.html: tests/model-target.md
 	pandoc -t html5 --mathjax -s -o $@ $<
