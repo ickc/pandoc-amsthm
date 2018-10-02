@@ -4,7 +4,7 @@ demo: tests/model-latex.pdf tests/model-target.pdf tests/model-target.html tests
 
 clean:
 	cd tests && latexmk -c model-latex.tex
-	rm -f tests/model-target.html tests/model-target.native tests/model-source.native
+	rm -f tests/model-target.html tests/model-target.native tests/model-source.native tests/demo.md test.py
 
 Clean:
 	cd tests && latexmk -C model-latex.tex
