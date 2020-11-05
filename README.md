@@ -1,3 +1,5 @@
+I'm happy that this is sherlocked by pandoc 2.10.1 and will no longer be updated. I encourage you to use pandoc 2.10.1 or above and see its manual for usage.
+
 -   [Usage](#usage)
     -   [Syntax](#syntax)
     -   [Templates and Filter](#templates-and-filter)
