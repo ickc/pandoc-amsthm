@@ -1,4 +1,4 @@
-I'm happy that this is sherlocked by pandoc 2.10.1 and will no longer be updated. I encourage you to use pandoc 2.10.1 or above and see its manual for usage.
+I'm happy that this is sherlocked by pandoc 2.10.1 and will no longer be updated. I encourage you to use pandoc 2.10.1 or above and see its manual for usage. Edit: [pandoc doesn't handle HTML output](https://github.com/jgm/pandoc/issues/1608#issuecomment-730639325) so this is here to stay for a while.
 
 -   [Usage](#usage)
     -   [Syntax](#syntax)
