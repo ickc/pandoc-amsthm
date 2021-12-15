@@ -1,10 +1,13 @@
 from __future__ import annotations
 
-from functools import cached_property
+from collections import defaultdict
 from dataclasses import dataclass, field
+from functools import cached_property
 from typing import TYPE_CHECKING
 
 import panflute as pf
+from panflute.containers import ListContainer
+from panflute.elements import Space
 
 from .util import setup_logging
 
@@ -33,6 +36,16 @@ METADATA_KEY: str = "amsthm"
 logger = setup_logging()
 
 
+def to_emph(elem: Element, doc: Doc):
+    if isinstance(elem, pf.Str):
+        return pf.Emph(elem)
+
+
+def to_strong(elem: Element, doc: Doc):
+    if isinstance(elem, pf.Str):
+        return pf.Strong(elem)
+
+
 @dataclass
 class NewTheorem:
     style: str
@@ -41,6 +54,11 @@ class NewTheorem:
     parent_counter: str | None = None
     shared_counter: str | None = None
     numbered: bool = True
+    """A LaTeX amsthm new theorem.
+
+    :param parent_counter: for LaTeX output, controlling the number of numbers in a theorem.
+        Should be used with counter_depth to match LaTeX and non-LaTeX output.
+    """
 
     def __post_init__(self) -> None:
         if self.env_name.endswith("*"):
@@ -50,9 +68,14 @@ class NewTheorem:
             logger.debug("Defaulting text to %s", self.env_name)
             self.text = self.env_name
         if (parent_counter := self.parent_counter) is not None and parent_counter not in PARENT_COUNTERS:
-            logger.warning("Unsupported parent_coutner %s, setting to default: %s.", parent_counter, DEFAULT_PARENT_COUNTER)
+            logger.warning(
+                "Unsupported parent_coutner %s, setting to default: %s.", parent_counter, DEFAULT_PARENT_COUNTER
+            )
         if self.numbered and (parent_counter is None) is (self.shared_counter is None):
-            logger.warning("In numbered environment, either parent_counter or shared_counter should be defined, and not both. Dropping shared_counter.")
+            logger.warning(
+                "In numbered environment, either parent_counter or shared_counter should be defined, and not both."
+                " Dropping shared_counter."
+            )
             self.shared_counter = None
 
     @property
@@ -65,14 +88,18 @@ class NewTheorem:
         else:
             res.append(f"{{{self.env_name}}}[{self.shared_counter}]{{{self.text}}}")
         return "".join(res)
-    
+
     @property
     def class_name(self) -> str:
         """Name in pandoc div classes.
-        
+
         It cannot have space.
         """
         return self.env_name.replace(" ", "_")
+
+    @property
+    def counter_name(self) -> str:
+        return self.env_name if self.shared_counter is None else self.shared_counter
 
 
 @dataclass
@@ -87,7 +114,33 @@ class Proof(NewTheorem):
 
 @dataclass
 class DocOptions:
+    """Document options.
+
+    :param: counter_depth: can be n=0-6 inclusive.
+        n means n+1 numbers shown in non-LaTeX outputs.
+        e.g. n=1 means x.y, where x is the heading 1 counter, y is the theorem counter.
+        Should be used with parent_counter to match LaTeX and non-LaTeX output.
+    """
+
     theorems: dict[str, NewTheorem] = field(default_factory=dict)
+    counter_depth: int = 1
+
+    def __post_init__(self) -> None:
+        try:
+            self.counter_depth = int(self.counter_depth)
+        except ValueError:
+            logger.warning("counter_depth must be int, default to 1.")
+            self.counter_depth = 1
+
+        # initial count is zero
+        # should be += 1 before using
+        self.header_counters: list[int] = [0] * self.counter_depth
+        self.reset_theorem_counters()
+        # from identifiers to numbers
+        self.identifiers: dict[str, str] = {}
+
+    def reset_theorem_counters(self) -> None:
+        self.theorem_counters: dict[str, int] = defaultdict(int)
 
     @cached_property
     def theorems_set(self) -> set[str]:
@@ -130,7 +183,7 @@ class DocOptions:
                     theorems[theorem.class_name] = theorem
         # proof is predefined in amsthm
         theorems["proof"] = Proof()
-        return cls(theorems)
+        return cls(theorems, counter_depth=options.get("counter_depth", 1))  # type: ignore[arg-type] # will be verified at __post_init__
 
     @property
     def latex(self) -> str:
@@ -156,7 +209,54 @@ def prepare(doc: Doc):
 
 
 def amsthm(elem: Element, doc: Doc):
-    pass
+    options: DocOptions = doc._amsthm
+    if isinstance(elem, pf.Header):
+        if elem.level <= options.counter_depth:
+            # Header.level is 1-indexed, while list is 0-indexed
+            options.header_counters[elem.level - 1] += 1
+            options.reset_theorem_counters()
+    elif isinstance(elem, pf.Div):
+        environments: set[str] = options.theorems_set.intersection(elem.classes)
+        if environments:
+            if len(environments) != 1:
+                logger.warning("Multiple environments found: %s", environments)
+                return None
+            environment = environments.pop()
+            theorem = options.theorems[environment]
+
+            info = elem.attributes.get("info", None)
+            id = elem.identifier
+
+            res: list[pf.Element] = []
+            # theorem header
+            ElementType = pf.Strong if theorem.style in {"plain", "definition"} else pf.Emph
+            res.append(ElementType(pf.Str(f"{theorem.text} ")))
+            if theorem.numbered:
+                counter_name = theorem.counter_name
+                options.theorem_counters[counter_name] += 1
+                theorem_counter = options.theorem_counters[counter_name]
+                theorem_number = ".".join([str(i) for i in options.header_counters] + [str(theorem_counter)])
+                if id:
+                    options.identifiers[id] = theorem_number
+                res.append(
+                    pf.Strong(pf.Str(theorem_number))
+                    if theorem.style in {"plain", "definition"}
+                    else pf.Str(theorem_number)
+                )
+
+            if info:
+                res.append(pf.Str(f" ({info})"))
+
+            res += [ElementType(pf.Str(r".")), pf.Space]
+
+            # theorem body
+            if theorem.style == "plain":
+                elem.walk(to_emph)
+            # TODO: can be improve this?
+            for r in reversed(res):
+                elem.content[0].content.insert(0, r)
+            if theorem.style == "proof":
+                elem.content[0].content.append(pf.RawInline("<span style='float: right'>◻</span>", format="html"))
 
 
 def amsthm_latex(elem: Element, doc: Doc):
