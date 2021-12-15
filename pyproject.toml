@@ -5,7 +5,7 @@ build-backend = "poetry.core.masonry.api"
 [tool.poetry]
 name = "amsthm"
 version = "1.2.3"
-description = "amsthm—just a naive cookiecutter to boostrap Python project"
+description = "amsthm—provide a syntax to use amsthm environments in pandoc, with output in LaTeX and HTML"
 license = "BSD-3-Clause"
 keywords = [
 ]
