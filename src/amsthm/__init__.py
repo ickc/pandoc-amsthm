@@ -270,7 +270,7 @@ def amsthm(elem: Element, doc: Doc):
             for r in reversed(res):
                 elem.content[0].content.insert(0, r)
             if theorem.style == "proof":
-                elem.content[0].content.append(pf.RawInline("<span style='float: right'>◻</span>", format="html"))
+                elem.content[-1].content.append(pf.RawInline("<span style='float: right'>◻</span>", format="html"))
 
 
 def process_ref(elem: Element, doc: Doc):
