@@ -7,8 +7,6 @@ from functools import cached_property
 from typing import TYPE_CHECKING
 
 import panflute as pf
-from panflute.containers import ListContainer
-from panflute.elements import Space
 
 from .util import setup_logging
 
@@ -34,6 +32,8 @@ STYLES: tuple[str, ...] = ("plain", "definition", "remark")
 DEFAULT_PARENT_COUNTER: str = "section"
 METADATA_KEY: str = "amsthm"
 REF_REGEX = re.compile(r"^\\ref\{(.*)\}$")
+LATEX_LIKE: set[str] = {"latex", "beamer"}
+PLAIN_OR_DEF: set[str] = {"plain", "definition"}
 
 logger = setup_logging()
 
@@ -217,7 +217,7 @@ class DocOptions:
 
 def prepare(doc: Doc):
     doc._amsthm = options = DocOptions.from_doc(doc)
-    if doc.format in {"latex", "beamer"}:
+    if doc.format in LATEX_LIKE:
         doc.content.insert(0, options.to_panflute)
 
 
@@ -242,7 +242,7 @@ def amsthm(elem: Element, doc: Doc):
 
             res: list[pf.Element] = []
             # theorem header
-            ElementType = pf.Strong if theorem.style in {"plain", "definition"} else pf.Emph
+            ElementType = pf.Strong if theorem.style in PLAIN_OR_DEF else pf.Emph
             res.append(ElementType(pf.Str(f"{theorem.text} ")))
             if theorem.numbered:
                 counter_name = theorem.counter_name
@@ -252,9 +252,7 @@ def amsthm(elem: Element, doc: Doc):
                 if id:
                     options.identifiers[id] = theorem_number
                 res.append(
-                    pf.Strong(pf.Str(theorem_number))
-                    if theorem.style in {"plain", "definition"}
-                    else pf.Str(theorem_number)
+                    pf.Strong(pf.Str(theorem_number)) if theorem.style in PLAIN_OR_DEF else pf.Str(theorem_number)
                 )
 
             if info:
@@ -312,14 +310,14 @@ def amsthm_latex(elem: Element, doc: Doc):
 
 
 def action(elem: Element, doc: Doc):
-    if doc.format in {"latex", "beamer"}:
+    if doc.format in LATEX_LIKE:
         return amsthm_latex(elem, doc)
     else:
         return amsthm(elem, doc)
 
 
 def post_action(elem: Element, doc: Doc):
-    if doc.format not in {"latex", "beamer"}:
+    if doc.format not in LATEX_LIKE:
         return process_ref(elem, doc)
 
 
