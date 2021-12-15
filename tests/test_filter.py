@@ -1,5 +1,5 @@
-from unittest import TestCase
 from pathlib import Path
+from unittest import TestCase
 
 from panflute.tools import convert_text
 
@@ -7,8 +7,8 @@ from amsthm import main
 
 DIR = Path(__file__).parent
 
-class TestAmsthm(TestCase):
 
+class TestAmsthm(TestCase):
     def setUp(self):
         with (DIR / "model-source.md").open("r") as f:
             self.text = f.read()
@@ -20,5 +20,10 @@ class TestAmsthm(TestCase):
         # force to convert to latex
         doc.format = "latex"
         main(doc)
-        res = convert_text(doc, input_format="panflute", output_format="latex", extra_args=["--top-level-division=chapter",  "--toc", "-N"])
+        res = convert_text(
+            doc,
+            input_format="panflute",
+            output_format="latex",
+            extra_args=["--top-level-division=chapter", "--toc", "-N"],
+        )
         assert res.strip() == self.ref_latex.strip()
