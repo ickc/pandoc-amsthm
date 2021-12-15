@@ -9,12 +9,15 @@ amsthm:
   - With Space*
   - Proposition: Conjecture
   - WithoutSpace
+  - KL
   definition:
   - Definition
   remark:
   - Case
   parent_counter: section
   counter_depth: 2
+  name_to_text:
+    KL: Klein's Lemma
 ...
 
 # Demo
@@ -50,6 +53,10 @@ remark theoremstyle here
 <div class="proof" info="Proof of the Main Theorem">
 Predefined proof theoremstyle here
 </div>
+
+:::KL
+Klein's Lemma from amsthm doc.
+:::
 
 # Counter test
 

@@ -37,6 +37,11 @@ theoremstyle here
 here`<span style='float: right'>◻</span>`{=html}
 :::
 
+::: KL
+**Klein's Lemma ****1.0.1****.** *Klein's* *Lemma* *from* *amsthm*
+*doc.*
+:::
+
 # Counter test
 
 ::: Theorem
