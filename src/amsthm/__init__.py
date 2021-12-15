@@ -11,12 +11,21 @@ import panflute as pf
 from .util import setup_logging
 
 if TYPE_CHECKING:
-    from typing import Union
+    from typing import Callable, Optional, Sequence, Union
 
     from panflute.elements import Doc, Element
 
     THM_DEF = list[Union[str, dict[str, str], dict[str, list[str]]]]
 
+    PANFLUTE_ACTION = Callable[[Element, Doc], Union[None, Element, list[Element]]]
+    PANFLUTE_PREPARE = Optional[Callable[[Doc], None]]
+    PANFLUTE_FINALIZE = PANFLUTE_PREPARE
+    # see https://panflute.readthedocs.io/en/latest/code.html?highlight=run_filters#panflute.io.run_filters
+    # PANFLUTE_FILTER can either be just an action, or a tuple of action, prepare, finalize
+    PANFLUTE_FILTER = Union[
+        PANFLUTE_ACTION,
+        tuple[Sequence[PANFLUTE_ACTION], PANFLUTE_PREPARE, PANFLUTE_FINALIZE],
+    ]
 
 PARENT_COUNTERS: set[str] = {
     "part",
@@ -335,5 +344,10 @@ def finalize(doc: Doc):
     del doc._amsthm
 
 
+actions: tuple[PANFLUTE_ACTION] = (action,)
+#: equiv. to the texp cli, but provided as a Python interface
+FILTER: PANFLUTE_FILTER = (actions, prepare, finalize)
+
+
 def main(doc: Doc | None = None):
-    return pf.run_filters([action], prepare=prepare, finalize=finalize, doc=doc)
+    return pf.run_filters(actions, prepare=prepare, finalize=finalize, doc=doc)
