@@ -8,6 +8,8 @@ version = "1.2.3"
 description = "amsthm—provide a syntax to use amsthm environments in pandoc, with output in LaTeX and HTML"
 license = "BSD-3-Clause"
 keywords = [
+    "pandoc",
+    "amsthm",
 ]
 classifiers = [
     "Development Status :: 4 - Beta",
