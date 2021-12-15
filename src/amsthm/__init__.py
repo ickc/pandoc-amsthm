@@ -177,7 +177,7 @@ class DocOptions:
             dict[str, str | dict[str, str] | THM_DEF],
         ] = doc.get_metadata(METADATA_KEY, {})
 
-        texts: dict[str, str] = options.get("texts", {})  # type: ignore[assignment, arg-type]
+        name_to_text: dict[str, str] = options.get("name_to_text", {})  # type: ignore[assignment, arg-type]
         parent_counter: str = options.get("parent_counter", DEFAULT_PARENT_COUNTER)  # type: ignore[assignment]
 
         theorems: dict[str, NewTheorem] = {}
@@ -187,20 +187,20 @@ class DocOptions:
                 if isinstance(opt, dict):
                     for key, value in opt.items():
                         # key
-                        theorem = NewTheorem(style, key, text=texts.get(key, None), parent_counter=parent_counter)
+                        theorem = NewTheorem(style, key, text=name_to_text.get(key, None), parent_counter=parent_counter)
                         theorems[theorem.class_name] = theorem
                         # value(s)
                         if isinstance(value, list):
                             for v in value:
-                                theorem = NewTheorem(style, v, text=texts.get(v, None), shared_counter=key)
+                                theorem = NewTheorem(style, v, text=name_to_text.get(v, None), shared_counter=key)
                                 theorems[theorem.class_name] = theorem
                         else:
                             v = value
-                            theorem = NewTheorem(style, v, text=texts.get(v, None), shared_counter=key)
+                            theorem = NewTheorem(style, v, text=name_to_text.get(v, None), shared_counter=key)
                             theorems[theorem.class_name] = theorem
                 else:
                     key = opt
-                    theorem = NewTheorem(style, key, text=texts.get(key, None), parent_counter=parent_counter)
+                    theorem = NewTheorem(style, key, text=name_to_text.get(key, None), parent_counter=parent_counter)
                     theorems[theorem.class_name] = theorem
         # proof is predefined in amsthm
         theorems["proof"] = Proof()
