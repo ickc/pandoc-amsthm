@@ -316,14 +316,24 @@ def action(elem: Element, doc: Doc):
         return amsthm(elem, doc)
 
 
-def post_action(elem: Element, doc: Doc):
-    if doc.format not in LATEX_LIKE:
-        return process_ref(elem, doc)
-
-
 def finalize(doc: Doc):
+    """Process ref and delete our private attr.
+
+    The `process_ref` is basically another action
+    but we call it in finalize because
+    we don't want to have a 2nd action
+    that does nothing when doc is not LATEX_LIKE.
+
+    Looking at the source code of `run_filters`,
+    the only difference between putting it in action
+    and inside prepare/finalize is that
+    action can change the doc, which is not what
+    we are doing here.
+    """
+    if doc.format not in LATEX_LIKE:
+        doc.walk(process_ref, doc)
     del doc._amsthm
 
 
 def main(doc: Doc | None = None):
-    return pf.run_filters([action, post_action], prepare=prepare, finalize=finalize, doc=doc)
+    return pf.run_filters([action], prepare=prepare, finalize=finalize, doc=doc)
