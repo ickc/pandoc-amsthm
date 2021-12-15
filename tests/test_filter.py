@@ -14,6 +14,8 @@ class TestAmsthm(TestCase):
             self.text = f.read()
         with (DIR / "model-latex.tex").open("r") as f:
             self.ref_latex = f.read()
+        with (DIR / "model-target.md").open("r") as f:
+            self.ref_md = f.read()
 
     def test_filter_latex(self):
         doc = convert_text(self.text, standalone=True)
@@ -27,3 +29,15 @@ class TestAmsthm(TestCase):
             extra_args=["--top-level-division=chapter", "--toc", "-N"],
         )
         assert res.strip() == self.ref_latex.strip()
+
+    def test_filter_non_latex(self):
+        doc = convert_text(self.text, standalone=True)
+        # force to convert to latex
+        doc.format = "markdown"
+        main(doc)
+        res = convert_text(
+            doc,
+            input_format="panflute",
+            output_format="markdown",
+        )
+        assert res.strip() == self.ref_md.strip()
