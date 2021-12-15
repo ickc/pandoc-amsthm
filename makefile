@@ -19,7 +19,7 @@ html: dist/docs/
 
 test:
 	rm -f .coverage*
-	coverage run -m pytest -vv $(PYTESTARGS) \
+	coverage run -m pytest -vv \
 		tests
 	coverage combine
 	coverage report
