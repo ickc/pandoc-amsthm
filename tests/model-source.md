@@ -34,7 +34,7 @@ Label and reference:
 $$E=mc^2$$
 :::
 
-From the `\ref{simplestEquation}`{=tex}, we see that...
+From the \ref{simplestEquation}, we see that...
 
 ::: {.With_Space info="within parenthesis"}
 Environment name has a space, and is unnumbered.
