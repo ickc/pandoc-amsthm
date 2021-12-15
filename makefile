@@ -26,7 +26,7 @@ test:
 	coverage html
 
 clean:
-	rm -f $(RSTs) .coverage* tests/model-latex.pdf tests/model-latex.html
+	rm -f $(RSTs) .coverage* tests/model-latex.pdf tests/model-html.html
 
 # docs #########################################################################
 
@@ -112,11 +112,11 @@ bump:
 
 # test files ###################################################################
 
-demo: tests/model-latex.pdf tests/model-latex.html
+demo: tests/model-latex.pdf tests/model-html.html
 
 tests/model-latex.tex: tests/model-source.md
 	pandoc -F amsthm $< -o $@ --top-level-division=chapter --toc -N
 tests/model-latex.pdf: tests/model-source.md
 	pandoc -F amsthm $< -o $@ --top-level-division=chapter --toc -N
-tests/model-latex.html: tests/model-source.md
+tests/model-html.html: tests/model-source.md
 	pandoc -F amsthm $< -o $@ --toc -N -s
