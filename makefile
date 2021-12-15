@@ -21,8 +21,7 @@ test:
 	rm -f .coverage*
 	coverage run -m pytest -vv \
 		tests
-	coverage combine
-	coverage report
+	coverage combine; coverage report
 	coverage html
 
 clean:
