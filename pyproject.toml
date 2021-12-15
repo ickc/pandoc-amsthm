@@ -89,8 +89,8 @@ docs = [
     "pantable",
 ]
 
-# [tool.poetry.scripts]
-# amsthm = 'amsthm:cli'
+[tool.poetry.scripts]
+amsthm = 'amsthm:main'
 
 [tool.coverage.paths]
 source = [
