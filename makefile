@@ -112,8 +112,11 @@ bump:
 
 # test files ###################################################################
 
+target: tests/model-target.md tests/model-latex.tex
 demo: tests/model-latex.pdf tests/model-html.html
 
+tests/model-target.md: tests/model-source.md
+	pandoc -F amsthm $< -o $@
 tests/model-latex.tex: tests/model-source.md
 	pandoc -F amsthm $< -o $@ --top-level-division=chapter --toc -N
 tests/model-latex.pdf: tests/model-source.md
