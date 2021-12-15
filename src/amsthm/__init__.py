@@ -187,7 +187,9 @@ class DocOptions:
                 if isinstance(opt, dict):
                     for key, value in opt.items():
                         # key
-                        theorem = NewTheorem(style, key, text=name_to_text.get(key, None), parent_counter=parent_counter)
+                        theorem = NewTheorem(
+                            style, key, text=name_to_text.get(key, None), parent_counter=parent_counter
+                        )
                         theorems[theorem.class_name] = theorem
                         # value(s)
                         if isinstance(value, list):
