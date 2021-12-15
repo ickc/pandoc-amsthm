@@ -217,7 +217,8 @@ class DocOptions:
 
 def prepare(doc: Doc):
     doc._amsthm = options = DocOptions.from_doc(doc)
-    doc.content.insert(0, options.to_panflute)
+    if doc.format in {"latex", "beamer"}:
+        doc.content.insert(0, options.to_panflute)
 
 
 def amsthm(elem: Element, doc: Doc):
