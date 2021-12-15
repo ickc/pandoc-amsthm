@@ -34,7 +34,7 @@ amsthm provide a syntax to use amsthm environments in pandoc, with output in LaT
 Usage
 =====
 
-From ```makefile`` <makefile>`__:
+From ``makefile``:
 
 .. code:: makefile
 
@@ -50,7 +50,7 @@ From ```makefile`` <makefile>`__:
 Syntax
 ======
 
-See ```tests/model-source.md`` <tests/model-source.md>`__ for an example.
+See ``tests/model-source.md`` for an example.
 
 Tips
 ====
