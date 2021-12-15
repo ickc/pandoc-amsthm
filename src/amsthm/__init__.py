@@ -149,7 +149,7 @@ def action(elem, doc):
 
 def finalize(doc):
     if doc.format in {"latex", "beamer"}:
-        finalize(doc)
+        define_latex_enviroments(doc)
 
 
 def main(doc=None):
