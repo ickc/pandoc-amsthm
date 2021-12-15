@@ -20,5 +20,5 @@ class TestAmsthm(TestCase):
         # force to convert to latex
         doc.format = "latex"
         main(doc)
-        res = convert_text(doc, input_format="panflute", output_format="latex")
+        res = convert_text(doc, input_format="panflute", output_format="latex", extra_args=["--top-level-division=chapter",  "--toc", "-N"])
         assert res.strip() == self.ref_latex.strip()
