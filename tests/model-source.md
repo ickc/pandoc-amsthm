@@ -10,7 +10,7 @@ amsthm:
   - Definition
   remark:
   - Case
-  parentcounter: chapter
+  parent_counter: chapter
 ...
 
 # Demo

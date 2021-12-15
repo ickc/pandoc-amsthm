@@ -2,23 +2,24 @@
 \newtheorem{Theorem}{Theorem}[chapter]
 \newtheorem{Lemma}[Theorem]{Lemma}
 \newtheorem{Corollary}[Theorem]{Corollary}
+\newtheorem*{With Space}{With Space}
 \newtheorem{Proposition}{Proposition}[chapter]
 \newtheorem{Conjecture}[Proposition]{Conjecture}
-\newtheorem*{With Space}{With Space}
 \newtheorem{WithoutSpace}{WithoutSpace}[chapter]
 \theoremstyle{definition}
 \newtheorem{Definition}{Definition}[chapter]
 \theoremstyle{remark}
 \newtheorem{Case}{Case}[chapter]
 
-\chapter{Demo}\label{demo}
+\hypertarget{demo}{%
+\section{Demo}\label{demo}}
 
 \begin{Theorem}[within parenthesis]
 plain theoremstyle here
 \end{Theorem}
 
 \begin{Theorem}\label{simplestEquation}
-\hypertarget{simplestEquation}{}
+\leavevmode\vadjust pre{\hypertarget{simplestEquation}{}}%
 Label and reference:
 
 \[E=mc^2\]

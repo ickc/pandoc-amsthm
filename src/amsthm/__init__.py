@@ -1,156 +1,199 @@
-from collections import ChainMap
+from __future__ import annotations
+
+from functools import cached_property
+from dataclasses import dataclass, field
+from typing import TYPE_CHECKING
 
 import panflute as pf
 
+from .util import setup_logging
 
-def parse_metadata(eachStyle):
-    """
-    Input: eachStyle is the metadata under the key of amsthm styles, i.e. plain, definition, or remark
-    Output:
-    environments: set of all environments
-    unnumbered: set of all unnumbered environments
-    counter_dict: a dictionary with keys as the environments and the values as the shared counter
-    counter: a dictionary with keys as the shared counter, and values as the counter (int), initialized as 0
-    shared_environments: a dictionary with keys as the shared counter, and values as all other environments using this counter
-    standalone_environments: a set of standalone environments (that do not share its counter)
-    """
-    # initialize
-    environments = set()
-    unnumbered = set()
-    counter_dict = {}
-    counter = {}
-    shared_environments = {}
-    standalone_environments = set()
-    # parsing
-    for environment in eachStyle:
-        # check if it is a dict: hence numbered environments with shared counters
-        if isinstance(environment, dict):
-            for main, shared in environment.items():
-                environments.add(main)
-                counter_dict[main] = main
-                counter[main] = 0
-                # check if it is a string (1 item) or a list
-                if isinstance(shared, str):
-                    environments.add(shared)
-                    counter_dict[shared] = main
-                    shared_environments[main] = [shared]
-                else:
-                    environments.update(shared)
-                    for i in shared:
-                        counter_dict[i] = main
-                    shared_environments[main] = shared
-        # check if it is unnumbered
-        elif str(environment)[-1] == "*":
-            environment = str(environment)[0:-1]
-            environments.add(environment)
-            unnumbered.add(environment)
-        # else it is a numbered environment with unshared counter
+if TYPE_CHECKING:
+    from typing import Union
+
+    from panflute.elements import Doc, Element
+
+    THM_DEF = list[Union[str, dict[str, str], dict[str, list[str]]]]
+
+
+PARENT_COUNTERS: set[str] = {
+    "part",
+    "chapter",
+    "section",
+    "subsection",
+    "subsubsection",
+    "paragraph",
+    "subparagraph",
+}
+STYLES: tuple[str, ...] = ("plain", "definition", "remark")
+# the default of `--top-level-division` in pandoc in the simplest case
+DEFAULT_PARENT_COUNTER: str = "section"
+METADATA_KEY: str = "amsthm"
+
+logger = setup_logging()
+
+
+@dataclass
+class NewTheorem:
+    style: str
+    env_name: str
+    text: str | None = None
+    parent_counter: str | None = None
+    shared_counter: str | None = None
+    numbered: bool = True
+
+    def __post_init__(self) -> None:
+        if self.env_name.endswith("*"):
+            self.env_name = self.env_name[:-1]
+            self.numbered = False
+        if self.text is None:
+            logger.debug("Defaulting text to %s", self.env_name)
+            self.text = self.env_name
+        if (parent_counter := self.parent_counter) is not None and parent_counter not in PARENT_COUNTERS:
+            logger.warning("Unsupported parent_coutner %s, setting to default: %s.", parent_counter, DEFAULT_PARENT_COUNTER)
+        if self.numbered and (parent_counter is None) is (self.shared_counter is None):
+            logger.warning("In numbered environment, either parent_counter or shared_counter should be defined, and not both. Dropping shared_counter.")
+            self.shared_counter = None
+
+    @property
+    def latex(self) -> str:
+        res = [r"\newtheorem"]
+        if not self.numbered:
+            res.append(f"*{{{self.env_name}}}{{{self.text}}}")
+        elif self.shared_counter is None:
+            res.append(f"{{{self.env_name}}}{{{self.text}}}[{self.parent_counter}]")
         else:
-            environment = str(environment)
-            environments.add(environment)
-            counter_dict[environment] = environment
-            counter[environment] = 0
-            standalone_environments.add(environment)
-    return environments, unnumbered, counter_dict, counter, shared_environments, standalone_environments
+            res.append(f"{{{self.env_name}}}[{self.shared_counter}]{{{self.text}}}")
+        return "".join(res)
+    
+    @property
+    def class_name(self) -> str:
+        """Name in pandoc div classes.
+        
+        It cannot have space.
+        """
+        return self.env_name.replace(" ", "_")
 
 
-def get_metadata(doc):
-    """
-    Getting the metadata:
-
-    - doc.environments: set of all environments for matching the div
-        - doc.environments_nospace: replace space with underscore for strings in the above set
-    - doc.unnumbered: set of unnumbered environments for checking if counter is needed
-    - doc.counter_dict: dict to lookup the shared counter for each environment
-    - doc.counter: dict of shared counters
-    - doc.shared_environments: a dictionary with keys as the shared counter, and values as all other environments using this counter
-    - doc.standalone_environments: a set of standalone environments (that do not share its counter)
-    - doc.style: dicts of plain, definition, remark
-    - header level mapping to part/chapter/section @todo
-
-    Note:
-
-    - proof environment is predefined in amsthm, and is manually added to doc.environments and doc.unnumbered.
-    - doc.unnumbered, doc.shared_environments, and doc.standalone_environments are mutually exclusive (the 3 different possible syntax in YAML).
-    """
-    amsthm_metadata = doc.get_metadata("amsthm")
-    # parse each styles
-    all_parsed_metadata = {}
-    amsthm_style = ("plain", "definition", "remark")
-    for i in amsthm_style:
-        all_parsed_metadata[i] = parse_metadata(amsthm_metadata[i])
-    # store output in doc
-    # (0, 1, 2, 3, 4, 5) corresponds to (environments, unnumbered, counter_dict, counter, shared_environments, standalone_environments)
-    doc.environments = set().union(*[all_parsed_metadata[i][0] for i in amsthm_style], {"proof"})
-    doc.environments_nospace = {i.replace(" ", "_") for i in doc.environments}
-    doc.unnumbered = set().union(*[all_parsed_metadata[i][1] for i in amsthm_style], {"proof"})
-    doc.counter_dict = dict(ChainMap(*[all_parsed_metadata[i][2] for i in amsthm_style]))
-    doc.counter = dict(ChainMap(*[all_parsed_metadata[i][3] for i in amsthm_style]))
-    doc.shared_environments = dict(ChainMap(*[all_parsed_metadata[i][4] for i in amsthm_style]))
-    doc.standalone_environments = set().union(*[all_parsed_metadata[i][5] for i in amsthm_style])
-    doc.style = {i: all_parsed_metadata[i][0] for i in amsthm_style}
-    # get parent counter
-    doc.parentcounter = amsthm_metadata["parentcounter"]
+@dataclass
+class Proof(NewTheorem):
+    style: str = "proof"
+    env_name: str = "proof"
+    text: str | None = "proof"
+    parent_counter: str | None = None
+    shared_counter: str | None = None
+    numbered: bool = False
 
 
-def define_latex_enviroments(doc):
-    """
-    For LaTeX output only, convert the metadata obtained in get_metadata to LaTeX amsthm environment's definition
-    """
-    latex_amsthm_def = []
-    amsthm_style = ("plain", "definition", "remark")
-    for style in amsthm_style:
-        if doc.style[style]:
-            latex_amsthm_def += [r"\theoremstyle{" + style + "}"]
-            for i in doc.style[style]:
-                # unnumbered environment
-                if i in doc.unnumbered:
-                    latex_amsthm_def += [r"\newtheorem*{" + i + "}{" + i + "}"]
-                # numbered, standalone environment
-                elif i in doc.standalone_environments:
-                    latex_amsthm_def += [r"\newtheorem{" + i + "}{" + i + "}[" + doc.parentcounter + "]"]
-                # numbered, shared environments
-                elif i in doc.shared_environments:
-                    latex_amsthm_def += [r"\newtheorem{" + i + "}{" + i + "}[" + doc.parentcounter + "]"]
-                    for shared in doc.shared_environments[i]:
-                        latex_amsthm_def += [r"\newtheorem{" + shared + "}[" + i + "]{" + shared + "}"]
-    doc.content.insert(0, pf.RawBlock("\n".join(latex_amsthm_def), format="latex"))
+@dataclass
+class DocOptions:
+    theorems: dict[str, NewTheorem] = field(default_factory=dict)
+
+    @cached_property
+    def theorems_set(self) -> set[str]:
+        return set(self.theorems)
+
+    @classmethod
+    def from_doc(
+        cls,
+        doc: Doc,
+    ) -> DocOptions:
+        options: dict[
+            str,
+            dict[str, str | dict[str, str] | THM_DEF],
+        ] = doc.get_metadata(METADATA_KEY, {})
+
+        texts: dict[str, str] = options.get("texts", {})  # type: ignore[assignment, arg-type]
+        parent_counter: str = options.get("parent_counter", DEFAULT_PARENT_COUNTER)  # type: ignore[assignment]
+
+        theorems: dict[str, NewTheorem] = {}
+        for style in STYLES:
+            option: THM_DEF = options.get(style, [])  # type: ignore[assignment]
+            for opt in option:
+                if isinstance(opt, dict):
+                    for key, value in opt.items():
+                        # key
+                        theorem = NewTheorem(style, key, text=texts.get(key, None), parent_counter=parent_counter)
+                        theorems[theorem.class_name] = theorem
+                        # value(s)
+                        if isinstance(value, list):
+                            for v in value:
+                                theorem = NewTheorem(style, v, text=texts.get(v, None), shared_counter=key)
+                                theorems[theorem.class_name] = theorem
+                        else:
+                            v = value
+                            theorem = NewTheorem(style, v, text=texts.get(v, None), shared_counter=key)
+                            theorems[theorem.class_name] = theorem
+                else:
+                    key = opt
+                    theorem = NewTheorem(style, key, text=texts.get(key, None), parent_counter=parent_counter)
+                    theorems[theorem.class_name] = theorem
+        # proof is predefined in amsthm
+        theorems["proof"] = Proof()
+        return cls(theorems)
+
+    @property
+    def latex(self) -> str:
+        cur_style: str = ""
+        res: list[str] = []
+        for theorem in self.theorems.values():
+            # proof is predefined in amsthm
+            if not isinstance(theorem, Proof):
+                if theorem.style != cur_style:
+                    cur_style = theorem.style
+                    res.append(f"\\theoremstyle{{{cur_style}}}")
+                res.append(theorem.latex)
+        return "\n".join(res)
+
+    @property
+    def to_panflute(self) -> pf.RawBlock:
+        return pf.RawBlock(self.latex, format="latex")
 
 
-def amsthm(elem, doc):
+def prepare(doc: Doc):
+    doc._amsthm = options = DocOptions.from_doc(doc)
+    doc.content.insert(0, options.to_panflute)
+
+
+def amsthm(elem: Element, doc: Doc):
     pass
 
 
-def amsthm_latex(elem, doc):
+def amsthm_latex(elem: Element, doc: Doc):
     """when output format is LaTeX, all div is converted into native LaTeX amsthm environments"""
     # check if it is a Div, and the class is an amsthm environment
+    options: DocOptions = doc._amsthm
     if isinstance(elem, pf.Div):
-        environment = set.intersection(doc.environments_nospace, set(elem.classes))
-        if environment:
-            environment = environment.pop().replace("_", " ")
+        environments: set[str] = options.theorems_set.intersection(elem.classes)
+        if environments:
+            if len(environments) != 1:
+                logger.warning("Multiple environments found: %s", environments)
+                return None
+            environment = environments.pop()
+            theorem = options.theorems[environment]
             div_content = pf.convert_text(elem, input_format="panflute", output_format="latex")
             info = elem.attributes.get("info", None)
             id = elem.identifier
-            latex_amsthm_env = []
-            env_begin = r"\begin{" + environment + "}"
+            res = [f"\\begin{{{theorem.env_name}}}"]
             if info:
-                env_begin += r"[" + info + "]"
+                res.append(f"[{info}]")
             if id:
-                env_begin += r"\label{" + id + "}"
-            return pf.RawBlock(env_begin + "\n" + div_content + "\n" + r"\end{" + environment + "}", format="latex")
+                res.append(f"\\label{{{id}}}")
+            res.append(f"\n{div_content}\n\\end{{{theorem.env_name}}}")
+            return pf.RawBlock("".join(res), format="latex")
+    return None
 
 
-def action(elem, doc):
+def action(elem: Element, doc: Doc):
     if doc.format in {"latex", "beamer"}:
         return amsthm_latex(elem, doc)
     else:
         return amsthm(elem, doc)
 
 
-def finalize(doc):
-    if doc.format in {"latex", "beamer"}:
-        define_latex_enviroments(doc)
+def finalize(doc: Doc):
+    del doc._amsthm
 
 
-def main(doc=None):
-    return pf.run_filter(action, prepare=get_metadata, finalize=finalize, doc=doc)
+def main(doc: Doc | None = None):
+    return pf.run_filter(action, prepare=prepare, finalize=finalize, doc=doc)
