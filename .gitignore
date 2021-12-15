@@ -83,3 +83,4 @@ docs/_build
 .mypy_cache/
 
 dask-worker-space/
+.dmypy.json
