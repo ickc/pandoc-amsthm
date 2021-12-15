@@ -20,7 +20,7 @@ amsthm:
 # Demo
 
 <div class="Theorem" info="within parenthesis">
-plain theoremstyle here
+plain theoremstyle *here*
 </div>
 
 <div class="Theorem" id="simplestEquation">
