@@ -16,7 +16,7 @@ amsthm provide a syntax to use amsthm environments in pandoc, with output in LaT
 
 # Usage
 
-From [`makefile`](makefile):
+From `makefile`:
 
 ```makefile
 tests/model-target.md: tests/model-source.md
@@ -31,7 +31,7 @@ tests/model-html.html: tests/model-source.md
 
 # Syntax
 
-See [`tests/model-source.md`](tests/model-source.md) for an example.
+See `tests/model-source.md` for an example.
 
 # Tips
 
