@@ -13,6 +13,8 @@ $$E=mc^2$$
 
 From the 1.0.2, we see that...
 
+Or we can use pandoc-crossref style 1.0.2 as well.
+
 ::: {.With_Space info="within parenthesis"}
 **With Space ** (within parenthesis)**.** *Environment* *name* *has* *a*
 *space,* *and* *is* *unnumbered.*

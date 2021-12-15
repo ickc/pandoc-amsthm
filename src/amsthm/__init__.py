@@ -284,7 +284,13 @@ def amsthm(elem: Element, doc: Doc):
 
 def process_ref(elem: Element, doc: Doc):
     options: DocOptions = doc._amsthm
-    if isinstance(elem, pf.RawInline) and elem.format == "tex":
+    # from [@...] to number
+    if isinstance(elem, pf.Cite):
+        text = pf.stringify(elem)[2:-1]
+        if text in options.identifiers:
+            return pf.Str(options.identifiers[text])
+    # from \ref{...} to number
+    elif isinstance(elem, pf.RawInline) and elem.format == "tex":
         text = elem.text
         if matches := REF_REGEX.findall(text):
             if len(matches) != 1:
@@ -293,6 +299,15 @@ def process_ref(elem: Element, doc: Doc):
             match = matches[0]
             if match in options.identifiers:
                 return pf.Str(options.identifiers[match])
+
+
+def process_ref_latex(elem: Element, doc: Doc):
+    options: DocOptions = doc._amsthm
+    # from [@...] to \ref{...}
+    if isinstance(elem, pf.Cite):
+        text = pf.stringify(elem)[2:-1]
+        if text in options.identifiers:
+            return pf.RawInline(f"\\ref{{{text}}}", format="latex")
 
 
 def amsthm_latex(elem: Element, doc: Doc):
@@ -315,38 +330,33 @@ def amsthm_latex(elem: Element, doc: Doc):
                 res.append(f"[{info}]")
             if id:
                 res.append(f"\\label{{{id}}}")
+                # in LaTeX output, we only need to keep a reference of the id
+                # the numbering (value of this dict) is handled by LaTeX
+                options.identifiers[id] = None
             res.append(f"\n{div_content}\n\\end{{{theorem.env_name}}}")
             return pf.RawBlock("".join(res), format="latex")
     return None
 
 
-def action(elem: Element, doc: Doc):
+def action_amsthm(elem: Element, doc: Doc):
     if doc.format in LATEX_LIKE:
         return amsthm_latex(elem, doc)
     else:
         return amsthm(elem, doc)
 
 
+def action_process_ref(elem: Element, doc: Doc):
+    if doc.format in LATEX_LIKE:
+        return process_ref_latex(elem, doc)
+    else:
+        return process_ref(elem, doc)
+
+
 def finalize(doc: Doc):
-    """Process ref and delete our private attr.
-
-    The `process_ref` is basically another action
-    but we call it in finalize because
-    we don't want to have a 2nd action
-    that does nothing when doc is not LATEX_LIKE.
-
-    Looking at the source code of `run_filters`,
-    the only difference between putting it in action
-    and inside prepare/finalize is that
-    action can change the doc, which is not what
-    we are doing here.
-    """
-    if doc.format not in LATEX_LIKE:
-        doc.walk(process_ref, doc)
     del doc._amsthm
 
 
-actions: tuple[PANFLUTE_ACTION] = (action,)
+actions: tuple[PANFLUTE_ACTION] = (action_amsthm, action_process_ref)
 #: equiv. to the texp cli, but provided as a Python interface
 FILTER: PANFLUTE_FILTER = (actions, prepare, finalize)
 

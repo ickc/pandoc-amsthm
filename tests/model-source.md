@@ -36,6 +36,8 @@ $$E=mc^2$$
 
 From the \ref{simplestEquation}, we see that...
 
+Or we can use pandoc-crossref style [@simplestEquation] as well.
+
 ::: {.With_Space info="within parenthesis"}
 Environment name has a space, and is unnumbered.
 :::
