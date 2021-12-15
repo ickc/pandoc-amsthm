@@ -3,10 +3,11 @@
 Pandoc filter using panflute
 """
 
-from collections import OrderedDict, ChainMap
 import json
-import panflute as pf
 import sys
+from collections import ChainMap, OrderedDict
+
+import panflute as pf
 
 
 def parse_metadata(eachStyle):
@@ -46,7 +47,7 @@ def parse_metadata(eachStyle):
                         counter_dict[i] = main
                     shared_environments[main] = shared
         # check if it is unnumbered
-        elif str(environment)[-1] == '*':
+        elif str(environment)[-1] == "*":
             environment = str(environment)[0:-1]
             environments.add(environment)
             unnumbered.add(environment)
@@ -73,30 +74,30 @@ def get_metadata(doc):
     - doc.standalone_environments: a set of standalone environments (that do not share its counter)
     - doc.style: dicts of plain, definition, remark
     - header level mapping to part/chapter/section @todo
-    
+
     Note:
-    
+
     - proof environment is predefined in amsthm, and is manually added to doc.environments and doc.unnumbered.
     - doc.unnumbered, doc.shared_environments, and doc.standalone_environments are mutually exclusive (the 3 different possible syntax in YAML).
     """
-    amsthm_metadata = doc.get_metadata('amsthm')
+    amsthm_metadata = doc.get_metadata("amsthm")
     # parse each styles
     all_parsed_metadata = {}
-    amsthm_style = ('plain', 'definition', 'remark')
+    amsthm_style = ("plain", "definition", "remark")
     for i in amsthm_style:
         all_parsed_metadata[i] = parse_metadata(amsthm_metadata[i])
     # store output in doc
     # (0, 1, 2, 3, 4, 5) corresponds to (environments, unnumbered, counter_dict, counter, shared_environments, standalone_environments)
-    doc.environments = set().union(*[all_parsed_metadata[i][0] for i in amsthm_style], {'proof'})
-    doc.environments_nospace = {i.replace(' ', '_') for i in doc.environments}
-    doc.unnumbered = set().union(*[all_parsed_metadata[i][1] for i in amsthm_style], {'proof'})
+    doc.environments = set().union(*[all_parsed_metadata[i][0] for i in amsthm_style], {"proof"})
+    doc.environments_nospace = {i.replace(" ", "_") for i in doc.environments}
+    doc.unnumbered = set().union(*[all_parsed_metadata[i][1] for i in amsthm_style], {"proof"})
     doc.counter_dict = dict(ChainMap(*[all_parsed_metadata[i][2] for i in amsthm_style]))
     doc.counter = dict(ChainMap(*[all_parsed_metadata[i][3] for i in amsthm_style]))
     doc.shared_environments = dict(ChainMap(*[all_parsed_metadata[i][4] for i in amsthm_style]))
     doc.standalone_environments = set().union(*[all_parsed_metadata[i][5] for i in amsthm_style])
     doc.style = {i: all_parsed_metadata[i][0] for i in amsthm_style}
     # get parent counter
-    doc.parentcounter = amsthm_metadata['parentcounter']
+    doc.parentcounter = amsthm_metadata["parentcounter"]
 
 
 def define_latex_enviroments(doc):
@@ -104,23 +105,23 @@ def define_latex_enviroments(doc):
     For LaTeX output only, convert the metadata obtained in get_metadata to LaTeX amsthm environment's definition
     """
     latex_amsthm_def = []
-    amsthm_style = ('plain', 'definition', 'remark')
+    amsthm_style = ("plain", "definition", "remark")
     for style in amsthm_style:
         if doc.style[style]:
-            latex_amsthm_def += [r'\theoremstyle{' + style + '}']
+            latex_amsthm_def += [r"\theoremstyle{" + style + "}"]
             for i in doc.style[style]:
                 # unnumbered environment
                 if i in doc.unnumbered:
-                    latex_amsthm_def += [r'\newtheorem*{' + i + '}{' + i + '}']
+                    latex_amsthm_def += [r"\newtheorem*{" + i + "}{" + i + "}"]
                 # numbered, standalone environment
                 elif i in doc.standalone_environments:
-                    latex_amsthm_def += [r'\newtheorem{' + i + '}{' + i + '}[' + doc.parentcounter + ']']
+                    latex_amsthm_def += [r"\newtheorem{" + i + "}{" + i + "}[" + doc.parentcounter + "]"]
                 # numbered, shared environments
                 elif i in doc.shared_environments:
-                    latex_amsthm_def += [r'\newtheorem{' + i + '}{' + i + '}[' + doc.parentcounter + ']']
+                    latex_amsthm_def += [r"\newtheorem{" + i + "}{" + i + "}[" + doc.parentcounter + "]"]
                     for shared in doc.shared_environments[i]:
-                        latex_amsthm_def += [r'\newtheorem{' + shared + '}['+ i + ']{' + shared + '}']
-    doc.content.insert(0, pf.RawBlock('\n'.join(latex_amsthm_def), format='latex'))
+                        latex_amsthm_def += [r"\newtheorem{" + shared + "}[" + i + "]{" + shared + "}"]
+    doc.content.insert(0, pf.RawBlock("\n".join(latex_amsthm_def), format="latex"))
 
 
 def amsthm(elem, doc):
@@ -133,30 +134,26 @@ def amsthm_latex(elem, doc):
     if isinstance(elem, pf.Div):
         environment = set.intersection(doc.environments_nospace, set(elem.classes))
         if environment:
-            environment = environment.pop().replace('_', ' ')
-            div_content = pf.convert_text(elem, input_format='panflute', output_format='latex')
-            info = elem.attributes.get('info', None)
+            environment = environment.pop().replace("_", " ")
+            div_content = pf.convert_text(elem, input_format="panflute", output_format="latex")
+            info = elem.attributes.get("info", None)
             id = elem.identifier
             latex_amsthm_env = []
-            env_begin = r'\begin{' + environment + '}'
+            env_begin = r"\begin{" + environment + "}"
             if info:
-                env_begin += r'[' + info + ']'
+                env_begin += r"[" + info + "]"
             if id:
-                env_begin += r'\label{' + id + '}'
-            return pf.RawBlock(env_begin + '\n' + div_content + '\n' + r'\end{' + environment + '}', format='latex')
+                env_begin += r"\label{" + id + "}"
+            return pf.RawBlock(env_begin + "\n" + div_content + "\n" + r"\end{" + environment + "}", format="latex")
+
 
 def main(doc=None):
     # check output format from the arg passed by pandoc. It can have no arg, hence the ``[-1]``.
-    if sys.argv[-1] in {'latex', 'beamer'}:
-        return pf.run_filter(amsthm_latex,
-                             prepare=get_metadata,
-                             finalize=define_latex_enviroments,
-                             doc=doc)
+    if sys.argv[-1] in {"latex", "beamer"}:
+        return pf.run_filter(amsthm_latex, prepare=get_metadata, finalize=define_latex_enviroments, doc=doc)
     else:
-        return pf.run_filter(amsthm,
-                             prepare=get_metadata,
-                             doc=doc)
+        return pf.run_filter(amsthm, prepare=get_metadata, doc=doc)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
