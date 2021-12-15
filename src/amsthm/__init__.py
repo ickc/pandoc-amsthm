@@ -1,11 +1,5 @@
-#!/usr/bin/env python3
-"""
-Pandoc filter using panflute
-"""
-
-import json
 import sys
-from collections import ChainMap, OrderedDict
+from collections import ChainMap
 
 import panflute as pf
 
@@ -147,13 +141,17 @@ def amsthm_latex(elem, doc):
             return pf.RawBlock(env_begin + "\n" + div_content + "\n" + r"\end{" + environment + "}", format="latex")
 
 
-def main(doc=None):
-    # check output format from the arg passed by pandoc. It can have no arg, hence the ``[-1]``.
-    if sys.argv[-1] in {"latex", "beamer"}:
-        return pf.run_filter(amsthm_latex, prepare=get_metadata, finalize=define_latex_enviroments, doc=doc)
+def action(elem, doc):
+    if doc.format in {"latex", "beamer"}:
+        return amsthm_latex(elem, doc)
     else:
-        return pf.run_filter(amsthm, prepare=get_metadata, doc=doc)
+        return amsthm(elem, doc)
 
 
-if __name__ == "__main__":
-    main()
+def finalize(doc):
+    if doc.format in {"latex", "beamer"}:
+        finalize(doc)
+
+
+def main(doc=None):
+    return pf.run_filter(action, prepare=get_metadata, finalize=finalize, doc=doc)
