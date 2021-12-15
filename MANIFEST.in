@@ -1,0 +1,18 @@
+graft docs
+graft src
+graft ci
+graft tests
+
+include .bumpversion.cfg
+include .coveragerc
+include .editorconfig
+
+include AUTHORS.rst
+include CHANGELOG.rst
+include CONTRIBUTING.rst
+include LICENSE
+include README.rst
+
+include .readthedocs.yml
+
+global-exclude *.py[cod] __pycache__/* *.so *.dylib

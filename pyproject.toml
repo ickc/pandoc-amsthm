@@ -1,0 +1,147 @@
+[build-system]
+requires = ["poetry_core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry]
+name = "amsthm"
+version = "1.2.3"
+description = "amsthm—just a naive cookiecutter to boostrap Python project"
+license = "BSD-3-Clause"
+keywords = [
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "Topic :: Software Development :: Build Tools",
+    "License :: OSI Approved :: BSD License",
+    "Operating System :: Unix",
+    "Operating System :: POSIX",
+    "Operating System :: Microsoft :: Windows",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Topic :: Utilities",
+]
+homepage = "https://github.com/ickc/amsthm"
+repository = "https://github.com/ickc/amsthm"
+documentation = "https://ickc.github.io/amsthm"
+authors = ["Kolen Cheung <christian.kolen@gmail.com>"]
+readme = "README.rst"
+packages = [
+    { include = "amsthm", from = "src" },
+]
+include = [
+    'LICENSE',
+    'README.rst',
+]
+
+[tool.poetry.dependencies]
+python = ">=3.8"
+
+# extras
+coloredlogs = { optional = true, version = ">=14,<16" }
+
+# tests
+coverage = { optional = true, version = "*" }
+coveralls = { optional = true, version = "*" }
+pytest = { optional = true, version = "*" }
+
+# docs
+sphinx = { optional = true, version = "^3.3" }
+sphinx-bootstrap-theme = { optional = true, version = "*" }
+sphinxcontrib-apidoc = { optional = true, version = "*" }
+nbsphinx = { optional = true, version = ">=0.8" }
+ipykernel = { optional = true, version = "*" }
+pantable = { optional = true, version = "*" }
+
+[tool.poetry.dev-dependencies]
+isort = "*"
+mypy = "*"
+bandit = "*"
+black = "*"
+bump2version = "*"
+ghp-import = "^2"
+nbconvert = "^6"
+pylint = "*"
+rstcheck = "*"
+types-PyYAML = "*"
+
+[tool.poetry.extras]
+extras = [
+    "coloredlogs",
+]
+tests = [
+    "coverage",
+    "coveralls",
+    "pytest",
+]
+docs = [
+    "sphinx",
+    "sphinx-bootstrap-theme",
+    "sphinxcontrib-apidoc",
+    "nbsphinx",
+    "ipykernel",
+    "pantable",
+]
+
+# [tool.poetry.scripts]
+# amsthm = 'amsthm:cli'
+
+[tool.coverage.paths]
+source = [
+    'src',
+    '*/site-packages',
+]
+
+[tool.coverage.run]
+branch = true
+# concurrency = ["thread", "multiprocessing"]
+source = [
+    'src',
+    'tests',
+]
+parallel = true
+relative_files = true
+
+[tool.coverage.report]
+show_missing = true
+precision = 2
+
+[tool.pytest.ini_options]
+
+addopts = [
+    '-ra',
+    '--strict-markers',
+    '--tb=auto',
+]
+
+testpaths = [
+    'tests',
+]
+
+[tool.isort]
+line_length = 120
+known_first_party = 'amsthm'
+default_section = 'THIRDPARTY'
+forced_separate = 'tests'
+profile = 'black'
+skip = [
+    '.eggs',
+    'ci/templates',
+    'build',
+    'dist',
+]
+
+[tool.pylint.messages_control]
+disable = "C0330, C0326"
+
+[tool.pylint.format]
+max-line-length = 120
+
+[tool.black]
+line-length = 120
+experimental-string-processing = true
+target-version = ['py38']
