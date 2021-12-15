@@ -109,3 +109,8 @@ editable: setup.py
 bump:
 	bump2version $(PART)
 	git push --follow-tags
+
+# test files ###################################################################
+
+tests/model-latex.tex: tests/model-source.md
+	pandoc -F amsthm $< -o $@
