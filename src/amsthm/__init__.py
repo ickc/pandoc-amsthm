@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import re
 from collections import defaultdict
 from dataclasses import dataclass, field
 from functools import cached_property
@@ -32,6 +33,7 @@ STYLES: tuple[str, ...] = ("plain", "definition", "remark")
 # the default of `--top-level-division` in pandoc in the simplest case
 DEFAULT_PARENT_COUNTER: str = "section"
 METADATA_KEY: str = "amsthm"
+REF_REGEX = re.compile(r"^\\ref\{(.*)\}$")
 
 logger = setup_logging()
 
@@ -41,9 +43,19 @@ def to_emph(elem: Element, doc: Doc):
         return pf.Emph(elem)
 
 
-def to_strong(elem: Element, doc: Doc):
-    if isinstance(elem, pf.Str):
-        return pf.Strong(elem)
+def cancel_emph(elem: Element, doc: Doc):
+    """Emulate the behavior of LaTeX that a double emph is cancelled."""
+    # this is to make sure nested Emph in any ways would be canceled.
+    if isinstance(elem, pf.Emph):
+        res = []
+        for e in elem.content:
+            # double Emph
+            if isinstance(e, pf.Emph):
+                res += e.content
+            # single Emph only, keeping Emph...
+            else:
+                res.append(pf.Emph(e))
+        return res
 
 
 @dataclass
@@ -252,11 +264,25 @@ def amsthm(elem: Element, doc: Doc):
             # theorem body
             if theorem.style == "plain":
                 elem.walk(to_emph)
+                elem.walk(cancel_emph)
             # TODO: can be improve this?
             for r in reversed(res):
                 elem.content[0].content.insert(0, r)
             if theorem.style == "proof":
                 elem.content[0].content.append(pf.RawInline("<span style='float: right'>◻</span>", format="html"))
+
+
+def process_ref(elem: Element, doc: Doc):
+    options: DocOptions = doc._amsthm
+    if isinstance(elem, pf.RawInline) and elem.format == "tex":
+        text = elem.text
+        if matches := REF_REGEX.findall(text):
+            if len(matches) != 1:
+                logger.warning("Ignoring ref matching in %s: %s", text, matches)
+                return None
+            match = matches[0]
+            if match in options.identifiers:
+                return pf.Str(options.identifiers[match])
 
 
 def amsthm_latex(elem: Element, doc: Doc):
@@ -291,9 +317,14 @@ def action(elem: Element, doc: Doc):
         return amsthm(elem, doc)
 
 
+def post_action(elem: Element, doc: Doc):
+    if doc.format not in {"latex", "beamer"}:
+        return process_ref(elem, doc)
+
+
 def finalize(doc: Doc):
     del doc._amsthm
 
 
 def main(doc: Doc | None = None):
-    return pf.run_filter(action, prepare=prepare, finalize=finalize, doc=doc)
+    return pf.run_filters([action, post_action], prepare=prepare, finalize=finalize, doc=doc)
