@@ -1,5 +1,8 @@
 ---
-fontfamily: lmodern, amsthm
+header-includes: |
+  ```{=latex}
+  \usepackage{amsthm}
+  ```
 amsthm:
   plain:
   - Theorem: [Lemma, Corollary]
@@ -10,7 +13,8 @@ amsthm:
   - Definition
   remark:
   - Case
-  parent_counter: chapter
+  parent_counter: section
+  counter_depth: 2
 ...
 
 # Demo
@@ -46,3 +50,63 @@ remark theoremstyle here
 <div class="proof" info="Proof of the Main Theorem">
 Predefined proof theoremstyle here
 </div>
+
+# Counter test
+
+:::Theorem
+some theorem
+:::
+
+:::Theorem
+some theorem
+:::
+
+## Next level
+
+:::Theorem
+some theorem
+:::
+
+:::Theorem
+some theorem
+:::
+
+### Level 3
+
+:::Theorem
+some theorem
+:::
+
+:::Theorem
+some theorem
+:::
+
+#### Level 4
+
+:::Theorem
+some theorem
+:::
+
+:::Theorem
+some theorem
+:::
+
+##### Level 5
+
+:::Theorem
+some theorem
+:::
+
+:::Theorem
+some theorem
+:::
+
+###### Level 6
+
+:::Theorem
+some theorem
+:::
+
+:::Theorem
+some theorem
+:::
