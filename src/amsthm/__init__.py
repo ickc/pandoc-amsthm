@@ -48,12 +48,14 @@ PLAIN_OR_DEF: set[str] = {"plain", "definition"}
 logger = setup_logging()
 
 
-def to_emph(elem: Element, doc: Doc):
+def to_emph(elem: Element, doc: Doc) -> pf.Emph | None:
     if isinstance(elem, pf.Str):
         return pf.Emph(elem)
+    else:
+        return None
 
 
-def cancel_emph(elem: Element, doc: Doc):
+def cancel_emph(elem: Element, doc: Doc) -> list[Element] | None:
     """Emulate the behavior of LaTeX that a double emph is cancelled."""
     # this is to make sure nested Emph in any ways would be canceled.
     if isinstance(elem, pf.Emph):
@@ -66,6 +68,8 @@ def cancel_emph(elem: Element, doc: Doc):
             else:
                 res.append(pf.Emph(e))
         return res
+    else:
+        return None
 
 
 @dataclass
@@ -232,13 +236,13 @@ class DocOptions:
         return pf.RawBlock(self.latex, format="latex")
 
 
-def prepare(doc: Doc):
+def prepare(doc: Doc) -> None:
     doc._amsthm = options = DocOptions.from_doc(doc)
     if doc.format in LATEX_LIKE:
         doc.content.insert(0, options.to_panflute)
 
 
-def amsthm(elem: Element, doc: Doc):
+def amsthm(elem: Element, doc: Doc) -> None:
     options: DocOptions = doc._amsthm
     if isinstance(elem, pf.Header):
         if elem.level <= options.counter_depth:
@@ -309,7 +313,7 @@ def amsthm(elem: Element, doc: Doc):
                 elem.content[-1].content.append(pf.RawInline("<span style='float: right'>◻</span>", format="html"))
 
 
-def amsthm_latex(elem: Element, doc: Doc):
+def amsthm_latex(elem: Element, doc: Doc) -> pf.RawBlock | None:
     """when output format is LaTeX, all div is converted into native LaTeX amsthm environments"""
     # check if it is a Div, and the class is an amsthm environment
     options: DocOptions = doc._amsthm
@@ -337,14 +341,15 @@ def amsthm_latex(elem: Element, doc: Doc):
     return None
 
 
-def action_amsthm(elem: Element, doc: Doc):
+def action_amsthm(elem: Element, doc: Doc) -> pf.RawBlock | None:
     if doc.format in LATEX_LIKE:
         return amsthm_latex(elem, doc)
     else:
-        return amsthm(elem, doc)
+        amsthm(elem, doc)
+        return None
 
 
-def process_ref(elem: Element, doc: Doc):
+def process_ref(elem: Element, doc: Doc) -> pf.Str | None:
     options: DocOptions = doc._amsthm
     # from [@...] to number
     if isinstance(elem, pf.Cite):
@@ -361,25 +366,27 @@ def process_ref(elem: Element, doc: Doc):
             match = matches[0]
             if match in options.identifiers:
                 return pf.Str(options.identifiers[match])
+    return None
 
 
-def process_ref_latex(elem: Element, doc: Doc):
+def process_ref_latex(elem: Element, doc: Doc) -> pf.RawInline | None:
     options: DocOptions = doc._amsthm
     # from [@...] to \ref{...}
     if isinstance(elem, pf.Cite):
         text = pf.stringify(elem)[2:-1]
         if text in options.identifiers:
             return pf.RawInline(f"\\ref{{{text}}}", format="latex")
+    return None
 
 
-def action_process_ref(elem: Element, doc: Doc):
+def action_process_ref(elem: Element, doc: Doc) -> pf.Str | pf.RawInline | None:
     if doc.format in LATEX_LIKE:
         return process_ref_latex(elem, doc)
     else:
         return process_ref(elem, doc)
 
 
-def finalize(doc: Doc):
+def finalize(doc: Doc) -> None:
     del doc._amsthm
 
 
@@ -388,5 +395,5 @@ actions: tuple[PANFLUTE_ACTION] = (action_amsthm, action_process_ref)  # type: i
 FILTER: PANFLUTE_FILTER = (actions, prepare, finalize)
 
 
-def main(doc: Doc | None = None):
+def main(doc: Doc | None = None) -> None:
     return pf.run_filters(actions, prepare=prepare, finalize=finalize, doc=doc)

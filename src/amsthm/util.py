@@ -16,8 +16,8 @@ def setup_logging(
     level: str = "INFO",
     env_var: str = "AMSTHMLOGLEVEL",
     fmt: str = "%(name)s %(levelname)s %(message)s",
-    Handler=logging.StreamHandler,
-    Formatter=Formatter,
+    Handler: type[logging.Handler] = logging.StreamHandler,
+    Formatter: type[logging.Formatter] = Formatter,
 ) -> logging.Logger:
     """Setup logging.
 
