@@ -1,0 +1,24 @@
+docs,"[![Documentation Status](https://readthedocs.org/projects/amsthm/badge/?version=latest)](https://amsthm.readthedocs.io/en/latest/?badge=latest&style=plastic)
+[![Documentation Status](https://github.com/ickc/amsthm/workflows/GitHub%20Pages/badge.svg)](https://ickc.github.io/amsthm)"
+tests,"![GitHub Actions](https://github.com/ickc/amsthm/workflows/Python%20package/badge.svg)
+[![Coverage Status](https://codecov.io/gh/ickc/amsthm/branch/master/graphs/badge.svg?branch=master)](https://codecov.io/github/ickc/amsthm)
+<!--[![Coverage Status](https://coveralls.io/repos/ickc/amsthm/badge.svg?branch=master&service=github)](https://coveralls.io/r/ickc/amsthm)-->
+
+[![Codacy Code Quality Status](https://img.shields.io/codacy/grade/078ebc537c5747f68c1d4ad3d3594bbf.svg)](https://www.codacy.com/app/ickc/amsthm)
+[![Scrutinizer Status](https://img.shields.io/scrutinizer/quality/g/ickc/amsthm/master.svg)](https://scrutinizer-ci.com/g/ickc/amsthm/)
+[![CodeClimate Quality Status](https://codeclimate.com/github/ickc/amsthm/badges/gpa.svg)](https://codeclimate.com/github/ickc/amsthm)"
+package,"[![Supported versions](https://img.shields.io/pypi/pyversions/amsthm.svg)](https://pypi.org/project/amsthm)
+[![Supported implementations](https://img.shields.io/pypi/implementation/amsthm.svg)](https://pypi.org/project/amsthm)
+[![PyPI Wheel](https://img.shields.io/pypi/wheel/amsthm.svg)](https://pypi.org/project/amsthm)
+
+[![PyPI Package latest release](https://img.shields.io/pypi/v/amsthm.svg)](https://pypi.org/project/amsthm)
+[![GitHub Releases](https://img.shields.io/github/tag/ickc/amsthm.svg?label=github+release)](https://github.com/ickc/amsthm/releases)
+[![Development Status](https://img.shields.io/pypi/status/amsthm.svg)](https://pypi.python.org/pypi/amsthm/)
+[![Downloads](https://img.shields.io/pypi/dm/amsthm.svg)](https://pypi.python.org/pypi/amsthm/)
+
+[![Commits since latest release](https://img.shields.io/github/commits-since/ickc/amsthm/v1.2.3.svg)](https://github.com/ickc/amsthm/compare/v1.2.3...master)
+![License](https://img.shields.io/pypi/l/amsthm.svg)"
+conda-forge,"[![Conda Recipe](https://img.shields.io/badge/recipe-amsthm-green.svg)](https://anaconda.org/conda-forge/amsthm)
+[![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/amsthm.svg)](https://anaconda.org/conda-forge/amsthm)
+[![Conda Version](https://img.shields.io/conda/vn/conda-forge/amsthm.svg)](https://anaconda.org/conda-forge/amsthm)
+[![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/amsthm.svg)](https://anaconda.org/conda-forge/amsthm)"

@@ -1,0 +1,125 @@
+\theoremstyle{plain}
+\newtheorem{Theorem}{Theorem}[section]
+\newtheorem{Lemma}[Theorem]{Lemma}
+\newtheorem{Corollary}[Theorem]{Corollary}
+\newtheorem*{With Space}{With Space}
+\newtheorem{Proposition}{Proposition}[section]
+\newtheorem{Conjecture}[Proposition]{Conjecture}
+\newtheorem{WithoutSpace}{WithoutSpace}[section]
+\newtheorem{KL}{Klein’s Lemma}[section]
+\theoremstyle{definition}
+\newtheorem{Definition}{Definition}[section]
+\theoremstyle{remark}
+\newtheorem{Case}{Case}[section]
+
+\hypertarget{demo}{%
+\chapter{Demo}\label{demo}}
+
+\begin{Theorem}[within parenthesis]
+plain theoremstyle \emph{here}
+\end{Theorem}
+
+\begin{Theorem}\label{simplestEquation}
+\leavevmode\vadjust pre{\hypertarget{simplestEquation}{}}%
+Label and reference:
+
+\[E=mc^2\]
+\end{Theorem}
+
+From the \ref{simplestEquation}, we see that\ldots{}
+
+Or we can use pandoc-crossref style \ref{simplestEquation} as well.
+
+\begin{With Space}[\textbf{This} is \emph{markdown}.]
+Environment name has a space, and is unnumbered.
+\end{With Space}
+
+\begin{Lemma}[can cite \ref{simplestEquation}]
+This one share counter with Theorem.
+
+Cite inside info only works with \texttt{ref\{...\}} syntax. As the
+conversion using \texttt{{[}@...{]}} to AST and walk and back to LaTeX
+would be too complex.
+\end{Lemma}
+
+\begin{Definition}[within parenthesis]
+definition theoremstyle here
+\end{Definition}
+
+\begin{Case}[within parenthesis]
+remark theoremstyle here
+\end{Case}
+
+\begin{proof}[Proof of the Main Theorem]
+Predefined proof theoremstyle here
+\end{proof}
+
+\begin{KL}
+Klein's Lemma from amsthm doc.
+\end{KL}
+
+\hypertarget{counter-test}{%
+\chapter{Counter test}\label{counter-test}}
+
+\begin{Theorem}
+some theorem
+\end{Theorem}
+
+\begin{Theorem}
+some theorem
+\end{Theorem}
+
+\hypertarget{next-level}{%
+\section{Next level}\label{next-level}}
+
+\begin{Theorem}
+some theorem
+\end{Theorem}
+
+\begin{Theorem}
+some theorem
+\end{Theorem}
+
+\hypertarget{level-3}{%
+\subsection{Level 3}\label{level-3}}
+
+\begin{Theorem}
+some theorem
+\end{Theorem}
+
+\begin{Theorem}
+some theorem
+\end{Theorem}
+
+\hypertarget{level-4}{%
+\subsubsection{Level 4}\label{level-4}}
+
+\begin{Theorem}
+some theorem
+\end{Theorem}
+
+\begin{Theorem}
+some theorem
+\end{Theorem}
+
+\hypertarget{level-5}{%
+\paragraph{Level 5}\label{level-5}}
+
+\begin{Theorem}
+some theorem
+\end{Theorem}
+
+\begin{Theorem}
+some theorem
+\end{Theorem}
+
+\hypertarget{level-6}{%
+\subparagraph{Level 6}\label{level-6}}
+
+\begin{Theorem}
+some theorem
+\end{Theorem}
+
+\begin{Theorem}
+some theorem
+\end{Theorem}

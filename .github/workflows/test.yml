@@ -1,0 +1,50 @@
+name: Python package
+
+on: [push, pull_request]
+
+jobs:
+  build-n-publish:
+
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # see setup.py for supported versions
+        # here instead of having a matrix
+        # we only test combinations in a round-robin fashion
+        # make sure the versions are monotmonic increasing w.r.t. each other
+        # other wise e.g. an older version of a dependency may not work well with a newer version of Python
+        include:
+          - python-version: "3.8"
+            pandoc-version: "2.15"
+          - python-version: "3.9"
+            pandoc-version: "2.16"
+          - python-version: "3.10"
+            pandoc-version: "latest"
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install dependencies—pip
+      run: |
+        pip install -U poetry setuptools
+        pip install .[extras,tests]
+        # let coverage read setup.py instead of pyproject.toml
+        make setup.py
+        mv pyproject.toml .pyproject.toml
+    - name: Install dependencies—pandoc
+      run: |
+        # pandoc
+        [[ ${{ matrix.pandoc-version }} == "latest" ]] && url="https://github.com/jgm/pandoc/releases/latest" || url="https://github.com/jgm/pandoc/releases/tag/${{ matrix.pandoc-version }}"
+        downloadUrl="https://github.com$(curl -L $url | grep -o '/jgm/pandoc/releases/download/.*-amd64\.deb')"
+        wget --quiet "$downloadUrl"
+        sudo dpkg -i "${downloadUrl##*/}"
+    - name: Sanity check
+      run: |
+        pip check
+        python -c 'import amsthm'
+    - name: Tests
+      run: |
+        make test COVHTML='--cov-report=xml'

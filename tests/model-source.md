@@ -1,0 +1,126 @@
+---
+amsthm:
+  counter_depth: 2
+  definition:
+  - Definition
+  name_to_text:
+    KL: Klein's Lemma
+  parent_counter: section
+  plain:
+  - Theorem:
+    - Lemma
+    - Corollary
+  - With Space\*
+  - Proposition: Conjecture
+  - WithoutSpace
+  - KL
+  remark:
+  - Case
+header-includes: |
+  ```{=latex}
+  \usepackage{amsthm}
+  ```
+---
+
+# Demo
+
+::: {.Theorem info="within parenthesis"}
+plain theoremstyle *here*
+:::
+
+::: {#simplestEquation .Theorem}
+Label and reference:
+
+$$E=mc^2$$
+:::
+
+From the \ref{simplestEquation}, we see that...
+
+Or we can use pandoc-crossref style [@simplestEquation] as well.
+
+::: {.With_Space info="**This** is *markdown*."}
+Environment name has a space, and is unnumbered.
+:::
+
+::: {.Lemma info="can cite \ref{simplestEquation}"}
+This one share counter with Theorem.
+
+Cite inside info only works with `ref{...}` syntax.
+As the conversion using `[@...]` to AST and walk and back to LaTeX would be too complex.
+:::
+
+::: {.Definition info="within parenthesis"}
+definition theoremstyle here
+:::
+
+::: {.Case info="within parenthesis"}
+remark theoremstyle here
+:::
+
+::: {.proof info="Proof of the Main Theorem"}
+Predefined proof theoremstyle here
+:::
+
+::: KL
+Klein's Lemma from amsthm doc.
+:::
+
+# Counter test
+
+::: Theorem
+some theorem
+:::
+
+::: Theorem
+some theorem
+:::
+
+## Next level
+
+::: Theorem
+some theorem
+:::
+
+::: Theorem
+some theorem
+:::
+
+### Level 3
+
+::: Theorem
+some theorem
+:::
+
+::: Theorem
+some theorem
+:::
+
+#### Level 4
+
+::: Theorem
+some theorem
+:::
+
+::: Theorem
+some theorem
+:::
+
+##### Level 5
+
+::: Theorem
+some theorem
+:::
+
+::: Theorem
+some theorem
+:::
+
+###### Level 6
+
+::: Theorem
+some theorem
+:::
+
+::: Theorem
+some theorem
+:::
