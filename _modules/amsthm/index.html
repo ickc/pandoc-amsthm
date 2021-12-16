@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>amsthm &#8212; amsthm 1.2.3 documentation</title>
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/ickc/markdown-latex-css/css/_table.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/ickc/markdown-latex-css/fonts/fonts.min.css" />
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <link rel="index" title="Index" href="../../genindex/" />
+    <link rel="search" title="Search" href="../../search/" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../../_static/js/jquery-1.12.4.min.js "></script>
+<script type="text/javascript" src="../../_static/js/jquery-fix.js "></script>
+<script type="text/javascript" src="../../_static/bootstrap-3.4.1/js/bootstrap.min.js "></script>
+<script type="text/javascript" src="../../_static/bootstrap-sphinx.js "></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../">
+          amsthm</a>
+        <span class="navbar-text navbar-version pull-left"><b>1.2.3</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="https://github.com/ickc/amsthm/">GitHub</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../../readme/">amsthm—provide a syntax to use amsthm environments in pandoc, with output in LaTeX and HTML</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation/">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/modules/">amsthm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing/">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../authors/">Authors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog/">Revision history for <code class="docutils literal notranslate"><span class="pre">amsthm</span></code></a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"></ul>
+</li>
+              
+            
+            
+              
+                
+              
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../search/" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <h1>Source code for amsthm</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">defaultdict</span>
+<span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">cached_property</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span>
+
+<span class="kn">import</span> <span class="nn">panflute</span> <span class="k">as</span> <span class="nn">pf</span>
+<span class="kn">from</span> <span class="nn">panflute.tools</span> <span class="kn">import</span> <span class="n">convert_text</span>
+
+<span class="kn">from</span> <span class="nn">.util</span> <span class="kn">import</span> <span class="n">setup_logging</span>
+
+<span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Union</span>
+
+    <span class="kn">from</span> <span class="nn">panflute.elements</span> <span class="kn">import</span> <span class="n">Doc</span><span class="p">,</span> <span class="n">Element</span>
+
+    <span class="n">THM_DEF</span> <span class="o">=</span> <span class="nb">list</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]]]]</span>
+
+    <span class="n">PANFLUTE_ACTION</span> <span class="o">=</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Element</span><span class="p">,</span> <span class="n">Doc</span><span class="p">],</span> <span class="n">Union</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="n">Element</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="n">Element</span><span class="p">]]]</span>
+    <span class="n">PANFLUTE_PREPARE</span> <span class="o">=</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="n">Doc</span><span class="p">],</span> <span class="kc">None</span><span class="p">]]</span>
+    <span class="n">PANFLUTE_FINALIZE</span> <span class="o">=</span> <span class="n">PANFLUTE_PREPARE</span>
+    <span class="c1"># see https://panflute.readthedocs.io/en/latest/code.html?highlight=run_filters#panflute.io.run_filters</span>
+    <span class="c1"># PANFLUTE_FILTER can either be just an action, or a tuple of action, prepare, finalize</span>
+    <span class="n">PANFLUTE_FILTER</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span>
+        <span class="n">PANFLUTE_ACTION</span><span class="p">,</span>
+        <span class="nb">tuple</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="n">PANFLUTE_ACTION</span><span class="p">],</span> <span class="n">PANFLUTE_PREPARE</span><span class="p">,</span> <span class="n">PANFLUTE_FINALIZE</span><span class="p">],</span>
+    <span class="p">]</span>
+
+<span class="n">PARENT_COUNTERS</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;part&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;chapter&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;section&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;subsection&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;subsubsection&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;paragraph&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;subparagraph&quot;</span><span class="p">,</span>
+<span class="p">}</span>
+<span class="n">STYLES</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;plain&quot;</span><span class="p">,</span> <span class="s2">&quot;definition&quot;</span><span class="p">,</span> <span class="s2">&quot;remark&quot;</span><span class="p">)</span>
+<span class="c1"># the default of `--top-level-division` in pandoc in the simplest case</span>
+<span class="n">DEFAULT_PARENT_COUNTER</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;section&quot;</span>
+<span class="n">METADATA_KEY</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;amsthm&quot;</span>
+<span class="n">REF_REGEX</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;^</span><span class="se">\\</span><span class="s2">ref\{(.*)\}$&quot;</span><span class="p">)</span>
+<span class="n">LATEX_LIKE</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;latex&quot;</span><span class="p">,</span> <span class="s2">&quot;beamer&quot;</span><span class="p">}</span>
+<span class="n">PLAIN_OR_DEF</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;plain&quot;</span><span class="p">,</span> <span class="s2">&quot;definition&quot;</span><span class="p">}</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">setup_logging</span><span class="p">()</span>
+
+
+<div class="viewcode-block" id="to_emph"><a class="viewcode-back" href="../../api/amsthm/#amsthm.to_emph">[docs]</a><span class="k">def</span> <span class="nf">to_emph</span><span class="p">(</span><span class="n">elem</span><span class="p">:</span> <span class="n">Element</span><span class="p">,</span> <span class="n">doc</span><span class="p">:</span> <span class="n">Doc</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">elem</span><span class="p">,</span> <span class="n">pf</span><span class="o">.</span><span class="n">Str</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">pf</span><span class="o">.</span><span class="n">Emph</span><span class="p">(</span><span class="n">elem</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="cancel_emph"><a class="viewcode-back" href="../../api/amsthm/#amsthm.cancel_emph">[docs]</a><span class="k">def</span> <span class="nf">cancel_emph</span><span class="p">(</span><span class="n">elem</span><span class="p">:</span> <span class="n">Element</span><span class="p">,</span> <span class="n">doc</span><span class="p">:</span> <span class="n">Doc</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Emulate the behavior of LaTeX that a double emph is cancelled.&quot;&quot;&quot;</span>
+    <span class="c1"># this is to make sure nested Emph in any ways would be canceled.</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">elem</span><span class="p">,</span> <span class="n">pf</span><span class="o">.</span><span class="n">Emph</span><span class="p">):</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">elem</span><span class="o">.</span><span class="n">content</span><span class="p">:</span>
+            <span class="c1"># double Emph</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">pf</span><span class="o">.</span><span class="n">Emph</span><span class="p">):</span>
+                <span class="n">res</span> <span class="o">+=</span> <span class="n">e</span><span class="o">.</span><span class="n">content</span>
+            <span class="c1"># single Emph only, keeping Emph...</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pf</span><span class="o">.</span><span class="n">Emph</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">res</span></div>
+
+
+<div class="viewcode-block" id="NewTheorem"><a class="viewcode-back" href="../../api/amsthm/#amsthm.NewTheorem">[docs]</a><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">NewTheorem</span><span class="p">:</span>
+    <span class="n">style</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">env_name</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">text</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">parent_counter</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">shared_counter</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">numbered</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="sd">&quot;&quot;&quot;A LaTeX amsthm new theorem.</span>
+
+<span class="sd">    :param parent_counter: for LaTeX output, controlling the number of numbers in a theorem.</span>
+<span class="sd">        Should be used with counter_depth to match LaTeX and non-LaTeX output.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">env_name</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;*&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">env_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env_name</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">numbered</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">text</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Defaulting text to </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">env_name</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env_name</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">parent_counter</span> <span class="o">:=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent_counter</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">parent_counter</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">PARENT_COUNTERS</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+                <span class="s2">&quot;Unsupported parent_coutner </span><span class="si">%s</span><span class="s2">, setting to default: </span><span class="si">%s</span><span class="s2">.&quot;</span><span class="p">,</span> <span class="n">parent_counter</span><span class="p">,</span> <span class="n">DEFAULT_PARENT_COUNTER</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">numbered</span> <span class="ow">and</span> <span class="p">(</span><span class="n">parent_counter</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">is</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">shared_counter</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+                <span class="s2">&quot;In numbered environment, either parent_counter or shared_counter should be defined, and not both.&quot;</span>
+                <span class="s2">&quot; Dropping shared_counter.&quot;</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">shared_counter</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">latex</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="p">[</span><span class="sa">r</span><span class="s2">&quot;\newtheorem&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">numbered</span><span class="p">:</span>
+            <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;*</span><span class="se">{{</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">env_name</span><span class="si">}</span><span class="se">}}{{</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">text</span><span class="si">}</span><span class="se">}}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">shared_counter</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">{{</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">env_name</span><span class="si">}</span><span class="se">}}{{</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">text</span><span class="si">}</span><span class="se">}}</span><span class="s2">[</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">parent_counter</span><span class="si">}</span><span class="s2">]&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">{{</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">env_name</span><span class="si">}</span><span class="se">}}</span><span class="s2">[</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">shared_counter</span><span class="si">}</span><span class="s2">]</span><span class="se">{{</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">text</span><span class="si">}</span><span class="se">}}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">class_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Name in pandoc div classes.</span>
+
+<span class="sd">        It cannot have space.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">env_name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;_&quot;</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">counter_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">env_name</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">shared_counter</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">shared_counter</span></div>
+
+
+<div class="viewcode-block" id="Proof"><a class="viewcode-back" href="../../api/amsthm/#amsthm.Proof">[docs]</a><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">Proof</span><span class="p">(</span><span class="n">NewTheorem</span><span class="p">):</span>
+    <span class="n">style</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;proof&quot;</span>
+    <span class="n">env_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;proof&quot;</span>
+    <span class="n">text</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="s2">&quot;proof&quot;</span>
+    <span class="n">parent_counter</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">shared_counter</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">numbered</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="DocOptions"><a class="viewcode-back" href="../../api/amsthm/#amsthm.DocOptions">[docs]</a><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">DocOptions</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Document options.</span>
+
+<span class="sd">    :param: counter_depth: can be n=0-6 inclusive.</span>
+<span class="sd">        n means n+1 numbers shown in non-LaTeX outputs.</span>
+<span class="sd">        e.g. n=1 means x.y, where x is the heading 1 counter, y is the theorem counter.</span>
+<span class="sd">        Should be used with parent_counter to match LaTeX and non-LaTeX output.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">theorems</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">NewTheorem</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
+    <span class="n">counter_depth</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span>
+
+    <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">counter_depth</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">counter_depth</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;counter_depth must be int, default to 1.&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">counter_depth</span> <span class="o">=</span> <span class="mi">1</span>
+
+        <span class="c1"># initial count is zero</span>
+        <span class="c1"># should be += 1 before using</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">header_counters</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">counter_depth</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reset_theorem_counters</span><span class="p">()</span>
+        <span class="c1"># from identifiers to numbers</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">identifiers</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+
+<div class="viewcode-block" id="DocOptions.reset_theorem_counters"><a class="viewcode-back" href="../../api/amsthm/#amsthm.DocOptions.reset_theorem_counters">[docs]</a>    <span class="k">def</span> <span class="nf">reset_theorem_counters</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">theorem_counters</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span></div>
+
+    <span class="nd">@cached_property</span>
+    <span class="k">def</span> <span class="nf">theorems_set</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">theorems</span><span class="p">)</span>
+
+<div class="viewcode-block" id="DocOptions.from_doc"><a class="viewcode-back" href="../../api/amsthm/#amsthm.DocOptions.from_doc">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_doc</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span>
+        <span class="n">doc</span><span class="p">:</span> <span class="n">Doc</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DocOptions</span><span class="p">:</span>
+        <span class="n">options</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span>
+            <span class="nb">str</span><span class="p">,</span>
+            <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="n">THM_DEF</span><span class="p">],</span>
+        <span class="p">]</span> <span class="o">=</span> <span class="n">doc</span><span class="o">.</span><span class="n">get_metadata</span><span class="p">(</span><span class="n">METADATA_KEY</span><span class="p">,</span> <span class="p">{})</span>
+
+        <span class="n">name_to_text</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">options</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name_to_text&quot;</span><span class="p">,</span> <span class="p">{})</span>  <span class="c1"># type: ignore[assignment, arg-type]</span>
+        <span class="n">parent_counter</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">options</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;parent_counter&quot;</span><span class="p">,</span> <span class="n">DEFAULT_PARENT_COUNTER</span><span class="p">)</span>  <span class="c1"># type: ignore[assignment]</span>
+
+        <span class="n">theorems</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">NewTheorem</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">style</span> <span class="ow">in</span> <span class="n">STYLES</span><span class="p">:</span>
+            <span class="n">option</span><span class="p">:</span> <span class="n">THM_DEF</span> <span class="o">=</span> <span class="n">options</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">style</span><span class="p">,</span> <span class="p">[])</span>  <span class="c1"># type: ignore[assignment]</span>
+            <span class="k">for</span> <span class="n">opt</span> <span class="ow">in</span> <span class="n">option</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">opt</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">opt</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                        <span class="c1"># key</span>
+                        <span class="n">theorem</span> <span class="o">=</span> <span class="n">NewTheorem</span><span class="p">(</span>
+                            <span class="n">style</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="n">name_to_text</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span> <span class="n">parent_counter</span><span class="o">=</span><span class="n">parent_counter</span>
+                        <span class="p">)</span>
+                        <span class="n">theorems</span><span class="p">[</span><span class="n">theorem</span><span class="o">.</span><span class="n">class_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">theorem</span>
+                        <span class="c1"># value(s)</span>
+                        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+                            <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">value</span><span class="p">:</span>
+                                <span class="n">theorem</span> <span class="o">=</span> <span class="n">NewTheorem</span><span class="p">(</span><span class="n">style</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="n">name_to_text</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span> <span class="n">shared_counter</span><span class="o">=</span><span class="n">key</span><span class="p">)</span>
+                                <span class="n">theorems</span><span class="p">[</span><span class="n">theorem</span><span class="o">.</span><span class="n">class_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">theorem</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">v</span> <span class="o">=</span> <span class="n">value</span>
+                            <span class="n">theorem</span> <span class="o">=</span> <span class="n">NewTheorem</span><span class="p">(</span><span class="n">style</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="n">name_to_text</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span> <span class="n">shared_counter</span><span class="o">=</span><span class="n">key</span><span class="p">)</span>
+                            <span class="n">theorems</span><span class="p">[</span><span class="n">theorem</span><span class="o">.</span><span class="n">class_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">theorem</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">key</span> <span class="o">=</span> <span class="n">opt</span>
+                    <span class="n">theorem</span> <span class="o">=</span> <span class="n">NewTheorem</span><span class="p">(</span><span class="n">style</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="n">name_to_text</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span> <span class="n">parent_counter</span><span class="o">=</span><span class="n">parent_counter</span><span class="p">)</span>
+                    <span class="n">theorems</span><span class="p">[</span><span class="n">theorem</span><span class="o">.</span><span class="n">class_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">theorem</span>
+        <span class="c1"># proof is predefined in amsthm</span>
+        <span class="n">theorems</span><span class="p">[</span><span class="s2">&quot;proof&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Proof</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">theorems</span><span class="p">,</span> <span class="n">counter_depth</span><span class="o">=</span><span class="n">options</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;counter_depth&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>  <span class="c1"># type: ignore[arg-type] # will be verified at __post_init__</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">latex</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="n">cur_style</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">res</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">theorem</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">theorems</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="c1"># proof is predefined in amsthm</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">theorem</span><span class="p">,</span> <span class="n">Proof</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">theorem</span><span class="o">.</span><span class="n">style</span> <span class="o">!=</span> <span class="n">cur_style</span><span class="p">:</span>
+                    <span class="n">cur_style</span> <span class="o">=</span> <span class="n">theorem</span><span class="o">.</span><span class="n">style</span>
+                    <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">theoremstyle</span><span class="se">{{</span><span class="si">{</span><span class="n">cur_style</span><span class="si">}</span><span class="se">}}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">theorem</span><span class="o">.</span><span class="n">latex</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">to_panflute</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pf</span><span class="o">.</span><span class="n">RawBlock</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">pf</span><span class="o">.</span><span class="n">RawBlock</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">latex</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;latex&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="prepare"><a class="viewcode-back" href="../../api/amsthm/#amsthm.prepare">[docs]</a><span class="k">def</span> <span class="nf">prepare</span><span class="p">(</span><span class="n">doc</span><span class="p">:</span> <span class="n">Doc</span><span class="p">):</span>
+    <span class="n">doc</span><span class="o">.</span><span class="n">_amsthm</span> <span class="o">=</span> <span class="n">options</span> <span class="o">=</span> <span class="n">DocOptions</span><span class="o">.</span><span class="n">from_doc</span><span class="p">(</span><span class="n">doc</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">doc</span><span class="o">.</span><span class="n">format</span> <span class="ow">in</span> <span class="n">LATEX_LIKE</span><span class="p">:</span>
+        <span class="n">doc</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">options</span><span class="o">.</span><span class="n">to_panflute</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="amsthm"><a class="viewcode-back" href="../../api/amsthm/#amsthm.amsthm">[docs]</a><span class="k">def</span> <span class="nf">amsthm</span><span class="p">(</span><span class="n">elem</span><span class="p">:</span> <span class="n">Element</span><span class="p">,</span> <span class="n">doc</span><span class="p">:</span> <span class="n">Doc</span><span class="p">):</span>
+    <span class="n">options</span><span class="p">:</span> <span class="n">DocOptions</span> <span class="o">=</span> <span class="n">doc</span><span class="o">.</span><span class="n">_amsthm</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">elem</span><span class="p">,</span> <span class="n">pf</span><span class="o">.</span><span class="n">Header</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">elem</span><span class="o">.</span><span class="n">level</span> <span class="o">&lt;=</span> <span class="n">options</span><span class="o">.</span><span class="n">counter_depth</span><span class="p">:</span>
+            <span class="c1"># Header.level is 1-indexed, while list is 0-indexed</span>
+            <span class="n">options</span><span class="o">.</span><span class="n">header_counters</span><span class="p">[</span><span class="n">elem</span><span class="o">.</span><span class="n">level</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">options</span><span class="o">.</span><span class="n">reset_theorem_counters</span><span class="p">()</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">elem</span><span class="p">,</span> <span class="n">pf</span><span class="o">.</span><span class="n">Div</span><span class="p">):</span>
+        <span class="n">environments</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">options</span><span class="o">.</span><span class="n">theorems_set</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">elem</span><span class="o">.</span><span class="n">classes</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">environments</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">environments</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Multiple environments found: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">environments</span><span class="p">)</span>
+                <span class="k">return</span> <span class="kc">None</span>
+            <span class="n">environment</span> <span class="o">=</span> <span class="n">environments</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+            <span class="n">theorem</span> <span class="o">=</span> <span class="n">options</span><span class="o">.</span><span class="n">theorems</span><span class="p">[</span><span class="n">environment</span><span class="p">]</span>
+
+            <span class="n">info</span> <span class="o">=</span> <span class="n">elem</span><span class="o">.</span><span class="n">attributes</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;info&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="nb">id</span> <span class="o">=</span> <span class="n">elem</span><span class="o">.</span><span class="n">identifier</span>
+
+            <span class="n">res</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">pf</span><span class="o">.</span><span class="n">Element</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="c1"># theorem header</span>
+            <span class="n">ElementType</span> <span class="o">=</span> <span class="n">pf</span><span class="o">.</span><span class="n">Strong</span> <span class="k">if</span> <span class="n">theorem</span><span class="o">.</span><span class="n">style</span> <span class="ow">in</span> <span class="n">PLAIN_OR_DEF</span> <span class="k">else</span> <span class="n">pf</span><span class="o">.</span><span class="n">Emph</span>
+            <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ElementType</span><span class="p">(</span><span class="n">pf</span><span class="o">.</span><span class="n">Str</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">theorem</span><span class="o">.</span><span class="n">text</span><span class="si">}</span><span class="s2"> &quot;</span><span class="p">)))</span>
+            <span class="k">if</span> <span class="n">theorem</span><span class="o">.</span><span class="n">numbered</span><span class="p">:</span>
+                <span class="n">counter_name</span> <span class="o">=</span> <span class="n">theorem</span><span class="o">.</span><span class="n">counter_name</span>
+                <span class="n">options</span><span class="o">.</span><span class="n">theorem_counters</span><span class="p">[</span><span class="n">counter_name</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="n">theorem_counter</span> <span class="o">=</span> <span class="n">options</span><span class="o">.</span><span class="n">theorem_counters</span><span class="p">[</span><span class="n">counter_name</span><span class="p">]</span>
+                <span class="n">theorem_number</span> <span class="o">=</span> <span class="s2">&quot;.&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">options</span><span class="o">.</span><span class="n">header_counters</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">theorem_counter</span><span class="p">)])</span>
+                <span class="k">if</span> <span class="nb">id</span><span class="p">:</span>
+                    <span class="n">options</span><span class="o">.</span><span class="n">identifiers</span><span class="p">[</span><span class="nb">id</span><span class="p">]</span> <span class="o">=</span> <span class="n">theorem_number</span>
+                <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                    <span class="n">pf</span><span class="o">.</span><span class="n">Strong</span><span class="p">(</span><span class="n">pf</span><span class="o">.</span><span class="n">Str</span><span class="p">(</span><span class="n">theorem_number</span><span class="p">))</span> <span class="k">if</span> <span class="n">theorem</span><span class="o">.</span><span class="n">style</span> <span class="ow">in</span> <span class="n">PLAIN_OR_DEF</span> <span class="k">else</span> <span class="n">pf</span><span class="o">.</span><span class="n">Str</span><span class="p">(</span><span class="n">theorem_number</span><span class="p">)</span>
+                <span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">info</span><span class="p">:</span>
+                <span class="n">res</span> <span class="o">+=</span> <span class="p">[</span><span class="n">pf</span><span class="o">.</span><span class="n">Space</span><span class="p">,</span> <span class="n">pf</span><span class="o">.</span><span class="n">Str</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;(&quot;</span><span class="p">)]</span>
+                <span class="n">info_ast</span> <span class="o">=</span> <span class="n">convert_text</span><span class="p">(</span><span class="n">info</span><span class="p">)</span>
+                <span class="n">temp</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Element</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">info_ast</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">pf</span><span class="o">.</span><span class="n">Para</span><span class="p">):</span>
+                        <span class="n">temp</span> <span class="o">+=</span> <span class="nb">list</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">temp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+                <span class="n">res</span> <span class="o">+=</span> <span class="n">temp</span>
+                <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pf</span><span class="o">.</span><span class="n">Str</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;)&quot;</span><span class="p">))</span>
+
+            <span class="n">res</span> <span class="o">+=</span> <span class="p">[</span><span class="n">ElementType</span><span class="p">(</span><span class="n">pf</span><span class="o">.</span><span class="n">Str</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;.&quot;</span><span class="p">)),</span> <span class="n">pf</span><span class="o">.</span><span class="n">Space</span><span class="p">]</span>
+
+            <span class="c1"># theorem body</span>
+            <span class="k">if</span> <span class="n">theorem</span><span class="o">.</span><span class="n">style</span> <span class="o">==</span> <span class="s2">&quot;plain&quot;</span><span class="p">:</span>
+                <span class="n">elem</span><span class="o">.</span><span class="n">walk</span><span class="p">(</span><span class="n">to_emph</span><span class="p">)</span>
+                <span class="n">elem</span><span class="o">.</span><span class="n">walk</span><span class="p">(</span><span class="n">cancel_emph</span><span class="p">)</span>
+            <span class="c1"># TODO: can be improve this?</span>
+            <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="n">res</span><span class="p">):</span>
+                <span class="n">elem</span><span class="o">.</span><span class="n">content</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">theorem</span><span class="o">.</span><span class="n">style</span> <span class="o">==</span> <span class="s2">&quot;proof&quot;</span><span class="p">:</span>
+                <span class="n">elem</span><span class="o">.</span><span class="n">content</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pf</span><span class="o">.</span><span class="n">RawInline</span><span class="p">(</span><span class="s2">&quot;&lt;span style=&#39;float: right&#39;&gt;◻&lt;/span&gt;&quot;</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;html&quot;</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="amsthm_latex"><a class="viewcode-back" href="../../api/amsthm/#amsthm.amsthm_latex">[docs]</a><span class="k">def</span> <span class="nf">amsthm_latex</span><span class="p">(</span><span class="n">elem</span><span class="p">:</span> <span class="n">Element</span><span class="p">,</span> <span class="n">doc</span><span class="p">:</span> <span class="n">Doc</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;when output format is LaTeX, all div is converted into native LaTeX amsthm environments&quot;&quot;&quot;</span>
+    <span class="c1"># check if it is a Div, and the class is an amsthm environment</span>
+    <span class="n">options</span><span class="p">:</span> <span class="n">DocOptions</span> <span class="o">=</span> <span class="n">doc</span><span class="o">.</span><span class="n">_amsthm</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">elem</span><span class="p">,</span> <span class="n">pf</span><span class="o">.</span><span class="n">Div</span><span class="p">):</span>
+        <span class="n">environments</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">options</span><span class="o">.</span><span class="n">theorems_set</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">elem</span><span class="o">.</span><span class="n">classes</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">environments</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">environments</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Multiple environments found: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">environments</span><span class="p">)</span>
+                <span class="k">return</span> <span class="kc">None</span>
+            <span class="n">environment</span> <span class="o">=</span> <span class="n">environments</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+            <span class="n">theorem</span> <span class="o">=</span> <span class="n">options</span><span class="o">.</span><span class="n">theorems</span><span class="p">[</span><span class="n">environment</span><span class="p">]</span>
+            <span class="n">div_content</span> <span class="o">=</span> <span class="n">pf</span><span class="o">.</span><span class="n">convert_text</span><span class="p">(</span><span class="n">elem</span><span class="p">,</span> <span class="n">input_format</span><span class="o">=</span><span class="s2">&quot;panflute&quot;</span><span class="p">,</span> <span class="n">output_format</span><span class="o">=</span><span class="s2">&quot;latex&quot;</span><span class="p">)</span>
+            <span class="n">info</span> <span class="o">=</span> <span class="n">elem</span><span class="o">.</span><span class="n">attributes</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;info&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="nb">id</span> <span class="o">=</span> <span class="n">elem</span><span class="o">.</span><span class="n">identifier</span>
+            <span class="n">res</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">begin</span><span class="se">{{</span><span class="si">{</span><span class="n">theorem</span><span class="o">.</span><span class="n">env_name</span><span class="si">}</span><span class="se">}}</span><span class="s2">&quot;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">info</span><span class="p">:</span>
+                <span class="n">res</span> <span class="o">+=</span> <span class="p">[</span><span class="sa">r</span><span class="s2">&quot;[&quot;</span><span class="p">,</span> <span class="n">convert_text</span><span class="p">(</span><span class="n">info</span><span class="p">,</span> <span class="n">output_format</span><span class="o">=</span><span class="s2">&quot;latex&quot;</span><span class="p">),</span> <span class="sa">r</span><span class="s2">&quot;]&quot;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="nb">id</span><span class="p">:</span>
+                <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">label</span><span class="se">{{</span><span class="si">{</span><span class="nb">id</span><span class="si">}</span><span class="se">}}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="c1"># in LaTeX output, we only need to keep a reference of the id</span>
+                <span class="c1"># the numbering (value of this dict) is handled by LaTeX</span>
+                <span class="n">options</span><span class="o">.</span><span class="n">identifiers</span><span class="p">[</span><span class="nb">id</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="si">{</span><span class="n">div_content</span><span class="si">}</span><span class="se">\n\\</span><span class="s2">end</span><span class="se">{{</span><span class="si">{</span><span class="n">theorem</span><span class="o">.</span><span class="n">env_name</span><span class="si">}</span><span class="se">}}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">pf</span><span class="o">.</span><span class="n">RawBlock</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">res</span><span class="p">),</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;latex&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="action_amsthm"><a class="viewcode-back" href="../../api/amsthm/#amsthm.action_amsthm">[docs]</a><span class="k">def</span> <span class="nf">action_amsthm</span><span class="p">(</span><span class="n">elem</span><span class="p">:</span> <span class="n">Element</span><span class="p">,</span> <span class="n">doc</span><span class="p">:</span> <span class="n">Doc</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">doc</span><span class="o">.</span><span class="n">format</span> <span class="ow">in</span> <span class="n">LATEX_LIKE</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">amsthm_latex</span><span class="p">(</span><span class="n">elem</span><span class="p">,</span> <span class="n">doc</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">amsthm</span><span class="p">(</span><span class="n">elem</span><span class="p">,</span> <span class="n">doc</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="process_ref"><a class="viewcode-back" href="../../api/amsthm/#amsthm.process_ref">[docs]</a><span class="k">def</span> <span class="nf">process_ref</span><span class="p">(</span><span class="n">elem</span><span class="p">:</span> <span class="n">Element</span><span class="p">,</span> <span class="n">doc</span><span class="p">:</span> <span class="n">Doc</span><span class="p">):</span>
+    <span class="n">options</span><span class="p">:</span> <span class="n">DocOptions</span> <span class="o">=</span> <span class="n">doc</span><span class="o">.</span><span class="n">_amsthm</span>
+    <span class="c1"># from [@...] to number</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">elem</span><span class="p">,</span> <span class="n">pf</span><span class="o">.</span><span class="n">Cite</span><span class="p">):</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="n">pf</span><span class="o">.</span><span class="n">stringify</span><span class="p">(</span><span class="n">elem</span><span class="p">)[</span><span class="mi">2</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">text</span> <span class="ow">in</span> <span class="n">options</span><span class="o">.</span><span class="n">identifiers</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">pf</span><span class="o">.</span><span class="n">Str</span><span class="p">(</span><span class="n">options</span><span class="o">.</span><span class="n">identifiers</span><span class="p">[</span><span class="n">text</span><span class="p">])</span>
+    <span class="c1"># from \ref{...} to number</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">elem</span><span class="p">,</span> <span class="n">pf</span><span class="o">.</span><span class="n">RawInline</span><span class="p">)</span> <span class="ow">and</span> <span class="n">elem</span><span class="o">.</span><span class="n">format</span> <span class="o">==</span> <span class="s2">&quot;tex&quot;</span><span class="p">:</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="n">elem</span><span class="o">.</span><span class="n">text</span>
+        <span class="k">if</span> <span class="n">matches</span> <span class="o">:=</span> <span class="n">REF_REGEX</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">matches</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Ignoring ref matching in </span><span class="si">%s</span><span class="s2">: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">matches</span><span class="p">)</span>
+                <span class="k">return</span> <span class="kc">None</span>
+            <span class="n">match</span> <span class="o">=</span> <span class="n">matches</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">match</span> <span class="ow">in</span> <span class="n">options</span><span class="o">.</span><span class="n">identifiers</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">pf</span><span class="o">.</span><span class="n">Str</span><span class="p">(</span><span class="n">options</span><span class="o">.</span><span class="n">identifiers</span><span class="p">[</span><span class="n">match</span><span class="p">])</span></div>
+
+
+<div class="viewcode-block" id="process_ref_latex"><a class="viewcode-back" href="../../api/amsthm/#amsthm.process_ref_latex">[docs]</a><span class="k">def</span> <span class="nf">process_ref_latex</span><span class="p">(</span><span class="n">elem</span><span class="p">:</span> <span class="n">Element</span><span class="p">,</span> <span class="n">doc</span><span class="p">:</span> <span class="n">Doc</span><span class="p">):</span>
+    <span class="n">options</span><span class="p">:</span> <span class="n">DocOptions</span> <span class="o">=</span> <span class="n">doc</span><span class="o">.</span><span class="n">_amsthm</span>
+    <span class="c1"># from [@...] to \ref{...}</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">elem</span><span class="p">,</span> <span class="n">pf</span><span class="o">.</span><span class="n">Cite</span><span class="p">):</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="n">pf</span><span class="o">.</span><span class="n">stringify</span><span class="p">(</span><span class="n">elem</span><span class="p">)[</span><span class="mi">2</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">text</span> <span class="ow">in</span> <span class="n">options</span><span class="o">.</span><span class="n">identifiers</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">pf</span><span class="o">.</span><span class="n">RawInline</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">ref</span><span class="se">{{</span><span class="si">{</span><span class="n">text</span><span class="si">}</span><span class="se">}}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;latex&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="action_process_ref"><a class="viewcode-back" href="../../api/amsthm/#amsthm.action_process_ref">[docs]</a><span class="k">def</span> <span class="nf">action_process_ref</span><span class="p">(</span><span class="n">elem</span><span class="p">:</span> <span class="n">Element</span><span class="p">,</span> <span class="n">doc</span><span class="p">:</span> <span class="n">Doc</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">doc</span><span class="o">.</span><span class="n">format</span> <span class="ow">in</span> <span class="n">LATEX_LIKE</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">process_ref_latex</span><span class="p">(</span><span class="n">elem</span><span class="p">,</span> <span class="n">doc</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">process_ref</span><span class="p">(</span><span class="n">elem</span><span class="p">,</span> <span class="n">doc</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="finalize"><a class="viewcode-back" href="../../api/amsthm/#amsthm.finalize">[docs]</a><span class="k">def</span> <span class="nf">finalize</span><span class="p">(</span><span class="n">doc</span><span class="p">:</span> <span class="n">Doc</span><span class="p">):</span>
+    <span class="k">del</span> <span class="n">doc</span><span class="o">.</span><span class="n">_amsthm</span></div>
+
+
+<span class="n">actions</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">PANFLUTE_ACTION</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">action_amsthm</span><span class="p">,</span> <span class="n">action_process_ref</span><span class="p">)</span>
+<span class="c1">#: equiv. to the texp cli, but provided as a Python interface</span>
+<span class="n">FILTER</span><span class="p">:</span> <span class="n">PANFLUTE_FILTER</span> <span class="o">=</span> <span class="p">(</span><span class="n">actions</span><span class="p">,</span> <span class="n">prepare</span><span class="p">,</span> <span class="n">finalize</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="main"><a class="viewcode-back" href="../../api/amsthm/#amsthm.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">doc</span><span class="p">:</span> <span class="n">Doc</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">pf</span><span class="o">.</span><span class="n">run_filters</span><span class="p">(</span><span class="n">actions</span><span class="p">,</span> <span class="n">prepare</span><span class="o">=</span><span class="n">prepare</span><span class="p">,</span> <span class="n">finalize</span><span class="o">=</span><span class="n">finalize</span><span class="p">,</span> <span class="n">doc</span><span class="o">=</span><span class="n">doc</span><span class="p">)</span></div>
+</pre></div>
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2016-2021, Kolen Cheung.<br/>
+      Last updated on Dec 16, 2021.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.5.4.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

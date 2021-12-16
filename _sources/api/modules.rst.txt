@@ -1,0 +1,7 @@
+amsthm
+======
+
+.. toctree::
+   :maxdepth: 4
+
+   amsthm

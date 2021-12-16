@@ -1,0 +1,7 @@
+amsthm.util module
+==================
+
+.. automodule:: amsthm.util
+   :members:
+   :undoc-members:
+   :show-inheritance:

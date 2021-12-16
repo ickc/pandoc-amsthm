@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>amsthm package &#8212; amsthm 1.2.3 documentation</title>
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/ickc/markdown-latex-css/css/_table.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/ickc/markdown-latex-css/fonts/fonts.min.css" />
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <link rel="index" title="Index" href="../../genindex/" />
+    <link rel="search" title="Search" href="../../search/" />
+    <link rel="next" title="amsthm.util module" href="../amsthm.util/" />
+    <link rel="prev" title="amsthm" href="../modules/" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../../_static/js/jquery-1.12.4.min.js "></script>
+<script type="text/javascript" src="../../_static/js/jquery-fix.js "></script>
+<script type="text/javascript" src="../../_static/bootstrap-3.4.1/js/bootstrap.min.js "></script>
+<script type="text/javascript" src="../../_static/bootstrap-sphinx.js "></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../">
+          amsthm</a>
+        <span class="navbar-text navbar-version pull-left"><b>1.2.3</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="https://github.com/ickc/amsthm/">GitHub</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../readme/">amsthm—provide a syntax to use amsthm environments in pandoc, with output in LaTeX and HTML</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation/">Installation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../modules/">amsthm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing/">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../authors/">Authors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog/">Revision history for <code class="docutils literal notranslate"><span class="pre">amsthm</span></code></a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">amsthm package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+              
+                
+  <li>
+    <a href="../modules/" title="Previous Chapter: amsthm"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; amsthm</span>
+    </a>
+  </li>
+  <li>
+    <a href="../amsthm.util/" title="Next Chapter: amsthm.util module"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">amsthm.util module &raquo;</span>
+    </a>
+  </li>
+              
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../search/" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <div class="section" id="module-amsthm">
+<span id="amsthm-package"></span><h1>amsthm package<a class="headerlink" href="#module-amsthm" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt id="amsthm.DocOptions">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">amsthm.</span></code><code class="sig-name descname"><span class="pre">DocOptions</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="pre">theorems:</span> <span class="pre">dict</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></em>, <em class="sig-param"><span class="pre">counter_depth:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">1</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/amsthm/#DocOptions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#amsthm.DocOptions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Document options.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Param</dt>
+<dd class="field-odd"><p>counter_depth: can be n=0-6 inclusive.
+n means n+1 numbers shown in non-LaTeX outputs.
+e.g. n=1 means x.y, where x is the heading 1 counter, y is the theorem counter.
+Should be used with parent_counter to match LaTeX and non-LaTeX output.</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt id="amsthm.DocOptions.counter_depth">
+<code class="sig-name descname"><span class="pre">counter_depth</span></code><em class="property"><span class="pre">:</span> <span class="pre">int</span></em><em class="property"> <span class="pre">=</span> <span class="pre">1</span></em><a class="headerlink" href="#amsthm.DocOptions.counter_depth" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="amsthm.DocOptions.from_doc">
+<em class="property"><span class="pre">classmethod</span> </em><code class="sig-name descname"><span class="pre">from_doc</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">doc</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Doc</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#amsthm.DocOptions" title="amsthm.DocOptions"><span class="pre">DocOptions</span></a><a class="reference internal" href="../../_modules/amsthm/#DocOptions.from_doc"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#amsthm.DocOptions.from_doc" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="amsthm.DocOptions.latex">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">latex</span></code><a class="headerlink" href="#amsthm.DocOptions.latex" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="amsthm.DocOptions.reset_theorem_counters">
+<code class="sig-name descname"><span class="pre">reset_theorem_counters</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="reference internal" href="../../_modules/amsthm/#DocOptions.reset_theorem_counters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#amsthm.DocOptions.reset_theorem_counters" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="amsthm.DocOptions.theorems">
+<code class="sig-name descname"><span class="pre">theorems</span></code><em class="property"><span class="pre">:</span> <span class="pre">dict</span></em><a class="headerlink" href="#amsthm.DocOptions.theorems" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="amsthm.DocOptions.theorems_set">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">theorems_set</span></code><a class="headerlink" href="#amsthm.DocOptions.theorems_set" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="amsthm.DocOptions.to_panflute">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">to_panflute</span></code><a class="headerlink" href="#amsthm.DocOptions.to_panflute" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py data">
+<dt id="amsthm.FILTER">
+<code class="sig-prename descclassname"><span class="pre">amsthm.</span></code><code class="sig-name descname"><span class="pre">FILTER</span></code><em class="property"><span class="pre">:</span> <span class="pre">PANFLUTE_FILTER</span></em><em class="property"> <span class="pre">=</span> <span class="pre">((&lt;function</span> <span class="pre">action_amsthm&gt;,</span> <span class="pre">&lt;function</span> <span class="pre">action_process_ref&gt;),</span> <span class="pre">&lt;function</span> <span class="pre">prepare&gt;,</span> <span class="pre">&lt;function</span> <span class="pre">finalize&gt;)</span></em><a class="headerlink" href="#amsthm.FILTER" title="Permalink to this definition">¶</a></dt>
+<dd><p>equiv. to the texp cli, but provided as a Python interface</p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="amsthm.NewTheorem">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">amsthm.</span></code><code class="sig-name descname"><span class="pre">NewTheorem</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">style</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">env_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span> <span class="pre">|</span> <span class="pre">None</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent_counter</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span> <span class="pre">|</span> <span class="pre">None</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shared_counter</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span> <span class="pre">|</span> <span class="pre">None</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numbered</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/amsthm/#NewTheorem"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#amsthm.NewTheorem" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt id="amsthm.NewTheorem.class_name">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">class_name</span></code><a class="headerlink" href="#amsthm.NewTheorem.class_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Name in pandoc div classes.</p>
+<p>It cannot have space.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="amsthm.NewTheorem.counter_name">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">counter_name</span></code><a class="headerlink" href="#amsthm.NewTheorem.counter_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="amsthm.NewTheorem.env_name">
+<code class="sig-name descname"><span class="pre">env_name</span></code><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><a class="headerlink" href="#amsthm.NewTheorem.env_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="amsthm.NewTheorem.latex">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">latex</span></code><a class="headerlink" href="#amsthm.NewTheorem.latex" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="amsthm.NewTheorem.numbered">
+<code class="sig-name descname"><span class="pre">numbered</span></code><em class="property"><span class="pre">:</span> <span class="pre">bool</span></em><em class="property"> <span class="pre">=</span> <span class="pre">True</span></em><a class="headerlink" href="#amsthm.NewTheorem.numbered" title="Permalink to this definition">¶</a></dt>
+<dd><p>A LaTeX amsthm new theorem.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>parent_counter</strong> – for LaTeX output, controlling the number of numbers in a theorem.
+Should be used with counter_depth to match LaTeX and non-LaTeX output.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="amsthm.NewTheorem.parent_counter">
+<code class="sig-name descname"><span class="pre">parent_counter</span></code><em class="property"><span class="pre">:</span> <span class="pre">str</span> <span class="p"><span class="pre">|</span></span> <span class="pre">None</span></em><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#amsthm.NewTheorem.parent_counter" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="amsthm.NewTheorem.shared_counter">
+<code class="sig-name descname"><span class="pre">shared_counter</span></code><em class="property"><span class="pre">:</span> <span class="pre">str</span> <span class="p"><span class="pre">|</span></span> <span class="pre">None</span></em><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#amsthm.NewTheorem.shared_counter" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="amsthm.NewTheorem.style">
+<code class="sig-name descname"><span class="pre">style</span></code><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><a class="headerlink" href="#amsthm.NewTheorem.style" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="amsthm.NewTheorem.text">
+<code class="sig-name descname"><span class="pre">text</span></code><em class="property"><span class="pre">:</span> <span class="pre">str</span> <span class="p"><span class="pre">|</span></span> <span class="pre">None</span></em><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#amsthm.NewTheorem.text" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="amsthm.Proof">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">amsthm.</span></code><code class="sig-name descname"><span class="pre">Proof</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">style</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'proof'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">env_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'proof'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span> <span class="pre">|</span> <span class="pre">None</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'proof'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent_counter</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span> <span class="pre">|</span> <span class="pre">None</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shared_counter</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span> <span class="pre">|</span> <span class="pre">None</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numbered</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/amsthm/#Proof"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#amsthm.Proof" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#amsthm.NewTheorem" title="amsthm.NewTheorem"><code class="xref py py-class docutils literal notranslate"><span class="pre">amsthm.NewTheorem</span></code></a></p>
+<dl class="py attribute">
+<dt id="amsthm.Proof.env_name">
+<code class="sig-name descname"><span class="pre">env_name</span></code><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><em class="property"> <span class="pre">=</span> <span class="pre">'proof'</span></em><a class="headerlink" href="#amsthm.Proof.env_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="amsthm.Proof.numbered">
+<code class="sig-name descname"><span class="pre">numbered</span></code><em class="property"><span class="pre">:</span> <span class="pre">bool</span></em><em class="property"> <span class="pre">=</span> <span class="pre">False</span></em><a class="headerlink" href="#amsthm.Proof.numbered" title="Permalink to this definition">¶</a></dt>
+<dd><p>A LaTeX amsthm new theorem.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>parent_counter</strong> – for LaTeX output, controlling the number of numbers in a theorem.
+Should be used with counter_depth to match LaTeX and non-LaTeX output.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="amsthm.Proof.parent_counter">
+<code class="sig-name descname"><span class="pre">parent_counter</span></code><em class="property"><span class="pre">:</span> <span class="pre">str</span> <span class="p"><span class="pre">|</span></span> <span class="pre">None</span></em><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#amsthm.Proof.parent_counter" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="amsthm.Proof.shared_counter">
+<code class="sig-name descname"><span class="pre">shared_counter</span></code><em class="property"><span class="pre">:</span> <span class="pre">str</span> <span class="p"><span class="pre">|</span></span> <span class="pre">None</span></em><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#amsthm.Proof.shared_counter" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="amsthm.Proof.style">
+<code class="sig-name descname"><span class="pre">style</span></code><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><em class="property"> <span class="pre">=</span> <span class="pre">'proof'</span></em><a class="headerlink" href="#amsthm.Proof.style" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="amsthm.Proof.text">
+<code class="sig-name descname"><span class="pre">text</span></code><em class="property"><span class="pre">:</span> <span class="pre">str</span> <span class="p"><span class="pre">|</span></span> <span class="pre">None</span></em><em class="property"> <span class="pre">=</span> <span class="pre">'proof'</span></em><a class="headerlink" href="#amsthm.Proof.text" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt id="amsthm.action_amsthm">
+<code class="sig-prename descclassname"><span class="pre">amsthm.</span></code><code class="sig-name descname"><span class="pre">action_amsthm</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">elem</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Element</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doc</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Doc</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/amsthm/#action_amsthm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#amsthm.action_amsthm" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="amsthm.action_process_ref">
+<code class="sig-prename descclassname"><span class="pre">amsthm.</span></code><code class="sig-name descname"><span class="pre">action_process_ref</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">elem</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Element</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doc</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Doc</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/amsthm/#action_process_ref"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#amsthm.action_process_ref" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="amsthm.amsthm">
+<code class="sig-prename descclassname"><span class="pre">amsthm.</span></code><code class="sig-name descname"><span class="pre">amsthm</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">elem</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Element</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doc</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Doc</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/amsthm/#amsthm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#amsthm.amsthm" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="amsthm.amsthm_latex">
+<code class="sig-prename descclassname"><span class="pre">amsthm.</span></code><code class="sig-name descname"><span class="pre">amsthm_latex</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">elem</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Element</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doc</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Doc</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/amsthm/#amsthm_latex"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#amsthm.amsthm_latex" title="Permalink to this definition">¶</a></dt>
+<dd><p>when output format is LaTeX, all div is converted into native LaTeX amsthm environments</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="amsthm.cancel_emph">
+<code class="sig-prename descclassname"><span class="pre">amsthm.</span></code><code class="sig-name descname"><span class="pre">cancel_emph</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">elem</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Element</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doc</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Doc</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/amsthm/#cancel_emph"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#amsthm.cancel_emph" title="Permalink to this definition">¶</a></dt>
+<dd><p>Emulate the behavior of LaTeX that a double emph is cancelled.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="amsthm.finalize">
+<code class="sig-prename descclassname"><span class="pre">amsthm.</span></code><code class="sig-name descname"><span class="pre">finalize</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">doc</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Doc</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/amsthm/#finalize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#amsthm.finalize" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="amsthm.main">
+<code class="sig-prename descclassname"><span class="pre">amsthm.</span></code><code class="sig-name descname"><span class="pre">main</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">doc</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Doc</span> <span class="p"><span class="pre">|</span></span> <span class="pre">None</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/amsthm/#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#amsthm.main" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="amsthm.prepare">
+<code class="sig-prename descclassname"><span class="pre">amsthm.</span></code><code class="sig-name descname"><span class="pre">prepare</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">doc</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Doc</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/amsthm/#prepare"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#amsthm.prepare" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="amsthm.process_ref">
+<code class="sig-prename descclassname"><span class="pre">amsthm.</span></code><code class="sig-name descname"><span class="pre">process_ref</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">elem</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Element</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doc</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Doc</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/amsthm/#process_ref"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#amsthm.process_ref" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="amsthm.process_ref_latex">
+<code class="sig-prename descclassname"><span class="pre">amsthm.</span></code><code class="sig-name descname"><span class="pre">process_ref_latex</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">elem</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Element</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doc</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Doc</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/amsthm/#process_ref_latex"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#amsthm.process_ref_latex" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="amsthm.to_emph">
+<code class="sig-prename descclassname"><span class="pre">amsthm.</span></code><code class="sig-name descname"><span class="pre">to_emph</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">elem</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Element</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doc</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Doc</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/amsthm/#to_emph"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#amsthm.to_emph" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../amsthm.util/">amsthm.util module</a></li>
+</ul>
+</div>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2016-2021, Kolen Cheung.<br/>
+      Last updated on Dec 16, 2021.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.5.4.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>
