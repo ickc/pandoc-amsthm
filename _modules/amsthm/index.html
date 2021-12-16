@@ -160,12 +160,14 @@
 <span class="n">logger</span> <span class="o">=</span> <span class="n">setup_logging</span><span class="p">()</span>
 
 
-<div class="viewcode-block" id="to_emph"><a class="viewcode-back" href="../../api/amsthm/#amsthm.to_emph">[docs]</a><span class="k">def</span> <span class="nf">to_emph</span><span class="p">(</span><span class="n">elem</span><span class="p">:</span> <span class="n">Element</span><span class="p">,</span> <span class="n">doc</span><span class="p">:</span> <span class="n">Doc</span><span class="p">):</span>
+<div class="viewcode-block" id="to_emph"><a class="viewcode-back" href="../../api/amsthm/#amsthm.to_emph">[docs]</a><span class="k">def</span> <span class="nf">to_emph</span><span class="p">(</span><span class="n">elem</span><span class="p">:</span> <span class="n">Element</span><span class="p">,</span> <span class="n">doc</span><span class="p">:</span> <span class="n">Doc</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pf</span><span class="o">.</span><span class="n">Emph</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">elem</span><span class="p">,</span> <span class="n">pf</span><span class="o">.</span><span class="n">Str</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">pf</span><span class="o">.</span><span class="n">Emph</span><span class="p">(</span><span class="n">elem</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">pf</span><span class="o">.</span><span class="n">Emph</span><span class="p">(</span><span class="n">elem</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
 
 
-<div class="viewcode-block" id="cancel_emph"><a class="viewcode-back" href="../../api/amsthm/#amsthm.cancel_emph">[docs]</a><span class="k">def</span> <span class="nf">cancel_emph</span><span class="p">(</span><span class="n">elem</span><span class="p">:</span> <span class="n">Element</span><span class="p">,</span> <span class="n">doc</span><span class="p">:</span> <span class="n">Doc</span><span class="p">):</span>
+<div class="viewcode-block" id="cancel_emph"><a class="viewcode-back" href="../../api/amsthm/#amsthm.cancel_emph">[docs]</a><span class="k">def</span> <span class="nf">cancel_emph</span><span class="p">(</span><span class="n">elem</span><span class="p">:</span> <span class="n">Element</span><span class="p">,</span> <span class="n">doc</span><span class="p">:</span> <span class="n">Doc</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Element</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Emulate the behavior of LaTeX that a double emph is cancelled.&quot;&quot;&quot;</span>
     <span class="c1"># this is to make sure nested Emph in any ways would be canceled.</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">elem</span><span class="p">,</span> <span class="n">pf</span><span class="o">.</span><span class="n">Emph</span><span class="p">):</span>
@@ -177,7 +179,9 @@
             <span class="c1"># single Emph only, keeping Emph...</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pf</span><span class="o">.</span><span class="n">Emph</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
-        <span class="k">return</span> <span class="n">res</span></div>
+        <span class="k">return</span> <span class="n">res</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
 
 
 <div class="viewcode-block" id="NewTheorem"><a class="viewcode-back" href="../../api/amsthm/#amsthm.NewTheorem">[docs]</a><span class="nd">@dataclass</span>
@@ -344,13 +348,13 @@
         <span class="k">return</span> <span class="n">pf</span><span class="o">.</span><span class="n">RawBlock</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">latex</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;latex&quot;</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="prepare"><a class="viewcode-back" href="../../api/amsthm/#amsthm.prepare">[docs]</a><span class="k">def</span> <span class="nf">prepare</span><span class="p">(</span><span class="n">doc</span><span class="p">:</span> <span class="n">Doc</span><span class="p">):</span>
+<div class="viewcode-block" id="prepare"><a class="viewcode-back" href="../../api/amsthm/#amsthm.prepare">[docs]</a><span class="k">def</span> <span class="nf">prepare</span><span class="p">(</span><span class="n">doc</span><span class="p">:</span> <span class="n">Doc</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
     <span class="n">doc</span><span class="o">.</span><span class="n">_amsthm</span> <span class="o">=</span> <span class="n">options</span> <span class="o">=</span> <span class="n">DocOptions</span><span class="o">.</span><span class="n">from_doc</span><span class="p">(</span><span class="n">doc</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">doc</span><span class="o">.</span><span class="n">format</span> <span class="ow">in</span> <span class="n">LATEX_LIKE</span><span class="p">:</span>
         <span class="n">doc</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">options</span><span class="o">.</span><span class="n">to_panflute</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="amsthm"><a class="viewcode-back" href="../../api/amsthm/#amsthm.amsthm">[docs]</a><span class="k">def</span> <span class="nf">amsthm</span><span class="p">(</span><span class="n">elem</span><span class="p">:</span> <span class="n">Element</span><span class="p">,</span> <span class="n">doc</span><span class="p">:</span> <span class="n">Doc</span><span class="p">):</span>
+<div class="viewcode-block" id="amsthm"><a class="viewcode-back" href="../../api/amsthm/#amsthm.amsthm">[docs]</a><span class="k">def</span> <span class="nf">amsthm</span><span class="p">(</span><span class="n">elem</span><span class="p">:</span> <span class="n">Element</span><span class="p">,</span> <span class="n">doc</span><span class="p">:</span> <span class="n">Doc</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
     <span class="n">options</span><span class="p">:</span> <span class="n">DocOptions</span> <span class="o">=</span> <span class="n">doc</span><span class="o">.</span><span class="n">_amsthm</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">elem</span><span class="p">,</span> <span class="n">pf</span><span class="o">.</span><span class="n">Header</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">elem</span><span class="o">.</span><span class="n">level</span> <span class="o">&lt;=</span> <span class="n">options</span><span class="o">.</span><span class="n">counter_depth</span><span class="p">:</span>
@@ -421,7 +425,7 @@
                 <span class="n">elem</span><span class="o">.</span><span class="n">content</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pf</span><span class="o">.</span><span class="n">RawInline</span><span class="p">(</span><span class="s2">&quot;&lt;span style=&#39;float: right&#39;&gt;◻&lt;/span&gt;&quot;</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;html&quot;</span><span class="p">))</span></div>
 
 
-<div class="viewcode-block" id="amsthm_latex"><a class="viewcode-back" href="../../api/amsthm/#amsthm.amsthm_latex">[docs]</a><span class="k">def</span> <span class="nf">amsthm_latex</span><span class="p">(</span><span class="n">elem</span><span class="p">:</span> <span class="n">Element</span><span class="p">,</span> <span class="n">doc</span><span class="p">:</span> <span class="n">Doc</span><span class="p">):</span>
+<div class="viewcode-block" id="amsthm_latex"><a class="viewcode-back" href="../../api/amsthm/#amsthm.amsthm_latex">[docs]</a><span class="k">def</span> <span class="nf">amsthm_latex</span><span class="p">(</span><span class="n">elem</span><span class="p">:</span> <span class="n">Element</span><span class="p">,</span> <span class="n">doc</span><span class="p">:</span> <span class="n">Doc</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pf</span><span class="o">.</span><span class="n">RawBlock</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;when output format is LaTeX, all div is converted into native LaTeX amsthm environments&quot;&quot;&quot;</span>
     <span class="c1"># check if it is a Div, and the class is an amsthm environment</span>
     <span class="n">options</span><span class="p">:</span> <span class="n">DocOptions</span> <span class="o">=</span> <span class="n">doc</span><span class="o">.</span><span class="n">_amsthm</span>
@@ -449,14 +453,15 @@
     <span class="k">return</span> <span class="kc">None</span></div>
 
 
-<div class="viewcode-block" id="action_amsthm"><a class="viewcode-back" href="../../api/amsthm/#amsthm.action_amsthm">[docs]</a><span class="k">def</span> <span class="nf">action_amsthm</span><span class="p">(</span><span class="n">elem</span><span class="p">:</span> <span class="n">Element</span><span class="p">,</span> <span class="n">doc</span><span class="p">:</span> <span class="n">Doc</span><span class="p">):</span>
+<div class="viewcode-block" id="action_amsthm"><a class="viewcode-back" href="../../api/amsthm/#amsthm.action_amsthm">[docs]</a><span class="k">def</span> <span class="nf">action_amsthm</span><span class="p">(</span><span class="n">elem</span><span class="p">:</span> <span class="n">Element</span><span class="p">,</span> <span class="n">doc</span><span class="p">:</span> <span class="n">Doc</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pf</span><span class="o">.</span><span class="n">RawBlock</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
     <span class="k">if</span> <span class="n">doc</span><span class="o">.</span><span class="n">format</span> <span class="ow">in</span> <span class="n">LATEX_LIKE</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">amsthm_latex</span><span class="p">(</span><span class="n">elem</span><span class="p">,</span> <span class="n">doc</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">amsthm</span><span class="p">(</span><span class="n">elem</span><span class="p">,</span> <span class="n">doc</span><span class="p">)</span></div>
+        <span class="n">amsthm</span><span class="p">(</span><span class="n">elem</span><span class="p">,</span> <span class="n">doc</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
 
 
-<div class="viewcode-block" id="process_ref"><a class="viewcode-back" href="../../api/amsthm/#amsthm.process_ref">[docs]</a><span class="k">def</span> <span class="nf">process_ref</span><span class="p">(</span><span class="n">elem</span><span class="p">:</span> <span class="n">Element</span><span class="p">,</span> <span class="n">doc</span><span class="p">:</span> <span class="n">Doc</span><span class="p">):</span>
+<div class="viewcode-block" id="process_ref"><a class="viewcode-back" href="../../api/amsthm/#amsthm.process_ref">[docs]</a><span class="k">def</span> <span class="nf">process_ref</span><span class="p">(</span><span class="n">elem</span><span class="p">:</span> <span class="n">Element</span><span class="p">,</span> <span class="n">doc</span><span class="p">:</span> <span class="n">Doc</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pf</span><span class="o">.</span><span class="n">Str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
     <span class="n">options</span><span class="p">:</span> <span class="n">DocOptions</span> <span class="o">=</span> <span class="n">doc</span><span class="o">.</span><span class="n">_amsthm</span>
     <span class="c1"># from [@...] to number</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">elem</span><span class="p">,</span> <span class="n">pf</span><span class="o">.</span><span class="n">Cite</span><span class="p">):</span>
@@ -472,26 +477,28 @@
                 <span class="k">return</span> <span class="kc">None</span>
             <span class="n">match</span> <span class="o">=</span> <span class="n">matches</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
             <span class="k">if</span> <span class="n">match</span> <span class="ow">in</span> <span class="n">options</span><span class="o">.</span><span class="n">identifiers</span><span class="p">:</span>
-                <span class="k">return</span> <span class="n">pf</span><span class="o">.</span><span class="n">Str</span><span class="p">(</span><span class="n">options</span><span class="o">.</span><span class="n">identifiers</span><span class="p">[</span><span class="n">match</span><span class="p">])</span></div>
+                <span class="k">return</span> <span class="n">pf</span><span class="o">.</span><span class="n">Str</span><span class="p">(</span><span class="n">options</span><span class="o">.</span><span class="n">identifiers</span><span class="p">[</span><span class="n">match</span><span class="p">])</span>
+    <span class="k">return</span> <span class="kc">None</span></div>
 
 
-<div class="viewcode-block" id="process_ref_latex"><a class="viewcode-back" href="../../api/amsthm/#amsthm.process_ref_latex">[docs]</a><span class="k">def</span> <span class="nf">process_ref_latex</span><span class="p">(</span><span class="n">elem</span><span class="p">:</span> <span class="n">Element</span><span class="p">,</span> <span class="n">doc</span><span class="p">:</span> <span class="n">Doc</span><span class="p">):</span>
+<div class="viewcode-block" id="process_ref_latex"><a class="viewcode-back" href="../../api/amsthm/#amsthm.process_ref_latex">[docs]</a><span class="k">def</span> <span class="nf">process_ref_latex</span><span class="p">(</span><span class="n">elem</span><span class="p">:</span> <span class="n">Element</span><span class="p">,</span> <span class="n">doc</span><span class="p">:</span> <span class="n">Doc</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pf</span><span class="o">.</span><span class="n">RawInline</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
     <span class="n">options</span><span class="p">:</span> <span class="n">DocOptions</span> <span class="o">=</span> <span class="n">doc</span><span class="o">.</span><span class="n">_amsthm</span>
     <span class="c1"># from [@...] to \ref{...}</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">elem</span><span class="p">,</span> <span class="n">pf</span><span class="o">.</span><span class="n">Cite</span><span class="p">):</span>
         <span class="n">text</span> <span class="o">=</span> <span class="n">pf</span><span class="o">.</span><span class="n">stringify</span><span class="p">(</span><span class="n">elem</span><span class="p">)[</span><span class="mi">2</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">text</span> <span class="ow">in</span> <span class="n">options</span><span class="o">.</span><span class="n">identifiers</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">pf</span><span class="o">.</span><span class="n">RawInline</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">ref</span><span class="se">{{</span><span class="si">{</span><span class="n">text</span><span class="si">}</span><span class="se">}}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;latex&quot;</span><span class="p">)</span></div>
+            <span class="k">return</span> <span class="n">pf</span><span class="o">.</span><span class="n">RawInline</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">ref</span><span class="se">{{</span><span class="si">{</span><span class="n">text</span><span class="si">}</span><span class="se">}}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;latex&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="kc">None</span></div>
 
 
-<div class="viewcode-block" id="action_process_ref"><a class="viewcode-back" href="../../api/amsthm/#amsthm.action_process_ref">[docs]</a><span class="k">def</span> <span class="nf">action_process_ref</span><span class="p">(</span><span class="n">elem</span><span class="p">:</span> <span class="n">Element</span><span class="p">,</span> <span class="n">doc</span><span class="p">:</span> <span class="n">Doc</span><span class="p">):</span>
+<div class="viewcode-block" id="action_process_ref"><a class="viewcode-back" href="../../api/amsthm/#amsthm.action_process_ref">[docs]</a><span class="k">def</span> <span class="nf">action_process_ref</span><span class="p">(</span><span class="n">elem</span><span class="p">:</span> <span class="n">Element</span><span class="p">,</span> <span class="n">doc</span><span class="p">:</span> <span class="n">Doc</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pf</span><span class="o">.</span><span class="n">Str</span> <span class="o">|</span> <span class="n">pf</span><span class="o">.</span><span class="n">RawInline</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
     <span class="k">if</span> <span class="n">doc</span><span class="o">.</span><span class="n">format</span> <span class="ow">in</span> <span class="n">LATEX_LIKE</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">process_ref_latex</span><span class="p">(</span><span class="n">elem</span><span class="p">,</span> <span class="n">doc</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">process_ref</span><span class="p">(</span><span class="n">elem</span><span class="p">,</span> <span class="n">doc</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="finalize"><a class="viewcode-back" href="../../api/amsthm/#amsthm.finalize">[docs]</a><span class="k">def</span> <span class="nf">finalize</span><span class="p">(</span><span class="n">doc</span><span class="p">:</span> <span class="n">Doc</span><span class="p">):</span>
+<div class="viewcode-block" id="finalize"><a class="viewcode-back" href="../../api/amsthm/#amsthm.finalize">[docs]</a><span class="k">def</span> <span class="nf">finalize</span><span class="p">(</span><span class="n">doc</span><span class="p">:</span> <span class="n">Doc</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
     <span class="k">del</span> <span class="n">doc</span><span class="o">.</span><span class="n">_amsthm</span></div>
 
 
@@ -500,7 +507,7 @@
 <span class="n">FILTER</span><span class="p">:</span> <span class="n">PANFLUTE_FILTER</span> <span class="o">=</span> <span class="p">(</span><span class="n">actions</span><span class="p">,</span> <span class="n">prepare</span><span class="p">,</span> <span class="n">finalize</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="main"><a class="viewcode-back" href="../../api/amsthm/#amsthm.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">doc</span><span class="p">:</span> <span class="n">Doc</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="main"><a class="viewcode-back" href="../../api/amsthm/#amsthm.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">doc</span><span class="p">:</span> <span class="n">Doc</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
     <span class="k">return</span> <span class="n">pf</span><span class="o">.</span><span class="n">run_filters</span><span class="p">(</span><span class="n">actions</span><span class="p">,</span> <span class="n">prepare</span><span class="o">=</span><span class="n">prepare</span><span class="p">,</span> <span class="n">finalize</span><span class="o">=</span><span class="n">finalize</span><span class="p">,</span> <span class="n">doc</span><span class="o">=</span><span class="n">doc</span><span class="p">)</span></div>
 </pre></div>
 
