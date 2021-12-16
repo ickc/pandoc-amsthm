@@ -42,6 +42,7 @@ METADATA_KEY: str = "amsthm"
 REF_REGEX = re.compile(r"^\\ref\{(.*)\}$")
 LATEX_LIKE: set[str] = {"latex", "beamer"}
 PLAIN_OR_DEF: set[str] = {"plain", "definition"}
+COUNTER_DEPTH_DEFAULT: int = 0
 
 logger = setup_logging()
 
@@ -145,7 +146,7 @@ class DocOptions:
     """
 
     theorems: dict[str, NewTheorem] = field(default_factory=dict)
-    counter_depth: int = 1
+    counter_depth: int = COUNTER_DEPTH_DEFAULT
     counter_ignore_headings: set[str] = field(default_factory=set)
 
     def __post_init__(self) -> None:
@@ -153,7 +154,7 @@ class DocOptions:
             self.counter_depth = int(self.counter_depth)
         except ValueError:
             logger.warning("counter_depth must be int, default to 1.")
-            self.counter_depth = 1
+            self.counter_depth = COUNTER_DEPTH_DEFAULT
 
         # initial count is zero
         # should be += 1 before using
@@ -210,7 +211,7 @@ class DocOptions:
         theorems["proof"] = Proof()
         return cls(
             theorems,
-            counter_depth=options.get("counter_depth", 1),  # type: ignore[arg-type] # will be verified at __post_init__
+            counter_depth=options.get("counter_depth", COUNTER_DEPTH_DEFAULT),  # type: ignore[arg-type] # will be verified at __post_init__
             counter_ignore_headings=set(options.get("counter_ignore_headings", set())),
         )
 
