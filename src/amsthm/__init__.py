@@ -146,6 +146,7 @@ class DocOptions:
 
     theorems: dict[str, NewTheorem] = field(default_factory=dict)
     counter_depth: int = 1
+    counter_ignore_headings: set[str] = field(default_factory=set)
 
     def __post_init__(self) -> None:
         try:
@@ -207,7 +208,11 @@ class DocOptions:
                     theorems[theorem.class_name] = theorem
         # proof is predefined in amsthm
         theorems["proof"] = Proof()
-        return cls(theorems, counter_depth=options.get("counter_depth", 1))  # type: ignore[arg-type] # will be verified at __post_init__
+        return cls(
+            theorems,
+            counter_depth=options.get("counter_depth", 1),  # type: ignore[arg-type] # will be verified at __post_init__
+            counter_ignore_headings=set(options.get("counter_ignore_headings", set())),
+        )
 
     @property
     def latex(self) -> str:
@@ -237,9 +242,21 @@ def amsthm(elem: Element, doc: Doc):
     options: DocOptions = doc._amsthm
     if isinstance(elem, pf.Header):
         if elem.level <= options.counter_depth:
-            # Header.level is 1-indexed, while list is 0-indexed
-            options.header_counters[elem.level - 1] += 1
-            options.reset_theorem_counters()
+            header_string = None
+            if (counter_ignore_headings := options.counter_ignore_headings) and (
+                header_string := pf.stringify(elem)
+            ) in counter_ignore_headings:
+                logger.debug("Ignoring header %s in header_counters as it is in counter_ignore_headings", header_string)
+            else:
+                # Header.level is 1-indexed, while list is 0-indexed
+                options.header_counters[elem.level - 1] += 1
+                # reset deeper levels
+                for i in range(elem.level, options.counter_depth):
+                    options.header_counters[i] = 0
+                logger.debug(
+                    "Header encounter: %s, current counter: %s", header_string or elem, options.header_counters
+                )
+                options.reset_theorem_counters()
     elif isinstance(elem, pf.Div):
         environments: set[str] = options.theorems_set.intersection(elem.classes)
         if environments:
@@ -314,7 +331,7 @@ def amsthm_latex(elem: Element, doc: Doc):
                 res.append(f"\\label{{{id}}}")
                 # in LaTeX output, we only need to keep a reference of the id
                 # the numbering (value of this dict) is handled by LaTeX
-                options.identifiers[id] = None
+                options.identifiers[id] = ""
             res.append(f"\n{div_content}\n\\end{{{theorem.env_name}}}")
             return pf.RawBlock("".join(res), format="latex")
     return None
@@ -366,7 +383,7 @@ def finalize(doc: Doc):
     del doc._amsthm
 
 
-actions: tuple[PANFLUTE_ACTION] = (action_amsthm, action_process_ref)
+actions: tuple[PANFLUTE_ACTION] = (action_amsthm, action_process_ref)  # type: ignore[assignment] # type limitation
 #: equiv. to the texp cli, but provided as a Python interface
 FILTER: PANFLUTE_FILTER = (actions, prepare, finalize)
 
