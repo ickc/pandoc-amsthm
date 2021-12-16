@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Overview: module code &#8212; amsthm 1.2.3 documentation</title>
+    <title>Syntax &#8212; amsthm 1.2.3 documentation</title>
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/ickc/markdown-latex-css/css/_table.min.css" />
@@ -16,6 +16,8 @@
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <link rel="index" title="Index" href="../genindex/" />
     <link rel="search" title="Search" href="../search/" />
+    <link rel="next" title="1 Demo" href="../example-output/" />
+    <link rel="prev" title="amsthm—provide a syntax to use amsthm environments in pandoc, with output in LaTeX and HTML" href="../readme/" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
@@ -55,9 +57,9 @@
      href="../">Site <b class="caret"></b></a>
   <ul class="dropdown-menu globaltoc"
       role="menu"
-      aria-labelledby="dLabelGlobalToc"><ul>
+      aria-labelledby="dLabelGlobalToc"><ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../readme/">amsthm—provide a syntax to use amsthm environments in pandoc, with output in LaTeX and HTML</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../example/">Syntax</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Syntax</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../example-output/"><span class="sectnum">1</span> Demo</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../example-output/#counter-test"><span class="sectnum">2</span> Counter test</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../installation/">Installation</a></li>
@@ -77,13 +79,24 @@
      href="#">Page <b class="caret"></b></a>
   <ul class="dropdown-menu localtoc"
       role="menu"
-      aria-labelledby="dLabelLocalToc"></ul>
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">Syntax</a></li>
+</ul>
+</ul>
 </li>
               
             
             
               
                 
+  <li>
+    <a href="../readme/" title="Previous Chapter: amsthm—provide a syntax to use amsthm environments in pandoc, with output in LaTeX and HTML"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; amsthm—provid...</span>
+    </a>
+  </li>
+  <li>
+    <a href="../example-output/" title="Next Chapter: 1 Demo"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">1 Demo &raquo;</span>
+    </a>
+  </li>
               
             
             
@@ -109,10 +122,138 @@
   <div class="row">
     <div class="body col-md-12 content" role="main">
       
-  <h1>All modules for which code is available</h1>
-<ul><li><a href="amsthm/">amsthm</a></li>
-<ul><li><a href="amsthm/util/">amsthm.util</a></li>
-</ul></ul>
+  <div class="section" id="syntax">
+<h1>Syntax<a class="headerlink" href="#syntax" title="Permalink to this headline">¶</a></h1>
+<div class="highlight-markdown notranslate"><div class="highlight"><pre><span></span>---
+amsthm:
+  counter_depth: 2
+  definition:
+  <span class="k">-</span> Definition
+  name_to_text:
+    KL: Klein&#39;s Lemma
+  parent_counter: section
+  plain:
+  <span class="k">-</span> Theorem:
+    <span class="k">-</span> Lemma
+    <span class="k">-</span> Corollary
+  <span class="k">-</span> With Space\*
+  <span class="k">-</span> Proposition: Conjecture
+  <span class="k">-</span> WithoutSpace
+  <span class="k">-</span> KL
+  remark:
+  <span class="k">-</span> Case
+header-includes: |
+  ```{=latex}
+  \usepackage{amsthm}
+<span class="gu">  ```</span>
+<span class="gu">---</span>
+
+<span class="gh"># Demo</span>
+
+::: {.Theorem info=&quot;within parenthesis&quot;}
+plain theoremstyle <span class="ge">*here*</span>
+:::
+
+::: {#simplestEquation .Theorem}
+Label and reference:
+
+$$E=mc^2$$
+:::
+
+From the \ref{simplestEquation}, we see that...
+
+Or we can use pandoc-crossref style [@simplestEquation] as well.
+
+::: {.With_Space info=&quot;**This** is <span class="ge">*markdown*</span>.&quot;}
+Environment name has a space, and is unnumbered.
+:::
+
+::: {.Lemma info=&quot;can cite \ref{simplestEquation}&quot;}
+This one share counter with Theorem.
+
+Cite inside info only works with <span class="sb">`ref{...}`</span> syntax.
+As the conversion using <span class="sb">`[@...]`</span> to AST and walk and back to LaTeX would be too complex.
+:::
+
+::: {.Definition info=&quot;within parenthesis&quot;}
+definition theoremstyle here
+:::
+
+::: {.Case info=&quot;within parenthesis&quot;}
+remark theoremstyle here
+:::
+
+::: {.proof info=&quot;Proof of the Main Theorem&quot;}
+Predefined proof theoremstyle here
+:::
+
+::: KL
+Klein&#39;s Lemma from amsthm doc.
+:::
+
+<span class="gh"># Counter test</span>
+
+::: Theorem
+some theorem
+:::
+
+::: Theorem
+some theorem
+:::
+
+<span class="gu">## Next level</span>
+
+::: Theorem
+some theorem
+:::
+
+::: Theorem
+some theorem
+:::
+
+<span class="gu">### Level 3</span>
+
+::: Theorem
+some theorem
+:::
+
+::: Theorem
+some theorem
+:::
+
+<span class="gu">#### Level 4</span>
+
+::: Theorem
+some theorem
+:::
+
+::: Theorem
+some theorem
+:::
+
+<span class="gu">##### Level 5</span>
+
+::: Theorem
+some theorem
+:::
+
+::: Theorem
+some theorem
+:::
+
+<span class="gu">###### Level 6</span>
+
+::: Theorem
+some theorem
+:::
+
+::: Theorem
+some theorem
+:::
+</pre></div>
+</div>
+</div>
+
 
     </div>
       

@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>1 Demo &#8212; amsthm 1.2.3 documentation</title>
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/ickc/markdown-latex-css/css/_table.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/ickc/markdown-latex-css/fonts/fonts.min.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "tex2jax_ignore|mathjax_ignore|document", "processClass": "tex2jax_process|mathjax_process|math|output_area"}})</script>
+    <link rel="index" title="Index" href="../genindex/" />
+    <link rel="search" title="Search" href="../search/" />
+    <link rel="next" title="Installation" href="../installation/" />
+    <link rel="prev" title="Syntax" href="../example/" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../_static/js/jquery-1.12.4.min.js "></script>
+<script type="text/javascript" src="../_static/js/jquery-fix.js "></script>
+<script type="text/javascript" src="../_static/bootstrap-3.4.1/js/bootstrap.min.js "></script>
+<script type="text/javascript" src="../_static/bootstrap-sphinx.js "></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../">
+          amsthm</a>
+        <span class="navbar-text navbar-version pull-left"><b>1.2.3</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="https://github.com/ickc/amsthm/">GitHub</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../readme/">amsthm—provide a syntax to use amsthm environments in pandoc, with output in LaTeX and HTML</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../example/">Syntax</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#"><span class="sectnum">1</span> Demo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#counter-test"><span class="sectnum">2</span> Counter test</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation/">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/modules/">amsthm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing/">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../authors/">Authors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog/">Revision history for <code class="docutils literal notranslate"><span class="pre">amsthm</span></code></a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#"><span class="sectnum">1</span> Demo</a></li>
+<li><a class="reference internal" href="#counter-test"><span class="sectnum">2</span> Counter test</a><ul>
+<li><a class="reference internal" href="#next-level"><span class="sectnum">2.1</span> Next level</a><ul>
+<li><a class="reference internal" href="#level-3"><span class="sectnum">2.1.1</span> Level 3</a><ul>
+<li><a class="reference internal" href="#level-4"><span class="sectnum">2.1.1.1</span> Level 4</a><ul>
+<li><a class="reference internal" href="#level-5"><span class="sectnum">2.1.1.1.1</span> Level 5</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+              
+                
+  <li>
+    <a href="../example/" title="Previous Chapter: Syntax"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Syntax</span>
+    </a>
+  </li>
+  <li>
+    <a href="../installation/" title="Next Chapter: Installation"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Installation &raquo;</span>
+    </a>
+  </li>
+              
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../search/" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <div class="contents topic" id="contents">
+<p class="topic-title">Contents</p>
+<ul class="auto-toc simple">
+<li><p><a class="reference internal" href="#demo" id="id1"><span class="sectnum">1</span> Demo</a></p></li>
+<li><p><a class="reference internal" href="#counter-test" id="id2"><span class="sectnum">2</span> Counter test</a></p>
+<ul class="auto-toc">
+<li><p><a class="reference internal" href="#next-level" id="id3"><span class="sectnum">2.1</span> Next level</a></p>
+<ul class="auto-toc">
+<li><p><a class="reference internal" href="#level-3" id="id4"><span class="sectnum">2.1.1</span> Level 3</a></p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="demo">
+<h1><a class="toc-backref" href="#id1"><span class="sectnum">1</span> Demo</a><a class="headerlink" href="#demo" title="Permalink to this headline">¶</a></h1>
+<div class="theorem docutils container">
+<p><strong>Theorem ****1.0.1</strong> (within parenthesis)<strong>.</strong> <em>plain</em>
+<em>theoremstyle</em> here</p>
+</div>
+<div class="theorem docutils container" id="simplestequation">
+<p><strong>Theorem ****1.0.2</strong><strong>.</strong> <em>Label</em> <em>and</em> <em>reference:</em></p>
+<div class="math notranslate nohighlight">
+\[E=mc^2\]</div>
+</div>
+<p>From the 1.0.2, we see that…</p>
+<p>Or we can use pandoc-crossref style 1.0.2 as well.</p>
+<div class="with-space docutils container">
+<p><strong>With Space ** (**This</strong> is <em>markdown</em>.)<strong>.</strong> <em>Environment</em> <em>name</em>
+<em>has</em> <em>a</em> <em>space,</em> <em>and</em> <em>is</em> <em>unnumbered.</em></p>
+</div>
+<div class="lemma docutils container">
+<p><strong>Lemma ****1.0.3</strong> (can cite 1.0.2)<strong>.</strong> <em>This</em> <em>one</em> <em>share</em>
+<em>counter</em> <em>with</em> <em>Theorem.</em></p>
+<p><em>Cite</em> <em>inside</em> <em>info</em> <em>only</em> <em>works</em> <em>with</em> <code class="docutils literal notranslate"><span class="pre">ref{...}</span></code> <em>syntax.</em>
+<em>As</em> <em>the</em> <em>conversion</em> <em>using</em> <code class="docutils literal notranslate"><span class="pre">[&#64;...]</span></code> <em>to</em> <em>AST</em> <em>and</em> <em>walk</em>
+<em>and</em> <em>back</em> <em>to</em> <em>LaTeX</em> <em>would</em> <em>be</em> <em>too</em> <em>complex.</em></p>
+</div>
+<div class="definition docutils container">
+<p><strong>Definition ****1.0.1</strong> (within parenthesis)<strong>.</strong> definition
+theoremstyle here</p>
+</div>
+<div class="case docutils container">
+<p><em>Case *1.0.1 (within parenthesis)*.</em> remark theoremstyle here</p>
+</div>
+<div class="proof docutils container">
+<p><em>proof * (Proof of the Main Theorem)*.</em> Predefined proof
+theoremstyle here</p>
+</div>
+<div class="kl docutils container">
+<p><strong>Klein’s Lemma ****1.0.1</strong><strong>.</strong> <em>Klein’s</em> <em>Lemma</em> <em>from</em>
+<em>amsthm</em> <em>doc.</em></p>
+</div>
+</div>
+<div class="section" id="counter-test">
+<h1><a class="toc-backref" href="#id2"><span class="sectnum">2</span> Counter test</a><a class="headerlink" href="#counter-test" title="Permalink to this headline">¶</a></h1>
+<div class="theorem docutils container">
+<p><strong>Theorem ****2.0.1</strong><strong>.</strong> <em>some</em> <em>theorem</em></p>
+</div>
+<div class="theorem docutils container">
+<p><strong>Theorem ****2.0.2</strong><strong>.</strong> <em>some</em> <em>theorem</em></p>
+</div>
+<div class="section" id="next-level">
+<h2><a class="toc-backref" href="#id3"><span class="sectnum">2.1</span> Next level</a><a class="headerlink" href="#next-level" title="Permalink to this headline">¶</a></h2>
+<div class="theorem docutils container">
+<p><strong>Theorem ****2.1.1</strong><strong>.</strong> <em>some</em> <em>theorem</em></p>
+</div>
+<div class="theorem docutils container">
+<p><strong>Theorem ****2.1.2</strong><strong>.</strong> <em>some</em> <em>theorem</em></p>
+</div>
+<div class="section" id="level-3">
+<h3><a class="toc-backref" href="#id4"><span class="sectnum">2.1.1</span> Level 3</a><a class="headerlink" href="#level-3" title="Permalink to this headline">¶</a></h3>
+<div class="theorem docutils container">
+<p><strong>Theorem ****2.1.3</strong><strong>.</strong> <em>some</em> <em>theorem</em></p>
+</div>
+<div class="theorem docutils container">
+<p><strong>Theorem ****2.1.4</strong><strong>.</strong> <em>some</em> <em>theorem</em></p>
+</div>
+<div class="section" id="level-4">
+<h4><span class="sectnum">2.1.1.1</span> Level 4<a class="headerlink" href="#level-4" title="Permalink to this headline">¶</a></h4>
+<div class="theorem docutils container">
+<p><strong>Theorem ****2.1.5</strong><strong>.</strong> <em>some</em> <em>theorem</em></p>
+</div>
+<div class="theorem docutils container">
+<p><strong>Theorem ****2.1.6</strong><strong>.</strong> <em>some</em> <em>theorem</em></p>
+</div>
+<div class="section" id="level-5">
+<h5><span class="sectnum">2.1.1.1.1</span> Level 5<a class="headerlink" href="#level-5" title="Permalink to this headline">¶</a></h5>
+<div class="theorem docutils container">
+<p><strong>Theorem ****2.1.7</strong><strong>.</strong> <em>some</em> <em>theorem</em></p>
+</div>
+<div class="theorem docutils container">
+<p><strong>Theorem ****2.1.8</strong><strong>.</strong> <em>some</em> <em>theorem</em></p>
+</div>
+<p>Level 6</p>
+<div class="theorem docutils container">
+<p><strong>Theorem ****2.1.9</strong><strong>.</strong> <em>some</em> <em>theorem</em></p>
+</div>
+<div class="theorem docutils container">
+<p><strong>Theorem ****2.1.10</strong><strong>.</strong> <em>some</em> <em>theorem</em></p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2016-2021, Kolen Cheung.<br/>
+      Last updated on Dec 16, 2021.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.5.4.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>
