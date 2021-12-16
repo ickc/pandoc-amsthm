@@ -38,8 +38,6 @@ PARENT_COUNTERS: set[str] = {
     "subparagraph",
 }
 STYLES: tuple[str, ...] = ("plain", "definition", "remark")
-# the default of `--top-level-division` in pandoc in the simplest case
-DEFAULT_PARENT_COUNTER: str = "section"
 METADATA_KEY: str = "amsthm"
 REF_REGEX = re.compile(r"^\\ref\{(.*)\}$")
 LATEX_LIKE: set[str] = {"latex", "beamer"}
@@ -94,14 +92,9 @@ class NewTheorem:
             logger.debug("Defaulting text to %s", self.env_name)
             self.text = self.env_name
         if (parent_counter := self.parent_counter) is not None and parent_counter not in PARENT_COUNTERS:
-            logger.warning(
-                "Unsupported parent_coutner %s, setting to default: %s.", parent_counter, DEFAULT_PARENT_COUNTER
-            )
-        if self.numbered and (parent_counter is None) is (self.shared_counter is None):
-            logger.warning(
-                "In numbered environment, either parent_counter or shared_counter should be defined, and not both."
-                " Dropping shared_counter."
-            )
+            logger.warning("Unsupported parent_counter %s, ignoring.", parent_counter)
+        if self.numbered and parent_counter is not None and self.shared_counter is not None:
+            logger.warning("Dropping shared_counter as parent_counter is defined.")
             self.shared_counter = None
 
     @property
@@ -110,7 +103,10 @@ class NewTheorem:
         if not self.numbered:
             res.append(f"*{{{self.env_name}}}{{{self.text}}}")
         elif self.shared_counter is None:
-            res.append(f"{{{self.env_name}}}{{{self.text}}}[{self.parent_counter}]")
+            if self.parent_counter is None:
+                res.append(f"{{{self.env_name}}}{{{self.text}}}")
+            else:
+                res.append(f"{{{self.env_name}}}{{{self.text}}}[{self.parent_counter}]")
         else:
             res.append(f"{{{self.env_name}}}[{self.shared_counter}]{{{self.text}}}")
         return "".join(res)
@@ -184,7 +180,7 @@ class DocOptions:
         ] = doc.get_metadata(METADATA_KEY, {})
 
         name_to_text: dict[str, str] = options.get("name_to_text", {})  # type: ignore[assignment, arg-type]
-        parent_counter: str = options.get("parent_counter", DEFAULT_PARENT_COUNTER)  # type: ignore[assignment]
+        parent_counter: str = options.get("parent_counter", None)  # type: ignore[assignment, arg-type]
 
         theorems: dict[str, NewTheorem] = {}
         for style in STYLES:
