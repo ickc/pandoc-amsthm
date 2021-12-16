@@ -7,6 +7,7 @@ from functools import cached_property
 from typing import TYPE_CHECKING
 
 import panflute as pf
+from panflute.tools import convert_text
 
 from .util import setup_logging
 
@@ -267,7 +268,16 @@ def amsthm(elem: Element, doc: Doc):
                 )
 
             if info:
-                res.append(pf.Str(f" ({info})"))
+                res += [pf.Space, pf.Str(r"(")]
+                info_ast = convert_text(info)
+                temp: list[Element] = []
+                for e in info_ast:
+                    if isinstance(e, pf.Para):
+                        temp += list(e.content)
+                    else:
+                        temp.append(e)
+                res += temp
+                res.append(pf.Str(r")"))
 
             res += [ElementType(pf.Str(r".")), pf.Space]
 
@@ -299,7 +309,7 @@ def amsthm_latex(elem: Element, doc: Doc):
             id = elem.identifier
             res = [f"\\begin{{{theorem.env_name}}}"]
             if info:
-                res.append(f"[{info}]")
+                res += [r"[", convert_text(info, output_format="latex"), r"]"]
             if id:
                 res.append(f"\\label{{{id}}}")
                 # in LaTeX output, we only need to keep a reference of the id

@@ -15,14 +15,18 @@ From the 1.0.2, we see that...
 
 Or we can use pandoc-crossref style 1.0.2 as well.
 
-::: {.With_Space info="within parenthesis"}
-**With Space ** (within parenthesis)**.** *Environment* *name* *has* *a*
-*space,* *and* *is* *unnumbered.*
+::: {.With_Space info="**This** is *markdown*."}
+**With Space ** (**This** is *markdown*.)**.** *Environment* *name*
+*has* *a* *space,* *and* *is* *unnumbered.*
 :::
 
-::: {.Lemma info="within parenthesis"}
-**Lemma ****1.0.3** (within parenthesis)**.** *This* *one* *share*
-*counter* *with* *Theorem*
+::: {.Lemma info="can cite \\ref{simplestEquation}"}
+**Lemma ****1.0.3** (can cite 1.0.2)**.** *This* *one* *share* *counter*
+*with* *Theorem.*
+
+*Cite* *inside* *info* *only* *works* *with* `ref{...}` *syntax.* *As*
+*the* *conversion* *using* `[@...]` *to* *AST* *and* *walk* *and* *back*
+*to* *LaTeX* *would* *be* *too* *complex.*
 :::
 
 ::: {.Definition info="within parenthesis"}
