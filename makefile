@@ -6,7 +6,7 @@ PART ?= patch
 
 PANDOC = pandoc
 pandocArgs = --toc -M date="`date "+%B %e, %Y"`" --filter=pantable --wrap=none
-RSTs = CHANGELOG.rst README.rst
+RSTs = CHANGELOG.rst README.rst docs/example-output.rst
 
 # Main Targets #################################################################
 
@@ -121,4 +121,6 @@ tests/model-latex.tex: tests/model-source.md
 tests/model-latex.pdf: tests/model-source.md
 	pandoc -F amsthm $< -o $@ --top-level-division=chapter --toc -N
 tests/model-html.html: tests/model-source.md
+	pandoc -F amsthm $< -o $@ --toc -N -s
+docs/example-output.rst: tests/model-source.md
 	pandoc -F amsthm $< -o $@ --toc -N -s
