@@ -282,34 +282,6 @@ def amsthm(elem: Element, doc: Doc):
                 elem.content[-1].content.append(pf.RawInline("<span style='float: right'>◻</span>", format="html"))
 
 
-def process_ref(elem: Element, doc: Doc):
-    options: DocOptions = doc._amsthm
-    # from [@...] to number
-    if isinstance(elem, pf.Cite):
-        text = pf.stringify(elem)[2:-1]
-        if text in options.identifiers:
-            return pf.Str(options.identifiers[text])
-    # from \ref{...} to number
-    elif isinstance(elem, pf.RawInline) and elem.format == "tex":
-        text = elem.text
-        if matches := REF_REGEX.findall(text):
-            if len(matches) != 1:
-                logger.warning("Ignoring ref matching in %s: %s", text, matches)
-                return None
-            match = matches[0]
-            if match in options.identifiers:
-                return pf.Str(options.identifiers[match])
-
-
-def process_ref_latex(elem: Element, doc: Doc):
-    options: DocOptions = doc._amsthm
-    # from [@...] to \ref{...}
-    if isinstance(elem, pf.Cite):
-        text = pf.stringify(elem)[2:-1]
-        if text in options.identifiers:
-            return pf.RawInline(f"\\ref{{{text}}}", format="latex")
-
-
 def amsthm_latex(elem: Element, doc: Doc):
     """when output format is LaTeX, all div is converted into native LaTeX amsthm environments"""
     # check if it is a Div, and the class is an amsthm environment
@@ -343,6 +315,34 @@ def action_amsthm(elem: Element, doc: Doc):
         return amsthm_latex(elem, doc)
     else:
         return amsthm(elem, doc)
+
+
+def process_ref(elem: Element, doc: Doc):
+    options: DocOptions = doc._amsthm
+    # from [@...] to number
+    if isinstance(elem, pf.Cite):
+        text = pf.stringify(elem)[2:-1]
+        if text in options.identifiers:
+            return pf.Str(options.identifiers[text])
+    # from \ref{...} to number
+    elif isinstance(elem, pf.RawInline) and elem.format == "tex":
+        text = elem.text
+        if matches := REF_REGEX.findall(text):
+            if len(matches) != 1:
+                logger.warning("Ignoring ref matching in %s: %s", text, matches)
+                return None
+            match = matches[0]
+            if match in options.identifiers:
+                return pf.Str(options.identifiers[match])
+
+
+def process_ref_latex(elem: Element, doc: Doc):
+    options: DocOptions = doc._amsthm
+    # from [@...] to \ref{...}
+    if isinstance(elem, pf.Cite):
+        text = pf.stringify(elem)[2:-1]
+        if text in options.identifiers:
+            return pf.RawInline(f"\\ref{{{text}}}", format="latex")
 
 
 def action_process_ref(elem: Element, doc: Doc):
