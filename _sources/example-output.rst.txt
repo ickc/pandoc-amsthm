@@ -60,6 +60,14 @@ Or we can use pandoc-crossref style 1.0.2 as well.
    **Klein’s Lemma **\ **1.0.1**\ **.** *Klein’s* *Lemma* *from*
    *amsthm* *doc.*
 
+.. container:: Definition
+
+   **Definition **\ **1.0.2**\ **.**
+
+   ::
+
+      code here
+
 Counter test
 ============
 
