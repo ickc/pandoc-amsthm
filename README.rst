@@ -50,7 +50,7 @@ From ``makefile``:
 Syntax
 ======
 
-See ``tests/model-source.md`` for an example.
+See ``tests/model-source.md`` (or next page in documentation site) for an example.
 
 Tips
 ====
