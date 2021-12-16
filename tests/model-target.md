@@ -48,6 +48,12 @@ here`<span style='float: right'>◻</span>`{=html}
 *doc.*
 :::
 
+::: Definition
+**Definition ****1.0.2****.**
+
+    code here
+:::
+
 # Counter test
 
 ::: Theorem

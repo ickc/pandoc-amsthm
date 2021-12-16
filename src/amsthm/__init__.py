@@ -303,11 +303,21 @@ def amsthm(elem: Element, doc: Doc) -> None:
             if theorem.style == "plain":
                 elem.walk(to_emph)
                 elem.walk(cancel_emph)
-            # TODO: can be improve this?
-            for r in reversed(res):
-                elem.content[0].content.insert(0, r)
-            if theorem.style == "proof":
-                elem.content[-1].content.append(pf.RawInline("<span style='float: right'>◻</span>", format="html"))
+            try:
+                # insert in the beginning of the first block element
+                for r in reversed(res):
+                    elem.content[0].content.insert(0, r)
+            except AttributeError:
+                # if fail, insert a Para before content
+                elem.content.insert(0, pf.Para(*res))
+            r = pf.RawInline("<span style='float: right'>◻</span>", format="html")
+            try:
+                # insert in the end of the last block element
+                if theorem.style == "proof":
+                    elem.content[-1].content.append(r)
+            except AttributeError:
+                # if fail, append a Para
+                elem.content.append(pf.Para(r))
 
 
 def amsthm_latex(elem: Element, doc: Doc) -> pf.RawBlock | None:

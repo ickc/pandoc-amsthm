@@ -71,6 +71,12 @@ Predefined proof theoremstyle here
 Klein's Lemma from amsthm doc.
 :::
 
+::: Definition
+```
+code here
+```
+:::
+
 # Counter test
 
 ::: Theorem
