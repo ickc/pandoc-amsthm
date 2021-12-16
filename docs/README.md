@@ -33,7 +33,7 @@ tests/model-html.html: tests/model-source.md
 
 # Syntax
 
-See `tests/model-source.md` for an example.
+See `tests/model-source.md` (or next page in documentation site) for an example.
 
 # Tips
 
