@@ -19,7 +19,7 @@ html: dist/docs/
 
 test:
 	rm -f .coverage*
-	coverage run -m pytest -vv \
+	coverage run -m pytest -vv --workers=auto \
 		tests
 	coverage combine; coverage report
 	coverage html
