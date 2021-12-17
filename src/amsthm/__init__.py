@@ -310,6 +310,10 @@ def prepare(doc: Doc) -> None:
 
 
 def amsthm(elem: Element, doc: Doc) -> None:
+    """General amsthm transformation working for all document types.
+
+    Essentially we replicate LaTeX amsthm behavior in this filter.
+    """
     options: DocOptions = doc._amsthm
     if isinstance(elem, pf.Header):
         if elem.level <= options.counter_depth:
@@ -364,10 +368,47 @@ def amsthm(elem: Element, doc: Doc) -> None:
                 elem.content.append(pf.Para(r))
 
 
-def amsthm_latex_get_id(elem: Element, doc: Doc) -> None:
-    """First pass getting all the id first.
+def resolve_ref(elem: Element, doc: Doc) -> pf.Str | None:
+    """Resolve references to theorem numbers.
 
+    Consider this as post-process ref for general output formats.
+    """
+    options: DocOptions = doc._amsthm
+    # from [@...] to number
+    if isinstance(elem, pf.Cite):
+        if (temp := cite_to_id_mode(elem)) is not None and (id := temp[0]) in options.identifiers:
+            mode = temp[1]
+            # @[...]
+            if mode == "NormalCitation":
+                return pf.Str(f"({options.identifiers[id]})")
+            # @...
+            elif mode == "AuthorInText":
+                return pf.Str(options.identifiers[id])
+            else:
+                logger.warning("Unknown citation mode %s from Cite: %s. Ignoring...", mode, elem)
+                return None
+
+    # from \ref{...} to number
+    elif isinstance(elem, pf.RawInline) and elem.format == "tex":
+        text = elem.text
+        if matches := REF_REGEX.findall(text):
+            if len(matches) != 1:
+                logger.warning("Ignoring ref matching in %s: %s", text, matches)
+                return None
+            match = matches[0]
+            if match in options.identifiers:
+                return pf.Str(options.identifiers[match])
+    return None
+
+
+def collect_ref_id(elem: Element, doc: Doc) -> None:
+    """Only collect all amsthm environment id.
+
+    This should be used before the `amsthm_latex` filter.
     This is done in 2 passes as the id may be cited/referenced earlier than definition.
+    Consider this as pre-process of ref for LaTeX output.
+
+    `options.identifiers` modified in-place.
     """
     # check if it is a Div, and the class is an amsthm environment
     options: DocOptions = doc._amsthm
@@ -384,7 +425,7 @@ def amsthm_latex_get_id(elem: Element, doc: Doc) -> None:
 
 
 def amsthm_latex(elem: Element, doc: Doc) -> pf.RawBlock | None:
-    """when output format is LaTeX, all div is converted into native LaTeX amsthm environments"""
+    """Transform amsthm defintion to LaTeX package specifications."""
     # check if it is a Div, and the class is an amsthm environment
     options: DocOptions = doc._amsthm
     if isinstance(elem, pf.Div):
@@ -417,38 +458,9 @@ def amsthm_latex(elem: Element, doc: Doc) -> pf.RawBlock | None:
 
 def action_amsthm(elem: Element, doc: Doc) -> pf.RawBlock | None:
     if doc.format in LATEX_LIKE:
-        amsthm_latex_get_id(elem, doc)
+        collect_ref_id(elem, doc)
     else:
         amsthm(elem, doc)
-    return None
-
-
-def process_ref(elem: Element, doc: Doc) -> pf.Str | None:
-    options: DocOptions = doc._amsthm
-    # from [@...] to number
-    if isinstance(elem, pf.Cite):
-        if (temp := cite_to_id_mode(elem)) is not None and (id := temp[0]) in options.identifiers:
-            mode = temp[1]
-            # @[...]
-            if mode == "NormalCitation":
-                return pf.Str(f"({options.identifiers[id]})")
-            # @...
-            elif mode == "AuthorInText":
-                return pf.Str(options.identifiers[id])
-            else:
-                logger.warning("Unknown citation mode %s from Cite: %s. Ignoring...", mode, elem)
-                return None
-
-    # from \ref{...} to number
-    elif isinstance(elem, pf.RawInline) and elem.format == "tex":
-        text = elem.text
-        if matches := REF_REGEX.findall(text):
-            if len(matches) != 1:
-                logger.warning("Ignoring ref matching in %s: %s", text, matches)
-                return None
-            match = matches[0]
-            if match in options.identifiers:
-                return pf.Str(options.identifiers[match])
     return None
 
 
@@ -456,7 +468,7 @@ def action_process_ref(elem: Element, doc: Doc) -> pf.Str | pf.RawInline | None:
     if doc.format in LATEX_LIKE:
         return amsthm_latex(elem, doc)
     else:
-        return process_ref(elem, doc)
+        return resolve_ref(elem, doc)
 
 
 def finalize(doc: Doc) -> None:
