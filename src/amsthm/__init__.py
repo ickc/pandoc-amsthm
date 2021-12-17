@@ -176,24 +176,21 @@ class NewTheorem:
         if self.style in PLAIN_OR_DEF:
             TextType = pf.Strong
             NumberType = pf.Strong
-            if theorem_number is None:
-                if info_list:
-                    res = [TextType(pf.Str(text))] + info_list + [TextType(pf.Str(".")), pf.Space]
-                else:
-                    res = [TextType(pf.Str(f"{text}.")), pf.Space]
+        else:
+            TextType = pf.Emph
+            NumberType = pf.Str
+        # We are normalizing the Emph/Strong boundary manually by having 6 cases
+        if theorem_number is None:
+            if info_list:
+                res = [TextType(pf.Str(text))] + info_list + [TextType(pf.Str(".")), pf.Space]
             else:
+                res = [TextType(pf.Str(f"{text}.")), pf.Space]
+        else:
+            if TextType is NumberType:
                 if info_list:
                     res = [TextType(pf.Str(f"{text} {theorem_number}"))] + info_list + [TextType(pf.Str(".")), pf.Space]
                 else:
                     res = [TextType(pf.Str(f"{text} {theorem_number}.")), pf.Space]
-        else:
-            TextType = pf.Emph
-            NumberType = pf.Str
-            if theorem_number is None:
-                if info_list:
-                    res = [TextType(pf.Str(text))] + info_list + [TextType(pf.Str(".")), pf.Space]
-                else:
-                    res = [TextType(pf.Str(f"{text}.")), pf.Space]
             else:
                 if info_list:
                     res = (
@@ -205,7 +202,7 @@ class NewTheorem:
                     res = [
                         TextType(pf.Str(text)),
                         pf.Space,
-                        NumberType(pf.Str(theorem_number)),
+                        pf.Str(theorem_number),
                         TextType(pf.Str(".")),
                         pf.Space,
                     ]
