@@ -84,7 +84,7 @@ def parse_markdown(markdown: str) -> list[Element]:
 
 def parse_info(info: str | None) -> list[Element]:
     """Convert markdown string to panflute AST inline elements."""
-    return [pf.Space, pf.Str(r"(")] + parse_markdown(info) + [pf.Str(r")")] if info else []
+    return [pf.Str(r"(")] + parse_markdown(info) + [pf.Str(r")")] if info else []
 
 
 @dataclass
@@ -182,19 +182,23 @@ class NewTheorem:
         # We are normalizing the Emph/Strong boundary manually by having 6 cases
         if theorem_number is None:
             if info_list:
-                res = [TextType(pf.Str(text))] + info_list + [TextType(pf.Str(".")), pf.Space]
+                res = [TextType(pf.Str(text)), pf.Space] + info_list + [TextType(pf.Str(".")), pf.Space]
             else:
                 res = [TextType(pf.Str(f"{text}.")), pf.Space]
         else:
             if TextType is NumberType:
                 if info_list:
-                    res = [TextType(pf.Str(f"{text} {theorem_number}"))] + info_list + [TextType(pf.Str(".")), pf.Space]
+                    res = (
+                        [TextType(pf.Str(f"{text} {theorem_number}")), pf.Space]
+                        + info_list
+                        + [TextType(pf.Str(".")), pf.Space]
+                    )
                 else:
                     res = [TextType(pf.Str(f"{text} {theorem_number}.")), pf.Space]
             else:
                 if info_list:
                     res = (
-                        [TextType(pf.Str(text)), pf.Space, pf.Str(theorem_number)]
+                        [TextType(pf.Str(text)), pf.Space, pf.Str(theorem_number), pf.Space]
                         + info_list
                         + [TextType(pf.Str(".")), pf.Space]
                     )
