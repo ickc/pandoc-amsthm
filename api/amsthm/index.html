@@ -317,19 +317,24 @@ Should be used with counter_depth to match LaTeX and non-LaTeX output.</p>
 <dl class="py function">
 <dt id="amsthm.amsthm">
 <code class="sig-prename descclassname"><span class="pre">amsthm.</span></code><code class="sig-name descname"><span class="pre">amsthm</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">elem</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Element</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doc</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Doc</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="reference internal" href="../../_modules/amsthm/#amsthm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#amsthm.amsthm" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>General amsthm transformation working for all document types.</p>
+<p>Essentially we replicate LaTeX amsthm behavior in this filter.</p>
+</dd></dl>
 
 <dl class="py function">
 <dt id="amsthm.amsthm_latex">
 <code class="sig-prename descclassname"><span class="pre">amsthm.</span></code><code class="sig-name descname"><span class="pre">amsthm_latex</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">elem</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Element</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doc</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Doc</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">pf.RawBlock</span> <span class="p"><span class="pre">|</span></span> <span class="pre">None</span><a class="reference internal" href="../../_modules/amsthm/#amsthm_latex"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#amsthm.amsthm_latex" title="Permalink to this definition">¶</a></dt>
-<dd><p>when output format is LaTeX, all div is converted into native LaTeX amsthm environments</p>
+<dd><p>Transform amsthm defintion to LaTeX package specifications.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="amsthm.amsthm_latex_get_id">
-<code class="sig-prename descclassname"><span class="pre">amsthm.</span></code><code class="sig-name descname"><span class="pre">amsthm_latex_get_id</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">elem</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Element</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doc</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Doc</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="reference internal" href="../../_modules/amsthm/#amsthm_latex_get_id"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#amsthm.amsthm_latex_get_id" title="Permalink to this definition">¶</a></dt>
-<dd><p>First pass getting all the id first.</p>
-<p>This is done in 2 passes as the id may be cited/referenced earlier than definition.</p>
+<dt id="amsthm.collect_ref_id">
+<code class="sig-prename descclassname"><span class="pre">amsthm.</span></code><code class="sig-name descname"><span class="pre">collect_ref_id</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">elem</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Element</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doc</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Doc</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="reference internal" href="../../_modules/amsthm/#collect_ref_id"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#amsthm.collect_ref_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Only collect all amsthm environment id.</p>
+<p>This should be used before the <cite>amsthm_latex</cite> filter.
+This is done in 2 passes as the id may be cited/referenced earlier than definition.
+Consider this as pre-process of ref for LaTeX output.</p>
+<p><cite>options.identifiers</cite> modified in-place.</p>
 </dd></dl>
 
 <dl class="py function">
@@ -354,9 +359,11 @@ Should be used with counter_depth to match LaTeX and non-LaTeX output.</p>
 <dd></dd></dl>
 
 <dl class="py function">
-<dt id="amsthm.process_ref">
-<code class="sig-prename descclassname"><span class="pre">amsthm.</span></code><code class="sig-name descname"><span class="pre">process_ref</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">elem</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Element</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doc</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Doc</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">pf.Str</span> <span class="p"><span class="pre">|</span></span> <span class="pre">None</span><a class="reference internal" href="../../_modules/amsthm/#process_ref"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#amsthm.process_ref" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dt id="amsthm.resolve_ref">
+<code class="sig-prename descclassname"><span class="pre">amsthm.</span></code><code class="sig-name descname"><span class="pre">resolve_ref</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">elem</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Element</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doc</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Doc</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">pf.Str</span> <span class="p"><span class="pre">|</span></span> <span class="pre">None</span><a class="reference internal" href="../../_modules/amsthm/#resolve_ref"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#amsthm.resolve_ref" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resolve references to theorem numbers.</p>
+<p>Consider this as post-process ref for general output formats.</p>
+</dd></dl>
 
 <div class="section" id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>

@@ -422,6 +422,10 @@
 
 
 <div class="viewcode-block" id="amsthm"><a class="viewcode-back" href="../../api/amsthm/#amsthm.amsthm">[docs]</a><span class="k">def</span> <span class="nf">amsthm</span><span class="p">(</span><span class="n">elem</span><span class="p">:</span> <span class="n">Element</span><span class="p">,</span> <span class="n">doc</span><span class="p">:</span> <span class="n">Doc</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;General amsthm transformation working for all document types.</span>
+
+<span class="sd">    Essentially we replicate LaTeX amsthm behavior in this filter.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">options</span><span class="p">:</span> <span class="n">DocOptions</span> <span class="o">=</span> <span class="n">doc</span><span class="o">.</span><span class="n">_amsthm</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">elem</span><span class="p">,</span> <span class="n">pf</span><span class="o">.</span><span class="n">Header</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">elem</span><span class="o">.</span><span class="n">level</span> <span class="o">&lt;=</span> <span class="n">options</span><span class="o">.</span><span class="n">counter_depth</span><span class="p">:</span>
@@ -476,10 +480,47 @@
                 <span class="n">elem</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pf</span><span class="o">.</span><span class="n">Para</span><span class="p">(</span><span class="n">r</span><span class="p">))</span></div>
 
 
-<div class="viewcode-block" id="amsthm_latex_get_id"><a class="viewcode-back" href="../../api/amsthm/#amsthm.amsthm_latex_get_id">[docs]</a><span class="k">def</span> <span class="nf">amsthm_latex_get_id</span><span class="p">(</span><span class="n">elem</span><span class="p">:</span> <span class="n">Element</span><span class="p">,</span> <span class="n">doc</span><span class="p">:</span> <span class="n">Doc</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;First pass getting all the id first.</span>
+<div class="viewcode-block" id="resolve_ref"><a class="viewcode-back" href="../../api/amsthm/#amsthm.resolve_ref">[docs]</a><span class="k">def</span> <span class="nf">resolve_ref</span><span class="p">(</span><span class="n">elem</span><span class="p">:</span> <span class="n">Element</span><span class="p">,</span> <span class="n">doc</span><span class="p">:</span> <span class="n">Doc</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pf</span><span class="o">.</span><span class="n">Str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Resolve references to theorem numbers.</span>
 
+<span class="sd">    Consider this as post-process ref for general output formats.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">options</span><span class="p">:</span> <span class="n">DocOptions</span> <span class="o">=</span> <span class="n">doc</span><span class="o">.</span><span class="n">_amsthm</span>
+    <span class="c1"># from [@...] to number</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">elem</span><span class="p">,</span> <span class="n">pf</span><span class="o">.</span><span class="n">Cite</span><span class="p">):</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">temp</span> <span class="o">:=</span> <span class="n">cite_to_id_mode</span><span class="p">(</span><span class="n">elem</span><span class="p">))</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="p">(</span><span class="nb">id</span> <span class="o">:=</span> <span class="n">temp</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="ow">in</span> <span class="n">options</span><span class="o">.</span><span class="n">identifiers</span><span class="p">:</span>
+            <span class="n">mode</span> <span class="o">=</span> <span class="n">temp</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="c1"># @[...]</span>
+            <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;NormalCitation&quot;</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">pf</span><span class="o">.</span><span class="n">Str</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;(</span><span class="si">{</span><span class="n">options</span><span class="o">.</span><span class="n">identifiers</span><span class="p">[</span><span class="nb">id</span><span class="p">]</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+            <span class="c1"># @...</span>
+            <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;AuthorInText&quot;</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">pf</span><span class="o">.</span><span class="n">Str</span><span class="p">(</span><span class="n">options</span><span class="o">.</span><span class="n">identifiers</span><span class="p">[</span><span class="nb">id</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Unknown citation mode </span><span class="si">%s</span><span class="s2"> from Cite: </span><span class="si">%s</span><span class="s2">. Ignoring...&quot;</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">elem</span><span class="p">)</span>
+                <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="c1"># from \ref{...} to number</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">elem</span><span class="p">,</span> <span class="n">pf</span><span class="o">.</span><span class="n">RawInline</span><span class="p">)</span> <span class="ow">and</span> <span class="n">elem</span><span class="o">.</span><span class="n">format</span> <span class="o">==</span> <span class="s2">&quot;tex&quot;</span><span class="p">:</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="n">elem</span><span class="o">.</span><span class="n">text</span>
+        <span class="k">if</span> <span class="n">matches</span> <span class="o">:=</span> <span class="n">REF_REGEX</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">matches</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Ignoring ref matching in </span><span class="si">%s</span><span class="s2">: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">matches</span><span class="p">)</span>
+                <span class="k">return</span> <span class="kc">None</span>
+            <span class="n">match</span> <span class="o">=</span> <span class="n">matches</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">match</span> <span class="ow">in</span> <span class="n">options</span><span class="o">.</span><span class="n">identifiers</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">pf</span><span class="o">.</span><span class="n">Str</span><span class="p">(</span><span class="n">options</span><span class="o">.</span><span class="n">identifiers</span><span class="p">[</span><span class="n">match</span><span class="p">])</span>
+    <span class="k">return</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="collect_ref_id"><a class="viewcode-back" href="../../api/amsthm/#amsthm.collect_ref_id">[docs]</a><span class="k">def</span> <span class="nf">collect_ref_id</span><span class="p">(</span><span class="n">elem</span><span class="p">:</span> <span class="n">Element</span><span class="p">,</span> <span class="n">doc</span><span class="p">:</span> <span class="n">Doc</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Only collect all amsthm environment id.</span>
+
+<span class="sd">    This should be used before the `amsthm_latex` filter.</span>
 <span class="sd">    This is done in 2 passes as the id may be cited/referenced earlier than definition.</span>
+<span class="sd">    Consider this as pre-process of ref for LaTeX output.</span>
+
+<span class="sd">    `options.identifiers` modified in-place.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># check if it is a Div, and the class is an amsthm environment</span>
     <span class="n">options</span><span class="p">:</span> <span class="n">DocOptions</span> <span class="o">=</span> <span class="n">doc</span><span class="o">.</span><span class="n">_amsthm</span>
@@ -496,7 +537,7 @@
 
 
 <div class="viewcode-block" id="amsthm_latex"><a class="viewcode-back" href="../../api/amsthm/#amsthm.amsthm_latex">[docs]</a><span class="k">def</span> <span class="nf">amsthm_latex</span><span class="p">(</span><span class="n">elem</span><span class="p">:</span> <span class="n">Element</span><span class="p">,</span> <span class="n">doc</span><span class="p">:</span> <span class="n">Doc</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pf</span><span class="o">.</span><span class="n">RawBlock</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;when output format is LaTeX, all div is converted into native LaTeX amsthm environments&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Transform amsthm defintion to LaTeX package specifications.&quot;&quot;&quot;</span>
     <span class="c1"># check if it is a Div, and the class is an amsthm environment</span>
     <span class="n">options</span><span class="p">:</span> <span class="n">DocOptions</span> <span class="o">=</span> <span class="n">doc</span><span class="o">.</span><span class="n">_amsthm</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">elem</span><span class="p">,</span> <span class="n">pf</span><span class="o">.</span><span class="n">Div</span><span class="p">):</span>
@@ -529,38 +570,9 @@
 
 <div class="viewcode-block" id="action_amsthm"><a class="viewcode-back" href="../../api/amsthm/#amsthm.action_amsthm">[docs]</a><span class="k">def</span> <span class="nf">action_amsthm</span><span class="p">(</span><span class="n">elem</span><span class="p">:</span> <span class="n">Element</span><span class="p">,</span> <span class="n">doc</span><span class="p">:</span> <span class="n">Doc</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pf</span><span class="o">.</span><span class="n">RawBlock</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
     <span class="k">if</span> <span class="n">doc</span><span class="o">.</span><span class="n">format</span> <span class="ow">in</span> <span class="n">LATEX_LIKE</span><span class="p">:</span>
-        <span class="n">amsthm_latex_get_id</span><span class="p">(</span><span class="n">elem</span><span class="p">,</span> <span class="n">doc</span><span class="p">)</span>
+        <span class="n">collect_ref_id</span><span class="p">(</span><span class="n">elem</span><span class="p">,</span> <span class="n">doc</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">amsthm</span><span class="p">(</span><span class="n">elem</span><span class="p">,</span> <span class="n">doc</span><span class="p">)</span>
-    <span class="k">return</span> <span class="kc">None</span></div>
-
-
-<div class="viewcode-block" id="process_ref"><a class="viewcode-back" href="../../api/amsthm/#amsthm.process_ref">[docs]</a><span class="k">def</span> <span class="nf">process_ref</span><span class="p">(</span><span class="n">elem</span><span class="p">:</span> <span class="n">Element</span><span class="p">,</span> <span class="n">doc</span><span class="p">:</span> <span class="n">Doc</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pf</span><span class="o">.</span><span class="n">Str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-    <span class="n">options</span><span class="p">:</span> <span class="n">DocOptions</span> <span class="o">=</span> <span class="n">doc</span><span class="o">.</span><span class="n">_amsthm</span>
-    <span class="c1"># from [@...] to number</span>
-    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">elem</span><span class="p">,</span> <span class="n">pf</span><span class="o">.</span><span class="n">Cite</span><span class="p">):</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">temp</span> <span class="o">:=</span> <span class="n">cite_to_id_mode</span><span class="p">(</span><span class="n">elem</span><span class="p">))</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="p">(</span><span class="nb">id</span> <span class="o">:=</span> <span class="n">temp</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="ow">in</span> <span class="n">options</span><span class="o">.</span><span class="n">identifiers</span><span class="p">:</span>
-            <span class="n">mode</span> <span class="o">=</span> <span class="n">temp</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-            <span class="c1"># @[...]</span>
-            <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;NormalCitation&quot;</span><span class="p">:</span>
-                <span class="k">return</span> <span class="n">pf</span><span class="o">.</span><span class="n">Str</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;(</span><span class="si">{</span><span class="n">options</span><span class="o">.</span><span class="n">identifiers</span><span class="p">[</span><span class="nb">id</span><span class="p">]</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
-            <span class="c1"># @...</span>
-            <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;AuthorInText&quot;</span><span class="p">:</span>
-                <span class="k">return</span> <span class="n">pf</span><span class="o">.</span><span class="n">Str</span><span class="p">(</span><span class="n">options</span><span class="o">.</span><span class="n">identifiers</span><span class="p">[</span><span class="nb">id</span><span class="p">])</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Unknown citation mode </span><span class="si">%s</span><span class="s2"> from Cite: </span><span class="si">%s</span><span class="s2">. Ignoring...&quot;</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">elem</span><span class="p">)</span>
-                <span class="k">return</span> <span class="kc">None</span>
-
-    <span class="c1"># from \ref{...} to number</span>
-    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">elem</span><span class="p">,</span> <span class="n">pf</span><span class="o">.</span><span class="n">RawInline</span><span class="p">)</span> <span class="ow">and</span> <span class="n">elem</span><span class="o">.</span><span class="n">format</span> <span class="o">==</span> <span class="s2">&quot;tex&quot;</span><span class="p">:</span>
-        <span class="n">text</span> <span class="o">=</span> <span class="n">elem</span><span class="o">.</span><span class="n">text</span>
-        <span class="k">if</span> <span class="n">matches</span> <span class="o">:=</span> <span class="n">REF_REGEX</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
-            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">matches</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
-                <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Ignoring ref matching in </span><span class="si">%s</span><span class="s2">: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">matches</span><span class="p">)</span>
-                <span class="k">return</span> <span class="kc">None</span>
-            <span class="n">match</span> <span class="o">=</span> <span class="n">matches</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-            <span class="k">if</span> <span class="n">match</span> <span class="ow">in</span> <span class="n">options</span><span class="o">.</span><span class="n">identifiers</span><span class="p">:</span>
-                <span class="k">return</span> <span class="n">pf</span><span class="o">.</span><span class="n">Str</span><span class="p">(</span><span class="n">options</span><span class="o">.</span><span class="n">identifiers</span><span class="p">[</span><span class="n">match</span><span class="p">])</span>
     <span class="k">return</span> <span class="kc">None</span></div>
 
 
@@ -568,7 +580,7 @@
     <span class="k">if</span> <span class="n">doc</span><span class="o">.</span><span class="n">format</span> <span class="ow">in</span> <span class="n">LATEX_LIKE</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">amsthm_latex</span><span class="p">(</span><span class="n">elem</span><span class="p">,</span> <span class="n">doc</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">process_ref</span><span class="p">(</span><span class="n">elem</span><span class="p">,</span> <span class="n">doc</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">resolve_ref</span><span class="p">(</span><span class="n">elem</span><span class="p">,</span> <span class="n">doc</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="finalize"><a class="viewcode-back" href="../../api/amsthm/#amsthm.finalize">[docs]</a><span class="k">def</span> <span class="nf">finalize</span><span class="p">(</span><span class="n">doc</span><span class="p">:</span> <span class="n">Doc</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
