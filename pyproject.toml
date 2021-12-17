@@ -51,6 +51,7 @@ coloredlogs = { optional = true, version = ">=14,<16" }
 coverage = { optional = true, version = "*" }
 coveralls = { optional = true, version = "*" }
 pytest = { optional = true, version = "*" }
+pytest-parallel = { optional = true, version = "^0.1.1" }
 
 # docs
 sphinx = { optional = true, version = "^3.3" }
@@ -80,6 +81,7 @@ tests = [
     "coverage",
     "coveralls",
     "pytest",
+    "pytest-parallel",
 ]
 docs = [
     "sphinx",
