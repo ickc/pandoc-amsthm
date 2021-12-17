@@ -71,22 +71,20 @@ def cancel_emph(elem: Element, doc: Doc) -> list[Element] | None:
         return None
 
 
+def parse_markdown(markdown: str) -> list[Element]:
+    ast = convert_text(markdown)
+    res: list[Element] = []
+    for e in ast:
+        if isinstance(e, pf.Para):
+            res += list(e.content)
+        else:
+            res.append(e)
+    return res
+
+
 def parse_info(info: str | None) -> list[Element]:
     """Convert markdown string to panflute AST inline elements."""
-    if info:
-        info_list = [pf.Space, pf.Str(r"(")]
-        info_ast = convert_text(info)
-        temp: list[Element] = []
-        for e in info_ast:
-            if isinstance(e, pf.Para):
-                temp += list(e.content)
-            else:
-                temp.append(e)
-        info_list += temp
-        info_list.append(pf.Str(r")"))
-    else:
-        info_list = []
-    return info_list
+    return [pf.Space, pf.Str(r"(")] + parse_markdown(info) + [pf.Str(r")")] if info else []
 
 
 @dataclass
@@ -222,6 +220,23 @@ class Proof(NewTheorem):
     parent_counter: str | None = None
     shared_counter: str | None = None
     numbered: bool = False
+
+    def to_panflute_theorem_header(
+        self,
+        options: DocOptions,
+        id: str | None,
+        info: str | None,
+    ) -> list[pf.Element]:
+        """Return a theorem header as panflute AST."""
+        if info is None:
+            return [pf.Emph(pf.Str("Proof.")), pf.Space]
+        else:
+            # put it into a Para then walk
+            ast = parse_markdown(info)
+            info_list = pf.Para(*ast)
+            info_list.walk(to_emph)
+            info_list.walk(cancel_emph)
+            return list(info_list.content) + [pf.Emph(pf.Str(".")), pf.Space]
 
 
 @dataclass

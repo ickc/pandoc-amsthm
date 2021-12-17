@@ -38,8 +38,17 @@ here
 :::
 
 ::: {.proof info="Proof of the Main Theorem"}
-*proof* (Proof of the Main Theorem)*.* Predefined proof theoremstyle
+*Proof* *of* *the* *Main* *Theorem**.* Predefined proof theoremstyle
 here`<span style='float: right'>◻</span>`{=html}
+:::
+
+::: {.proof info="Proof of the *little* theorem"}
+*Proof* *of* *the* little *theorem**.* Predefined proof theoremstyle
+here with markdown info.`<span style='float: right'>◻</span>`{=html}
+:::
+
+::: proof
+*Proof.* Bare proof here.`<span style='float: right'>◻</span>`{=html}
 :::
 
 ::: KL

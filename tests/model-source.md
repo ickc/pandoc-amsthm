@@ -67,6 +67,14 @@ remark theoremstyle here
 Predefined proof theoremstyle here
 :::
 
+::: {.proof info="Proof of the *little* theorem"}
+Predefined proof theoremstyle here with markdown info.
+:::
+
+::: {.proof}
+Bare proof here.
+:::
+
 ::: KL
 Klein's Lemma from amsthm doc.
 :::
