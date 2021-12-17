@@ -40,7 +40,7 @@ PARENT_COUNTERS: set[str] = {
 }
 STYLES: tuple[str, ...] = ("plain", "definition", "remark")
 METADATA_KEY: str = "amsthm"
-REF_REGEX = re.compile(r"^\\ref\{(.*)\}$")
+REF_REGEX = re.compile(r"^\\(ref|eqref)\{(.*)\}$")
 LATEX_LIKE: set[str] = {"latex", "beamer"}
 PLAIN_OR_DEF: set[str] = {"plain", "definition"}
 COUNTER_DEPTH_DEFAULT: int = 0
@@ -395,9 +395,12 @@ def resolve_ref(elem: Element, doc: Doc) -> pf.Str | None:
             if len(matches) != 1:
                 logger.warning("Ignoring ref matching in %s: %s", text, matches)
                 return None
-            match = matches[0]
-            if match in options.identifiers:
-                return pf.Str(options.identifiers[match])
+            ref_type, id = matches[0]
+            if id in options.identifiers:
+                if ref_type == "eqref":
+                    return pf.Str(f"({options.identifiers[id]})")
+                else:
+                    return pf.Str(options.identifiers[id])
     return None
 
 

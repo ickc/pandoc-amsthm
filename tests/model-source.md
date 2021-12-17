@@ -44,6 +44,7 @@ $$E=mc^2$$
 :::
 
 From the \ref{simplestEquation}, we see that...
+Or \eqref{simplestEquation}, ...
 
 ::: {.With_Space info="**This** is *markdown*."}
 Environment name has a space, and is unnumbered.

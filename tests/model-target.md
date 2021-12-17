@@ -13,7 +13,7 @@ definition.*
 $$E=mc^2$$
 :::
 
-From the 1.0.2, we see that...
+From the 1.0.2, we see that... Or (1.0.2), ...
 
 ::: {.With_Space info="**This** is *markdown*."}
 **With Space** (**This** is *markdown*.)**.** *Environment name has a
