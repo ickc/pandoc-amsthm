@@ -124,6 +124,43 @@ class NewTheorem:
     def counter_name(self) -> str:
         return self.env_name if self.shared_counter is None else self.shared_counter
 
+    def to_panflute_theorem_header(
+        self,
+        options: DocOptions,
+        id: str | None,
+        info: str | None,
+    ) -> list[pf.Element]:
+        """Return a theorem header as panflute AST.
+
+        This mutates `options.theorem_counters`, `options.identifiers` in-place.
+        """
+        res: list[pf.Element] = []
+        ElementType = pf.Strong if self.style in PLAIN_OR_DEF else pf.Emph
+        res.append(ElementType(pf.Str(f"{self.text} ")))
+        if self.numbered:
+            counter_name = self.counter_name
+            options.theorem_counters[counter_name] += 1
+            theorem_counter = options.theorem_counters[counter_name]
+            theorem_number = ".".join([str(i) for i in options.header_counters] + [str(theorem_counter)])
+            if id:
+                options.identifiers[id] = theorem_number
+            res.append(pf.Strong(pf.Str(theorem_number)) if self.style in PLAIN_OR_DEF else pf.Str(theorem_number))
+
+        if info:
+            res += [pf.Space, pf.Str(r"(")]
+            info_ast = convert_text(info)
+            temp: list[Element] = []
+            for e in info_ast:
+                if isinstance(e, pf.Para):
+                    temp += list(e.content)
+                else:
+                    temp.append(e)
+            res += temp
+            res.append(pf.Str(r")"))
+
+        res += [ElementType(pf.Str(r".")), pf.Space]
+        return res
+
 
 @dataclass
 class Proof(NewTheorem):
@@ -270,34 +307,7 @@ def amsthm(elem: Element, doc: Doc) -> None:
             info = elem.attributes.get("info", None)
             id = elem.identifier
 
-            res: list[pf.Element] = []
-            # theorem header
-            ElementType = pf.Strong if theorem.style in PLAIN_OR_DEF else pf.Emph
-            res.append(ElementType(pf.Str(f"{theorem.text} ")))
-            if theorem.numbered:
-                counter_name = theorem.counter_name
-                options.theorem_counters[counter_name] += 1
-                theorem_counter = options.theorem_counters[counter_name]
-                theorem_number = ".".join([str(i) for i in options.header_counters] + [str(theorem_counter)])
-                if id:
-                    options.identifiers[id] = theorem_number
-                res.append(
-                    pf.Strong(pf.Str(theorem_number)) if theorem.style in PLAIN_OR_DEF else pf.Str(theorem_number)
-                )
-
-            if info:
-                res += [pf.Space, pf.Str(r"(")]
-                info_ast = convert_text(info)
-                temp: list[Element] = []
-                for e in info_ast:
-                    if isinstance(e, pf.Para):
-                        temp += list(e.content)
-                    else:
-                        temp.append(e)
-                res += temp
-                res.append(pf.Str(r")"))
-
-            res += [ElementType(pf.Str(r".")), pf.Space]
+            res = theorem.to_panflute_theorem_header(options, id, info)
 
             # theorem body
             if theorem.style == "plain":
