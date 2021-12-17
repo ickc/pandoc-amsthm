@@ -122,7 +122,20 @@
 
     <span class="kn">from</span> <span class="nn">panflute.elements</span> <span class="kn">import</span> <span class="n">Doc</span><span class="p">,</span> <span class="n">Element</span>
 
-    <span class="n">EmphLike</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;EmphLike&quot;</span><span class="p">,</span> <span class="n">pf</span><span class="o">.</span><span class="n">Emph</span><span class="p">,</span> <span class="n">pf</span><span class="o">.</span><span class="n">Strong</span><span class="p">,</span> <span class="n">pf</span><span class="o">.</span><span class="n">SmallCaps</span><span class="p">)</span>
+    <span class="n">EmphLike</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span>
+        <span class="s2">&quot;EmphLike&quot;</span><span class="p">,</span>
+        <span class="n">pf</span><span class="o">.</span><span class="n">Emph</span><span class="p">,</span>
+        <span class="n">pf</span><span class="o">.</span><span class="n">Underline</span><span class="p">,</span>
+        <span class="n">pf</span><span class="o">.</span><span class="n">Strong</span><span class="p">,</span>
+        <span class="n">pf</span><span class="o">.</span><span class="n">Strikeout</span><span class="p">,</span>
+        <span class="n">pf</span><span class="o">.</span><span class="n">Superscript</span><span class="p">,</span>
+        <span class="n">pf</span><span class="o">.</span><span class="n">SmallCaps</span><span class="p">,</span>
+        <span class="n">pf</span><span class="o">.</span><span class="n">Quoted</span><span class="p">,</span>
+        <span class="n">pf</span><span class="o">.</span><span class="n">Cite</span><span class="p">,</span>
+        <span class="n">pf</span><span class="o">.</span><span class="n">Link</span><span class="p">,</span>
+        <span class="n">pf</span><span class="o">.</span><span class="n">Image</span><span class="p">,</span>
+        <span class="n">pf</span><span class="o">.</span><span class="n">Span</span><span class="p">,</span>
+    <span class="p">)</span>
 
 
 <div class="viewcode-block" id="to_type"><a class="viewcode-back" href="../../../api/amsthm.helper/#amsthm.helper.to_type">[docs]</a><span class="k">def</span> <span class="nf">to_type</span><span class="p">(</span>
