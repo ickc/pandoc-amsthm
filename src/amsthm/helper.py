@@ -6,35 +6,60 @@ import panflute as pf
 from panflute.tools import convert_text
 
 if TYPE_CHECKING:
+    from typing import TypeVar
 
     from panflute.elements import Doc, Element
 
+    EmphLike = TypeVar("EmphLike", pf.Emph, pf.Strong, pf.SmallCaps)
 
-def to_emph(elem: Element, doc: Doc) -> pf.Emph | None:
+
+def to_type(
+    elem: Element,
+    doc: Doc,
+    ElementType: type[EmphLike] = pf.Emph,
+) -> EmphLike | None:
+    """Convert all Str to ElementType.
+
+    This should works for Emph, Strong, SmallCap, etc.
+    """
     if isinstance(elem, pf.Str):
-        return pf.Emph(elem)
+        return ElementType(elem)
     else:
         return None
 
 
-def cancel_emph(elem: Element, doc: Doc) -> list[Element] | None:
+to_emph = to_type
+
+
+def cancel_repeated_type(
+    elem: Element,
+    doc: Doc,
+    ElementType: type[EmphLike] = pf.Emph,
+) -> list[EmphLike] | None:
     """Emulate the behavior of LaTeX that a double emph is cancelled."""
     # this is to make sure nested Emph in any ways would be canceled.
-    if isinstance(elem, pf.Emph):
+    if isinstance(elem, ElementType):
         res = []
         for e in elem.content:
             # double Emph
-            if isinstance(e, pf.Emph):
+            if isinstance(e, ElementType):
                 res += e.content
             # single Emph only, keeping Emph...
             else:
-                res.append(pf.Emph(e))
+                res.append(ElementType(e))
         return res
     else:
         return None
 
 
-def merge_emph(elem: Element, doc: Doc) -> list[Element] | None:
+cancel_emph = cancel_repeated_type
+
+
+def merge_consecutive_type(
+    elem: Element,
+    doc: Doc,
+    ElementType: type[EmphLike] = pf.Emph,
+) -> list[EmphLike] | None:
     """Merge neighboring Emph with optionally Space between them."""
     if isinstance(elem, pf.Block):
         content = elem.content
@@ -48,19 +73,22 @@ def merge_emph(elem: Element, doc: Doc) -> list[Element] | None:
             # remember that we are mutated content and therefore len(content) changes too
             elem_next = None if i + 1 >= len(content) else content[i + 1]
             elem_next_next = None if i + 2 >= len(content) else content[i + 2]
-            if isinstance(elem_cur, pf.Emph):
-                if isinstance(elem_next, pf.Emph):
+            if isinstance(elem_cur, ElementType):
+                if isinstance(elem_next, ElementType):
                     merged = list(elem_cur.content) + list(elem_next.content)
-                    content = list(content[:i]) + [pf.Emph(*merged)] + list(content[i + 2 :])
+                    content = list(content[:i]) + [ElementType(*merged)] + list(content[i + 2 :])
                     mutated = True
                 elif isinstance(elem_next, pf.Space):
-                    if isinstance(elem_next_next, pf.Emph):
+                    if isinstance(elem_next_next, ElementType):
                         merged = list(elem_cur.content) + [pf.Space] + list(elem_next_next.content)
-                        content = list(content[:i]) + [pf.Emph(*merged)] + list(content[i + 3 :])
+                        content = list(content[:i]) + [ElementType(*merged)] + list(content[i + 3 :])
                         mutated = True
         if mutated:
             elem.content = content
     return None
+
+
+merge_emph = merge_consecutive_type
 
 
 def parse_markdown_as_inline(markdown: str) -> list[Element]:
