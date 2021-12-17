@@ -101,6 +101,7 @@ def merge_emph(elem: Element, doc: Doc) -> list[Element] | None:
 
 
 def parse_markdown(markdown: str) -> list[Element]:
+    """Convert markdown string to panflute AST inline elements."""
     ast = convert_text(markdown)
     res: list[Element] = []
     for e in ast:
@@ -112,7 +113,7 @@ def parse_markdown(markdown: str) -> list[Element]:
 
 
 def parse_info(info: str | None) -> list[Element]:
-    """Convert markdown string to panflute AST inline elements."""
+    """Convert theorem info to panflute AST inline elements."""
     return [pf.Str(r"(")] + parse_markdown(info) + [pf.Str(r")")] if info else []
 
 
