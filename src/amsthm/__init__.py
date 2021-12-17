@@ -71,6 +71,35 @@ def cancel_emph(elem: Element, doc: Doc) -> list[Element] | None:
         return None
 
 
+def merge_emph(elem: Element, doc: Doc) -> list[Element] | None:
+    """Merge neighboring Emph with optionally Space between them."""
+    if isinstance(elem, pf.Block):
+        content = elem.content
+        n = len(content)
+
+        mutated = False
+        # walk in reverse direction to avoid mutating current location i
+        # also start with the 2nd last entry because we're matching 2 or more elements
+        for i in range(n - 2, -1, -1):
+            elem_cur = content[i]
+            # remember that we are mutated content and therefore len(content) changes too
+            elem_next = None if i + 1 >= len(content) else content[i + 1]
+            elem_next_next = None if i + 2 >= len(content) else content[i + 2]
+            if isinstance(elem_cur, pf.Emph):
+                if isinstance(elem_next, pf.Emph):
+                    merged = list(elem_cur.content) + list(elem_next.content)
+                    content = list(content[:i]) + [pf.Emph(*merged)] + list(content[i + 2 :])
+                    mutated = True
+                elif isinstance(elem_next, pf.Space):
+                    if isinstance(elem_next_next, pf.Emph):
+                        merged = list(elem_cur.content) + [pf.Space] + list(elem_next_next.content)
+                        content = list(content[:i]) + [pf.Emph(*merged)] + list(content[i + 3 :])
+                        mutated = True
+        if mutated:
+            elem.content = content
+    return None
+
+
 def parse_markdown(markdown: str) -> list[Element]:
     ast = convert_text(markdown)
     res: list[Element] = []
@@ -237,6 +266,7 @@ class Proof(NewTheorem):
             info_list = pf.Para(*ast)
             info_list.walk(to_emph)
             info_list.walk(cancel_emph)
+            info_list.walk(merge_emph)
             return list(info_list.content) + [pf.Emph(pf.Str(".")), pf.Space]
 
 
@@ -379,6 +409,7 @@ def amsthm(elem: Element, doc: Doc) -> None:
             if theorem.style == "plain":
                 elem.walk(to_emph)
                 elem.walk(cancel_emph)
+                elem.walk(merge_emph)
             try:
                 # insert in the beginning of the first block element
                 for r in reversed(res):
