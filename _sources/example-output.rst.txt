@@ -26,7 +26,7 @@ Demo
 
    .. math:: E=mc^2
 
-From the 1.0.2, we see that…
+From the 1.0.2, we see that… Or (1.0.2), …
 
 .. container:: With_Space
 
