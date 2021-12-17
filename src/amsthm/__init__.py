@@ -4,7 +4,7 @@ import re
 from collections import defaultdict
 from dataclasses import dataclass, field
 from functools import cached_property
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Text
 
 import panflute as pf
 from panflute.tools import convert_text
@@ -75,7 +75,7 @@ def cancel_emph(elem: Element, doc: Doc) -> list[Element] | None:
 class NewTheorem:
     style: str
     env_name: str
-    text: str | None = None
+    text: str = ""
     parent_counter: str | None = None
     shared_counter: str | None = None
     numbered: bool = True
@@ -89,7 +89,7 @@ class NewTheorem:
         if self.env_name.endswith("*"):
             self.env_name = self.env_name[:-1]
             self.numbered = False
-        if self.text is None:
+        if not self.text:
             logger.debug("Defaulting text to %s", self.env_name)
             self.text = self.env_name
         if (parent_counter := self.parent_counter) is not None and parent_counter not in PARENT_COUNTERS:
@@ -134,9 +134,13 @@ class NewTheorem:
 
         This mutates `options.theorem_counters`, `options.identifiers` in-place.
         """
-        res: list[pf.Element] = []
-        ElementType = pf.Strong if self.style in PLAIN_OR_DEF else pf.Emph
-        res.append(ElementType(pf.Str(f"{self.text} ")))
+        TextType: type[Element]
+        text = self.text
+
+        # text and number separated by Space
+
+        NumberType: type[Element]
+        theorem_number: str | None
         if self.numbered:
             counter_name = self.counter_name
             options.theorem_counters[counter_name] += 1
@@ -144,10 +148,13 @@ class NewTheorem:
             theorem_number = ".".join([str(i) for i in options.header_counters] + [str(theorem_counter)])
             if id:
                 options.identifiers[id] = theorem_number
-            res.append(pf.Strong(pf.Str(theorem_number)) if self.style in PLAIN_OR_DEF else pf.Str(theorem_number))
+        else:
+            theorem_number = None
 
+        # no additional styling here
+        info_list: list[Element]
         if info:
-            res += [pf.Space, pf.Str(r"(")]
+            info_list = [pf.Space, pf.Str(r"(")]
             info_ast = convert_text(info)
             temp: list[Element] = []
             for e in info_ast:
@@ -155,10 +162,50 @@ class NewTheorem:
                     temp += list(e.content)
                 else:
                     temp.append(e)
-            res += temp
-            res.append(pf.Str(r")"))
+            info_list += temp
+            info_list.append(pf.Str(r")"))
+        else:
+            info_list = []
 
-        res += [ElementType(pf.Str(r".")), pf.Space]
+        # append TextType of ".", Space
+
+        # cases: PLAIN_OR_DEF, theorem_number, info_list
+        if self.style in PLAIN_OR_DEF:
+            TextType = pf.Strong
+            NumberType = pf.Strong
+            if theorem_number is None:
+                if info_list:
+                    res = [TextType(pf.Str(text))] + info_list + [TextType(pf.Str(".")), pf.Space]
+                else:
+                    res = [TextType(pf.Str(f"{text}.")), pf.Space]
+            else:
+                if info_list:
+                    res = [TextType(pf.Str(f"{text} {theorem_number}"))] + info_list + [TextType(pf.Str(".")), pf.Space]
+                else:
+                    res = [TextType(pf.Str(f"{text} {theorem_number}.")), pf.Space]
+        else:
+            TextType = pf.Emph
+            NumberType = pf.Str
+            if theorem_number is None:
+                if info_list:
+                    res = [TextType(pf.Str(text))] + info_list + [TextType(pf.Str(".")), pf.Space]
+                else:
+                    res = [TextType(pf.Str(f"{text}.")), pf.Space]
+            else:
+                if info_list:
+                    res = (
+                        [TextType(pf.Str(text)), pf.Space, pf.Str(theorem_number)]
+                        + info_list
+                        + [TextType(pf.Str(".")), pf.Space]
+                    )
+                else:
+                    res = [
+                        TextType(pf.Str(text)),
+                        pf.Space,
+                        NumberType(pf.Str(theorem_number)),
+                        TextType(pf.Str(".")),
+                        pf.Space,
+                    ]
         return res
 
 
@@ -166,7 +213,7 @@ class NewTheorem:
 class Proof(NewTheorem):
     style: str = "proof"
     env_name: str = "proof"
-    text: str | None = "proof"
+    text: str = "proof"
     parent_counter: str | None = None
     shared_counter: str | None = None
     numbered: bool = False
@@ -227,22 +274,20 @@ class DocOptions:
                 if isinstance(opt, dict):
                     for key, value in opt.items():
                         # key
-                        theorem = NewTheorem(
-                            style, key, text=name_to_text.get(key, None), parent_counter=parent_counter
-                        )
+                        theorem = NewTheorem(style, key, text=name_to_text.get(key, ""), parent_counter=parent_counter)
                         theorems[theorem.class_name] = theorem
                         # value(s)
                         if isinstance(value, list):
                             for v in value:
-                                theorem = NewTheorem(style, v, text=name_to_text.get(v, None), shared_counter=key)
+                                theorem = NewTheorem(style, v, text=name_to_text.get(v, ""), shared_counter=key)
                                 theorems[theorem.class_name] = theorem
                         else:
                             v = value
-                            theorem = NewTheorem(style, v, text=name_to_text.get(v, None), shared_counter=key)
+                            theorem = NewTheorem(style, v, text=name_to_text.get(v, ""), shared_counter=key)
                             theorems[theorem.class_name] = theorem
                 else:
                     key = opt
-                    theorem = NewTheorem(style, key, text=name_to_text.get(key, None), parent_counter=parent_counter)
+                    theorem = NewTheorem(style, key, text=name_to_text.get(key, ""), parent_counter=parent_counter)
                     theorems[theorem.class_name] = theorem
         # proof is predefined in amsthm
         theorems["proof"] = Proof()
