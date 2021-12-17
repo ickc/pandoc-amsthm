@@ -118,35 +118,60 @@
 <span class="kn">from</span> <span class="nn">panflute.tools</span> <span class="kn">import</span> <span class="n">convert_text</span>
 
 <span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TypeVar</span>
 
     <span class="kn">from</span> <span class="nn">panflute.elements</span> <span class="kn">import</span> <span class="n">Doc</span><span class="p">,</span> <span class="n">Element</span>
 
+    <span class="n">EmphLike</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;EmphLike&quot;</span><span class="p">,</span> <span class="n">pf</span><span class="o">.</span><span class="n">Emph</span><span class="p">,</span> <span class="n">pf</span><span class="o">.</span><span class="n">Strong</span><span class="p">,</span> <span class="n">pf</span><span class="o">.</span><span class="n">SmallCaps</span><span class="p">)</span>
 
-<div class="viewcode-block" id="to_emph"><a class="viewcode-back" href="../../../api/amsthm.helper/#amsthm.helper.to_emph">[docs]</a><span class="k">def</span> <span class="nf">to_emph</span><span class="p">(</span><span class="n">elem</span><span class="p">:</span> <span class="n">Element</span><span class="p">,</span> <span class="n">doc</span><span class="p">:</span> <span class="n">Doc</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pf</span><span class="o">.</span><span class="n">Emph</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+
+<div class="viewcode-block" id="to_type"><a class="viewcode-back" href="../../../api/amsthm.helper/#amsthm.helper.to_type">[docs]</a><span class="k">def</span> <span class="nf">to_type</span><span class="p">(</span>
+    <span class="n">elem</span><span class="p">:</span> <span class="n">Element</span><span class="p">,</span>
+    <span class="n">doc</span><span class="p">:</span> <span class="n">Doc</span><span class="p">,</span>
+    <span class="n">ElementType</span><span class="p">:</span> <span class="nb">type</span><span class="p">[</span><span class="n">EmphLike</span><span class="p">]</span> <span class="o">=</span> <span class="n">pf</span><span class="o">.</span><span class="n">Emph</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EmphLike</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Convert all Str to ElementType.</span>
+
+<span class="sd">    This should works for Emph, Strong, SmallCap, etc.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">elem</span><span class="p">,</span> <span class="n">pf</span><span class="o">.</span><span class="n">Str</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">pf</span><span class="o">.</span><span class="n">Emph</span><span class="p">(</span><span class="n">elem</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">ElementType</span><span class="p">(</span><span class="n">elem</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">return</span> <span class="kc">None</span></div>
 
 
-<div class="viewcode-block" id="cancel_emph"><a class="viewcode-back" href="../../../api/amsthm.helper/#amsthm.helper.cancel_emph">[docs]</a><span class="k">def</span> <span class="nf">cancel_emph</span><span class="p">(</span><span class="n">elem</span><span class="p">:</span> <span class="n">Element</span><span class="p">,</span> <span class="n">doc</span><span class="p">:</span> <span class="n">Doc</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Element</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="n">to_emph</span> <span class="o">=</span> <span class="n">to_type</span>
+
+
+<div class="viewcode-block" id="cancel_repeated_type"><a class="viewcode-back" href="../../../api/amsthm.helper/#amsthm.helper.cancel_repeated_type">[docs]</a><span class="k">def</span> <span class="nf">cancel_repeated_type</span><span class="p">(</span>
+    <span class="n">elem</span><span class="p">:</span> <span class="n">Element</span><span class="p">,</span>
+    <span class="n">doc</span><span class="p">:</span> <span class="n">Doc</span><span class="p">,</span>
+    <span class="n">ElementType</span><span class="p">:</span> <span class="nb">type</span><span class="p">[</span><span class="n">EmphLike</span><span class="p">]</span> <span class="o">=</span> <span class="n">pf</span><span class="o">.</span><span class="n">Emph</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">EmphLike</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Emulate the behavior of LaTeX that a double emph is cancelled.&quot;&quot;&quot;</span>
     <span class="c1"># this is to make sure nested Emph in any ways would be canceled.</span>
-    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">elem</span><span class="p">,</span> <span class="n">pf</span><span class="o">.</span><span class="n">Emph</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">elem</span><span class="p">,</span> <span class="n">ElementType</span><span class="p">):</span>
         <span class="n">res</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">elem</span><span class="o">.</span><span class="n">content</span><span class="p">:</span>
             <span class="c1"># double Emph</span>
-            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">pf</span><span class="o">.</span><span class="n">Emph</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">ElementType</span><span class="p">):</span>
                 <span class="n">res</span> <span class="o">+=</span> <span class="n">e</span><span class="o">.</span><span class="n">content</span>
             <span class="c1"># single Emph only, keeping Emph...</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pf</span><span class="o">.</span><span class="n">Emph</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+                <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ElementType</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">res</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">return</span> <span class="kc">None</span></div>
 
 
-<div class="viewcode-block" id="merge_emph"><a class="viewcode-back" href="../../../api/amsthm.helper/#amsthm.helper.merge_emph">[docs]</a><span class="k">def</span> <span class="nf">merge_emph</span><span class="p">(</span><span class="n">elem</span><span class="p">:</span> <span class="n">Element</span><span class="p">,</span> <span class="n">doc</span><span class="p">:</span> <span class="n">Doc</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Element</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="n">cancel_emph</span> <span class="o">=</span> <span class="n">cancel_repeated_type</span>
+
+
+<div class="viewcode-block" id="merge_consecutive_type"><a class="viewcode-back" href="../../../api/amsthm.helper/#amsthm.helper.merge_consecutive_type">[docs]</a><span class="k">def</span> <span class="nf">merge_consecutive_type</span><span class="p">(</span>
+    <span class="n">elem</span><span class="p">:</span> <span class="n">Element</span><span class="p">,</span>
+    <span class="n">doc</span><span class="p">:</span> <span class="n">Doc</span><span class="p">,</span>
+    <span class="n">ElementType</span><span class="p">:</span> <span class="nb">type</span><span class="p">[</span><span class="n">EmphLike</span><span class="p">]</span> <span class="o">=</span> <span class="n">pf</span><span class="o">.</span><span class="n">Emph</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">EmphLike</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Merge neighboring Emph with optionally Space between them.&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">elem</span><span class="p">,</span> <span class="n">pf</span><span class="o">.</span><span class="n">Block</span><span class="p">):</span>
         <span class="n">content</span> <span class="o">=</span> <span class="n">elem</span><span class="o">.</span><span class="n">content</span>
@@ -160,19 +185,22 @@
             <span class="c1"># remember that we are mutated content and therefore len(content) changes too</span>
             <span class="n">elem_next</span> <span class="o">=</span> <span class="kc">None</span> <span class="k">if</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">&gt;=</span> <span class="nb">len</span><span class="p">(</span><span class="n">content</span><span class="p">)</span> <span class="k">else</span> <span class="n">content</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
             <span class="n">elem_next_next</span> <span class="o">=</span> <span class="kc">None</span> <span class="k">if</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">&gt;=</span> <span class="nb">len</span><span class="p">(</span><span class="n">content</span><span class="p">)</span> <span class="k">else</span> <span class="n">content</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">2</span><span class="p">]</span>
-            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">elem_cur</span><span class="p">,</span> <span class="n">pf</span><span class="o">.</span><span class="n">Emph</span><span class="p">):</span>
-                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">elem_next</span><span class="p">,</span> <span class="n">pf</span><span class="o">.</span><span class="n">Emph</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">elem_cur</span><span class="p">,</span> <span class="n">ElementType</span><span class="p">):</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">elem_next</span><span class="p">,</span> <span class="n">ElementType</span><span class="p">):</span>
                     <span class="n">merged</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">elem_cur</span><span class="o">.</span><span class="n">content</span><span class="p">)</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">elem_next</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
-                    <span class="n">content</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">content</span><span class="p">[:</span><span class="n">i</span><span class="p">])</span> <span class="o">+</span> <span class="p">[</span><span class="n">pf</span><span class="o">.</span><span class="n">Emph</span><span class="p">(</span><span class="o">*</span><span class="n">merged</span><span class="p">)]</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">content</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">2</span> <span class="p">:])</span>
+                    <span class="n">content</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">content</span><span class="p">[:</span><span class="n">i</span><span class="p">])</span> <span class="o">+</span> <span class="p">[</span><span class="n">ElementType</span><span class="p">(</span><span class="o">*</span><span class="n">merged</span><span class="p">)]</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">content</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">2</span> <span class="p">:])</span>
                     <span class="n">mutated</span> <span class="o">=</span> <span class="kc">True</span>
                 <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">elem_next</span><span class="p">,</span> <span class="n">pf</span><span class="o">.</span><span class="n">Space</span><span class="p">):</span>
-                    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">elem_next_next</span><span class="p">,</span> <span class="n">pf</span><span class="o">.</span><span class="n">Emph</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">elem_next_next</span><span class="p">,</span> <span class="n">ElementType</span><span class="p">):</span>
                         <span class="n">merged</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">elem_cur</span><span class="o">.</span><span class="n">content</span><span class="p">)</span> <span class="o">+</span> <span class="p">[</span><span class="n">pf</span><span class="o">.</span><span class="n">Space</span><span class="p">]</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">elem_next_next</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
-                        <span class="n">content</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">content</span><span class="p">[:</span><span class="n">i</span><span class="p">])</span> <span class="o">+</span> <span class="p">[</span><span class="n">pf</span><span class="o">.</span><span class="n">Emph</span><span class="p">(</span><span class="o">*</span><span class="n">merged</span><span class="p">)]</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">content</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">3</span> <span class="p">:])</span>
+                        <span class="n">content</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">content</span><span class="p">[:</span><span class="n">i</span><span class="p">])</span> <span class="o">+</span> <span class="p">[</span><span class="n">ElementType</span><span class="p">(</span><span class="o">*</span><span class="n">merged</span><span class="p">)]</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">content</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">3</span> <span class="p">:])</span>
                         <span class="n">mutated</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="k">if</span> <span class="n">mutated</span><span class="p">:</span>
             <span class="n">elem</span><span class="o">.</span><span class="n">content</span> <span class="o">=</span> <span class="n">content</span>
     <span class="k">return</span> <span class="kc">None</span></div>
+
+
+<span class="n">merge_emph</span> <span class="o">=</span> <span class="n">merge_consecutive_type</span>
 
 
 <div class="viewcode-block" id="parse_markdown_as_inline"><a class="viewcode-back" href="../../../api/amsthm.helper/#amsthm.helper.parse_markdown_as_inline">[docs]</a><span class="k">def</span> <span class="nf">parse_markdown_as_inline</span><span class="p">(</span><span class="n">markdown</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Element</span><span class="p">]:</span>
