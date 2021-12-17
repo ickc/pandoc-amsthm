@@ -234,7 +234,44 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">counter_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">env_name</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">shared_counter</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">shared_counter</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">env_name</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">shared_counter</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">shared_counter</span>
+
+<div class="viewcode-block" id="NewTheorem.to_panflute_theorem_header"><a class="viewcode-back" href="../../api/amsthm/#amsthm.NewTheorem.to_panflute_theorem_header">[docs]</a>    <span class="k">def</span> <span class="nf">to_panflute_theorem_header</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">options</span><span class="p">:</span> <span class="n">DocOptions</span><span class="p">,</span>
+        <span class="nb">id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">info</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">pf</span><span class="o">.</span><span class="n">Element</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Return a theorem header as panflute AST.</span>
+
+<span class="sd">        This mutates `options.theorem_counters`, `options.identifiers` in-place.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">res</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">pf</span><span class="o">.</span><span class="n">Element</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">ElementType</span> <span class="o">=</span> <span class="n">pf</span><span class="o">.</span><span class="n">Strong</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">style</span> <span class="ow">in</span> <span class="n">PLAIN_OR_DEF</span> <span class="k">else</span> <span class="n">pf</span><span class="o">.</span><span class="n">Emph</span>
+        <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ElementType</span><span class="p">(</span><span class="n">pf</span><span class="o">.</span><span class="n">Str</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">text</span><span class="si">}</span><span class="s2"> &quot;</span><span class="p">)))</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">numbered</span><span class="p">:</span>
+            <span class="n">counter_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">counter_name</span>
+            <span class="n">options</span><span class="o">.</span><span class="n">theorem_counters</span><span class="p">[</span><span class="n">counter_name</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">theorem_counter</span> <span class="o">=</span> <span class="n">options</span><span class="o">.</span><span class="n">theorem_counters</span><span class="p">[</span><span class="n">counter_name</span><span class="p">]</span>
+            <span class="n">theorem_number</span> <span class="o">=</span> <span class="s2">&quot;.&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">options</span><span class="o">.</span><span class="n">header_counters</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">theorem_counter</span><span class="p">)])</span>
+            <span class="k">if</span> <span class="nb">id</span><span class="p">:</span>
+                <span class="n">options</span><span class="o">.</span><span class="n">identifiers</span><span class="p">[</span><span class="nb">id</span><span class="p">]</span> <span class="o">=</span> <span class="n">theorem_number</span>
+            <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pf</span><span class="o">.</span><span class="n">Strong</span><span class="p">(</span><span class="n">pf</span><span class="o">.</span><span class="n">Str</span><span class="p">(</span><span class="n">theorem_number</span><span class="p">))</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">style</span> <span class="ow">in</span> <span class="n">PLAIN_OR_DEF</span> <span class="k">else</span> <span class="n">pf</span><span class="o">.</span><span class="n">Str</span><span class="p">(</span><span class="n">theorem_number</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">info</span><span class="p">:</span>
+            <span class="n">res</span> <span class="o">+=</span> <span class="p">[</span><span class="n">pf</span><span class="o">.</span><span class="n">Space</span><span class="p">,</span> <span class="n">pf</span><span class="o">.</span><span class="n">Str</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;(&quot;</span><span class="p">)]</span>
+            <span class="n">info_ast</span> <span class="o">=</span> <span class="n">convert_text</span><span class="p">(</span><span class="n">info</span><span class="p">)</span>
+            <span class="n">temp</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Element</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">info_ast</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">pf</span><span class="o">.</span><span class="n">Para</span><span class="p">):</span>
+                    <span class="n">temp</span> <span class="o">+=</span> <span class="nb">list</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">temp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+            <span class="n">res</span> <span class="o">+=</span> <span class="n">temp</span>
+            <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pf</span><span class="o">.</span><span class="n">Str</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;)&quot;</span><span class="p">))</span>
+
+        <span class="n">res</span> <span class="o">+=</span> <span class="p">[</span><span class="n">ElementType</span><span class="p">(</span><span class="n">pf</span><span class="o">.</span><span class="n">Str</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;.&quot;</span><span class="p">)),</span> <span class="n">pf</span><span class="o">.</span><span class="n">Space</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">res</span></div></div>
 
 
 <div class="viewcode-block" id="Proof"><a class="viewcode-back" href="../../api/amsthm/#amsthm.Proof">[docs]</a><span class="nd">@dataclass</span>
@@ -382,34 +419,7 @@
             <span class="n">info</span> <span class="o">=</span> <span class="n">elem</span><span class="o">.</span><span class="n">attributes</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;info&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
             <span class="nb">id</span> <span class="o">=</span> <span class="n">elem</span><span class="o">.</span><span class="n">identifier</span>
 
-            <span class="n">res</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">pf</span><span class="o">.</span><span class="n">Element</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
-            <span class="c1"># theorem header</span>
-            <span class="n">ElementType</span> <span class="o">=</span> <span class="n">pf</span><span class="o">.</span><span class="n">Strong</span> <span class="k">if</span> <span class="n">theorem</span><span class="o">.</span><span class="n">style</span> <span class="ow">in</span> <span class="n">PLAIN_OR_DEF</span> <span class="k">else</span> <span class="n">pf</span><span class="o">.</span><span class="n">Emph</span>
-            <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ElementType</span><span class="p">(</span><span class="n">pf</span><span class="o">.</span><span class="n">Str</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">theorem</span><span class="o">.</span><span class="n">text</span><span class="si">}</span><span class="s2"> &quot;</span><span class="p">)))</span>
-            <span class="k">if</span> <span class="n">theorem</span><span class="o">.</span><span class="n">numbered</span><span class="p">:</span>
-                <span class="n">counter_name</span> <span class="o">=</span> <span class="n">theorem</span><span class="o">.</span><span class="n">counter_name</span>
-                <span class="n">options</span><span class="o">.</span><span class="n">theorem_counters</span><span class="p">[</span><span class="n">counter_name</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
-                <span class="n">theorem_counter</span> <span class="o">=</span> <span class="n">options</span><span class="o">.</span><span class="n">theorem_counters</span><span class="p">[</span><span class="n">counter_name</span><span class="p">]</span>
-                <span class="n">theorem_number</span> <span class="o">=</span> <span class="s2">&quot;.&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">options</span><span class="o">.</span><span class="n">header_counters</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">theorem_counter</span><span class="p">)])</span>
-                <span class="k">if</span> <span class="nb">id</span><span class="p">:</span>
-                    <span class="n">options</span><span class="o">.</span><span class="n">identifiers</span><span class="p">[</span><span class="nb">id</span><span class="p">]</span> <span class="o">=</span> <span class="n">theorem_number</span>
-                <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-                    <span class="n">pf</span><span class="o">.</span><span class="n">Strong</span><span class="p">(</span><span class="n">pf</span><span class="o">.</span><span class="n">Str</span><span class="p">(</span><span class="n">theorem_number</span><span class="p">))</span> <span class="k">if</span> <span class="n">theorem</span><span class="o">.</span><span class="n">style</span> <span class="ow">in</span> <span class="n">PLAIN_OR_DEF</span> <span class="k">else</span> <span class="n">pf</span><span class="o">.</span><span class="n">Str</span><span class="p">(</span><span class="n">theorem_number</span><span class="p">)</span>
-                <span class="p">)</span>
-
-            <span class="k">if</span> <span class="n">info</span><span class="p">:</span>
-                <span class="n">res</span> <span class="o">+=</span> <span class="p">[</span><span class="n">pf</span><span class="o">.</span><span class="n">Space</span><span class="p">,</span> <span class="n">pf</span><span class="o">.</span><span class="n">Str</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;(&quot;</span><span class="p">)]</span>
-                <span class="n">info_ast</span> <span class="o">=</span> <span class="n">convert_text</span><span class="p">(</span><span class="n">info</span><span class="p">)</span>
-                <span class="n">temp</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Element</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
-                <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">info_ast</span><span class="p">:</span>
-                    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">pf</span><span class="o">.</span><span class="n">Para</span><span class="p">):</span>
-                        <span class="n">temp</span> <span class="o">+=</span> <span class="nb">list</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
-                    <span class="k">else</span><span class="p">:</span>
-                        <span class="n">temp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
-                <span class="n">res</span> <span class="o">+=</span> <span class="n">temp</span>
-                <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pf</span><span class="o">.</span><span class="n">Str</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;)&quot;</span><span class="p">))</span>
-
-            <span class="n">res</span> <span class="o">+=</span> <span class="p">[</span><span class="n">ElementType</span><span class="p">(</span><span class="n">pf</span><span class="o">.</span><span class="n">Str</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;.&quot;</span><span class="p">)),</span> <span class="n">pf</span><span class="o">.</span><span class="n">Space</span><span class="p">]</span>
+            <span class="n">res</span> <span class="o">=</span> <span class="n">theorem</span><span class="o">.</span><span class="n">to_panflute_theorem_header</span><span class="p">(</span><span class="n">options</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="n">info</span><span class="p">)</span>
 
             <span class="c1"># theorem body</span>
             <span class="k">if</span> <span class="n">theorem</span><span class="o">.</span><span class="n">style</span> <span class="o">==</span> <span class="s2">&quot;plain&quot;</span><span class="p">:</span>
@@ -530,7 +540,7 @@
     </p>
     <p>
         &copy; Copyright 2016-2021, Kolen Cheung.<br/>
-      Last updated on Dec 16, 2021.<br/>
+      Last updated on Dec 17, 2021.<br/>
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.5.4.<br/>
     </p>
   </div>

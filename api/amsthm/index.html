@@ -246,6 +246,13 @@ Should be used with counter_depth to match LaTeX and non-LaTeX output.</p>
 <code class="sig-name descname"><span class="pre">text</span></code><em class="property"><span class="pre">:</span> <span class="pre">str</span> <span class="p"><span class="pre">|</span></span> <span class="pre">None</span></em><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#amsthm.NewTheorem.text" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
+<dl class="py method">
+<dt id="amsthm.NewTheorem.to_panflute_theorem_header">
+<code class="sig-name descname"><span class="pre">to_panflute_theorem_header</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">options</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#amsthm.DocOptions" title="amsthm.DocOptions"><span class="pre">DocOptions</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span> <span class="p"><span class="pre">|</span></span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">info</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span> <span class="p"><span class="pre">|</span></span> <span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">pf.Element</span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="../../_modules/amsthm/#NewTheorem.to_panflute_theorem_header"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#amsthm.NewTheorem.to_panflute_theorem_header" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a theorem header as panflute AST.</p>
+<p>This mutates <cite>options.theorem_counters</cite>, <cite>options.identifiers</cite> in-place.</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="py class">
@@ -371,7 +378,7 @@ Should be used with counter_depth to match LaTeX and non-LaTeX output.</p>
     </p>
     <p>
         &copy; Copyright 2016-2021, Kolen Cheung.<br/>
-      Last updated on Dec 16, 2021.<br/>
+      Last updated on Dec 17, 2021.<br/>
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.5.4.<br/>
     </p>
   </div>
