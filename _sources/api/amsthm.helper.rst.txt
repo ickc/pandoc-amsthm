@@ -1,0 +1,7 @@
+amsthm.helper module
+====================
+
+.. automodule:: amsthm.helper
+   :members:
+   :undoc-members:
+   :show-inheritance:

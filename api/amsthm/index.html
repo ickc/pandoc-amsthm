@@ -16,7 +16,7 @@
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <link rel="index" title="Index" href="../../genindex/" />
     <link rel="search" title="Search" href="../../search/" />
-    <link rel="next" title="amsthm.util module" href="../amsthm.util/" />
+    <link rel="next" title="amsthm.helper module" href="../amsthm.helper/" />
     <link rel="prev" title="amsthm" href="../modules/" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
@@ -97,7 +97,7 @@
     </a>
   </li>
   <li>
-    <a href="../amsthm.util/" title="Next Chapter: amsthm.util module"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">amsthm.util module &raquo;</span>
+    <a href="../amsthm.helper/" title="Next Chapter: amsthm.helper module"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">amsthm.helper module &raquo;</span>
     </a>
   </li>
               
@@ -326,12 +326,6 @@ Should be used with counter_depth to match LaTeX and non-LaTeX output.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="amsthm.cancel_emph">
-<code class="sig-prename descclassname"><span class="pre">amsthm.</span></code><code class="sig-name descname"><span class="pre">cancel_emph</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">elem</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Element</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doc</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Doc</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">Element</span><span class="p"><span class="pre">]</span></span> <span class="p"><span class="pre">|</span></span> <span class="pre">None</span><a class="reference internal" href="../../_modules/amsthm/#cancel_emph"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#amsthm.cancel_emph" title="Permalink to this definition">¶</a></dt>
-<dd><p>Emulate the behavior of LaTeX that a double emph is cancelled.</p>
-</dd></dl>
-
-<dl class="py function">
 <dt id="amsthm.finalize">
 <code class="sig-prename descclassname"><span class="pre">amsthm.</span></code><code class="sig-name descname"><span class="pre">finalize</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">doc</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Doc</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="reference internal" href="../../_modules/amsthm/#finalize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#amsthm.finalize" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -342,21 +336,9 @@ Should be used with counter_depth to match LaTeX and non-LaTeX output.</p>
 <dd></dd></dl>
 
 <dl class="py function">
-<dt id="amsthm.merge_emph">
-<code class="sig-prename descclassname"><span class="pre">amsthm.</span></code><code class="sig-name descname"><span class="pre">merge_emph</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">elem</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Element</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doc</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Doc</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">Element</span><span class="p"><span class="pre">]</span></span> <span class="p"><span class="pre">|</span></span> <span class="pre">None</span><a class="reference internal" href="../../_modules/amsthm/#merge_emph"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#amsthm.merge_emph" title="Permalink to this definition">¶</a></dt>
-<dd><p>Merge neighboring Emph with optionally Space between them.</p>
-</dd></dl>
-
-<dl class="py function">
 <dt id="amsthm.parse_info">
 <code class="sig-prename descclassname"><span class="pre">amsthm.</span></code><code class="sig-name descname"><span class="pre">parse_info</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">info</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span> <span class="p"><span class="pre">|</span></span> <span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">Element</span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="../../_modules/amsthm/#parse_info"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#amsthm.parse_info" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert theorem info to panflute AST inline elements.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt id="amsthm.parse_markdown">
-<code class="sig-prename descclassname"><span class="pre">amsthm.</span></code><code class="sig-name descname"><span class="pre">parse_markdown</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">markdown</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">Element</span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="../../_modules/amsthm/#parse_markdown"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#amsthm.parse_markdown" title="Permalink to this definition">¶</a></dt>
-<dd><p>Convert markdown string to panflute AST inline elements.</p>
 </dd></dl>
 
 <dl class="py function">
@@ -374,15 +356,11 @@ Should be used with counter_depth to match LaTeX and non-LaTeX output.</p>
 <code class="sig-prename descclassname"><span class="pre">amsthm.</span></code><code class="sig-name descname"><span class="pre">process_ref_latex</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">elem</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Element</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doc</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Doc</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">pf.RawInline</span> <span class="p"><span class="pre">|</span></span> <span class="pre">None</span><a class="reference internal" href="../../_modules/amsthm/#process_ref_latex"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#amsthm.process_ref_latex" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="py function">
-<dt id="amsthm.to_emph">
-<code class="sig-prename descclassname"><span class="pre">amsthm.</span></code><code class="sig-name descname"><span class="pre">to_emph</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">elem</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Element</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doc</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Doc</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">pf.Emph</span> <span class="p"><span class="pre">|</span></span> <span class="pre">None</span><a class="reference internal" href="../../_modules/amsthm/#to_emph"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#amsthm.to_emph" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
 <div class="section" id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="../amsthm.helper/">amsthm.helper module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../amsthm.util/">amsthm.util module</a></li>
 </ul>
 </div>
