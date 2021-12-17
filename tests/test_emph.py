@@ -5,7 +5,7 @@ from unittest import TestCase
 import panflute as pf
 from panflute.tools import convert_text
 
-from amsthm import cancel_emph, merge_emph, to_emph
+from amsthm.helper import cancel_emph, merge_emph, to_emph
 
 DIR = Path(__file__).parent
 

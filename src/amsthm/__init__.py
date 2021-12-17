@@ -4,11 +4,12 @@ import re
 from collections import defaultdict
 from dataclasses import dataclass, field
 from functools import cached_property
-from typing import TYPE_CHECKING, Text
+from typing import TYPE_CHECKING
 
 import panflute as pf
 from panflute.tools import convert_text
 
+from .helper import cancel_emph, merge_emph, parse_markdown_as_inline, to_emph
 from .util import setup_logging
 
 if TYPE_CHECKING:
@@ -47,74 +48,9 @@ COUNTER_DEPTH_DEFAULT: int = 0
 logger = setup_logging()
 
 
-def to_emph(elem: Element, doc: Doc) -> pf.Emph | None:
-    if isinstance(elem, pf.Str):
-        return pf.Emph(elem)
-    else:
-        return None
-
-
-def cancel_emph(elem: Element, doc: Doc) -> list[Element] | None:
-    """Emulate the behavior of LaTeX that a double emph is cancelled."""
-    # this is to make sure nested Emph in any ways would be canceled.
-    if isinstance(elem, pf.Emph):
-        res = []
-        for e in elem.content:
-            # double Emph
-            if isinstance(e, pf.Emph):
-                res += e.content
-            # single Emph only, keeping Emph...
-            else:
-                res.append(pf.Emph(e))
-        return res
-    else:
-        return None
-
-
-def merge_emph(elem: Element, doc: Doc) -> list[Element] | None:
-    """Merge neighboring Emph with optionally Space between them."""
-    if isinstance(elem, pf.Block):
-        content = elem.content
-        n = len(content)
-
-        mutated = False
-        # walk in reverse direction to avoid mutating current location i
-        # also start with the 2nd last entry because we're matching 2 or more elements
-        for i in range(n - 2, -1, -1):
-            elem_cur = content[i]
-            # remember that we are mutated content and therefore len(content) changes too
-            elem_next = None if i + 1 >= len(content) else content[i + 1]
-            elem_next_next = None if i + 2 >= len(content) else content[i + 2]
-            if isinstance(elem_cur, pf.Emph):
-                if isinstance(elem_next, pf.Emph):
-                    merged = list(elem_cur.content) + list(elem_next.content)
-                    content = list(content[:i]) + [pf.Emph(*merged)] + list(content[i + 2 :])
-                    mutated = True
-                elif isinstance(elem_next, pf.Space):
-                    if isinstance(elem_next_next, pf.Emph):
-                        merged = list(elem_cur.content) + [pf.Space] + list(elem_next_next.content)
-                        content = list(content[:i]) + [pf.Emph(*merged)] + list(content[i + 3 :])
-                        mutated = True
-        if mutated:
-            elem.content = content
-    return None
-
-
-def parse_markdown(markdown: str) -> list[Element]:
-    """Convert markdown string to panflute AST inline elements."""
-    ast = convert_text(markdown)
-    res: list[Element] = []
-    for e in ast:
-        if isinstance(e, pf.Para):
-            res += list(e.content)
-        else:
-            res.append(e)
-    return res
-
-
 def parse_info(info: str | None) -> list[Element]:
     """Convert theorem info to panflute AST inline elements."""
-    return [pf.Str(r"(")] + parse_markdown(info) + [pf.Str(r")")] if info else []
+    return [pf.Str(r"(")] + parse_markdown_as_inline(info) + [pf.Str(r")")] if info else []
 
 
 @dataclass
@@ -263,7 +199,7 @@ class Proof(NewTheorem):
             return [pf.Emph(pf.Str("Proof.")), pf.Space]
         else:
             # put it into a Para then walk
-            ast = parse_markdown(info)
+            ast = parse_markdown_as_inline(info)
             info_list = pf.Para(*ast)
             info_list.walk(to_emph)
             info_list.walk(cancel_emph)
