@@ -71,6 +71,24 @@ def cancel_emph(elem: Element, doc: Doc) -> list[Element] | None:
         return None
 
 
+def parse_info(info: str | None) -> list[Element]:
+    """Convert markdown string to panflute AST inline elements."""
+    if info:
+        info_list = [pf.Space, pf.Str(r"(")]
+        info_ast = convert_text(info)
+        temp: list[Element] = []
+        for e in info_ast:
+            if isinstance(e, pf.Para):
+                temp += list(e.content)
+            else:
+                temp.append(e)
+        info_list += temp
+        info_list.append(pf.Str(r")"))
+    else:
+        info_list = []
+    return info_list
+
+
 @dataclass
 class NewTheorem:
     style: str
@@ -152,20 +170,7 @@ class NewTheorem:
             theorem_number = None
 
         # no additional styling here
-        info_list: list[Element]
-        if info:
-            info_list = [pf.Space, pf.Str(r"(")]
-            info_ast = convert_text(info)
-            temp: list[Element] = []
-            for e in info_ast:
-                if isinstance(e, pf.Para):
-                    temp += list(e.content)
-                else:
-                    temp.append(e)
-            info_list += temp
-            info_list.append(pf.Str(r")"))
-        else:
-            info_list = []
+        info_list = parse_info(info)
 
         # append TextType of ".", Space
 
