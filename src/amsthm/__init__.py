@@ -364,24 +364,22 @@ def amsthm(elem: Element, doc: Doc) -> None:
                 elem.content.append(pf.Para(r))
 
 
-def amsthm_latex_get_id(elem: Element, doc: Doc) -> pf.RawBlock | None:
+def amsthm_latex_get_id(elem: Element, doc: Doc) -> None:
     """First pass getting all the id first.
 
     This is done in 2 passes as the id may be cited/referenced earlier than definition.
     """
     # check if it is a Div, and the class is an amsthm environment
     options: DocOptions = doc._amsthm
-    if isinstance(elem, pf.Div):
-        environments: set[str] = options.theorems_set.intersection(elem.classes)
-        if environments:
-            if len(environments) != 1:
-                logger.warning("Multiple environments found: %s", environments)
-                return None
-            id = elem.identifier
-            if id:
-                # in LaTeX output, we only need to keep a reference of the id
-                # the numbering (value of this dict) is handled by LaTeX
-                options.identifiers[id] = ""
+    environments: set[str]
+    if isinstance(elem, pf.Div) and (environments := options.theorems_set.intersection(elem.classes)):
+        if len(environments) != 1:
+            logger.warning("Multiple environments found: %s", environments)
+            return None
+        if id := elem.identifier:
+            # in LaTeX output, we only need to keep a reference of the id
+            # the numbering (value of this dict) is handled by LaTeX
+            options.identifiers[id] = ""
     return None
 
 
@@ -411,6 +409,7 @@ def amsthm_latex(elem: Element, doc: Doc) -> pf.RawBlock | None:
                 res.append(f"\\label{{{id}}}")
             res.append(f"\n{div_content}\n\\end{{{theorem.env_name}}}")
             return pf.RawBlock("".join(res), format="latex")
+    # check if pf.Cite is done inside cite_to_ref
     else:
         return cite_to_ref(elem, doc, options.identifiers)
     return None
@@ -418,30 +417,27 @@ def amsthm_latex(elem: Element, doc: Doc) -> pf.RawBlock | None:
 
 def action_amsthm(elem: Element, doc: Doc) -> pf.RawBlock | None:
     if doc.format in LATEX_LIKE:
-        return amsthm_latex_get_id(elem, doc)
+        amsthm_latex_get_id(elem, doc)
     else:
         amsthm(elem, doc)
-        return None
+    return None
 
 
 def process_ref(elem: Element, doc: Doc) -> pf.Str | None:
     options: DocOptions = doc._amsthm
     # from [@...] to number
-    if (
-        isinstance(elem, pf.Cite)
-        and (temp := cite_to_id_mode(elem)) is not None
-        and (id := temp[0]) in options.identifiers
-    ):
-        mode = temp[1]
-        # @[...]
-        if mode == "NormalCitation":
-            return pf.Str(f"({options.identifiers[id]})")
-        # @...
-        elif mode == "AuthorInText":
-            return pf.Str(options.identifiers[id])
-        else:
-            logger.warning("Unknown citation mode %s from Cite: %s. Ignoring...", mode, elem)
-            return None
+    if isinstance(elem, pf.Cite):
+        if (temp := cite_to_id_mode(elem)) is not None and (id := temp[0]) in options.identifiers:
+            mode = temp[1]
+            # @[...]
+            if mode == "NormalCitation":
+                return pf.Str(f"({options.identifiers[id]})")
+            # @...
+            elif mode == "AuthorInText":
+                return pf.Str(options.identifiers[id])
+            else:
+                logger.warning("Unknown citation mode %s from Cite: %s. Ignoring...", mode, elem)
+                return None
 
     # from \ref{...} to number
     elif isinstance(elem, pf.RawInline) and elem.format == "tex":
