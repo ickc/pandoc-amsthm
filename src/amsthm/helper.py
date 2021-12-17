@@ -10,7 +10,20 @@ if TYPE_CHECKING:
 
     from panflute.elements import Doc, Element
 
-    EmphLike = TypeVar("EmphLike", pf.Emph, pf.Strong, pf.SmallCaps)
+    EmphLike = TypeVar(
+        "EmphLike",
+        pf.Emph,
+        pf.Underline,
+        pf.Strong,
+        pf.Strikeout,
+        pf.Superscript,
+        pf.SmallCaps,
+        pf.Quoted,
+        pf.Cite,
+        pf.Link,
+        pf.Image,
+        pf.Span,
+    )
 
 
 def to_type(
