@@ -2,6 +2,9 @@
 
 ::: {.Theorem info="within parenthesis"}
 **Theorem 1.0.1** (within parenthesis)**.** *plain theoremstyle* here
+
+*We can use pandoc-crossref style* 1.0.2 *and* (1.0.2) *and cite before
+definition.*
 :::
 
 ::: {#simplestEquation .Theorem}
@@ -12,8 +15,6 @@ $$E=mc^2$$
 
 From the 1.0.2, we see that...
 
-Or we can use pandoc-crossref style 1.0.2 as well.
-
 ::: {.With_Space info="**This** is *markdown*."}
 **With Space** (**This** is *markdown*.)**.** *Environment name has a
 space, and is unnumbered.*
@@ -22,15 +23,11 @@ space, and is unnumbered.*
 ::: {.Lemma info="can cite \\ref{simplestEquation}"}
 **Lemma 1.0.3** (can cite 1.0.2)**.** *This one share counter with
 Theorem.*
-
-*Cite inside info only works with* `ref{...}` *syntax.* *As the
-conversion using* `[@...]` *to AST and walk and back to LaTeX would be
-too complex.*
 :::
 
-::: {.Definition info="within parenthesis"}
-**Definition 1.0.1** (within parenthesis)**.** definition theoremstyle
-here
+::: {.Definition info="pandoc-crossref style cite @simplestEquation"}
+**Definition 1.0.1** (pandoc-crossref style cite 1.0.2)**.** definition
+theoremstyle here
 :::
 
 ::: {.Case info="within parenthesis"}

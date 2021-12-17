@@ -17,6 +17,9 @@
 
 \begin{Theorem}[within parenthesis]
 plain theoremstyle \emph{here}
+
+We can use pandoc-crossref style \ref{simplestEquation} and
+\eqref{simplestEquation} and cite before definition.
 \end{Theorem}
 
 \begin{Theorem}\label{simplestEquation}
@@ -28,21 +31,15 @@ Label and reference:
 
 From the \ref{simplestEquation}, we see that\ldots{}
 
-Or we can use pandoc-crossref style \ref{simplestEquation} as well.
-
 \begin{With Space}[\textbf{This} is \emph{markdown}.]
 Environment name has a space, and is unnumbered.
 \end{With Space}
 
 \begin{Lemma}[can cite \ref{simplestEquation}]
 This one share counter with Theorem.
-
-Cite inside info only works with \texttt{ref\{...\}} syntax. As the
-conversion using \texttt{{[}@...{]}} to AST and walk and back to LaTeX
-would be too complex.
 \end{Lemma}
 
-\begin{Definition}[within parenthesis]
+\begin{Definition}[pandoc-crossref style cite \ref{simplestEquation}]
 definition theoremstyle here
 \end{Definition}
 

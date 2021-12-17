@@ -1,9 +1,12 @@
 from __future__ import annotations
 
+from logging import getLogger
 from typing import TYPE_CHECKING
 
 import panflute as pf
 from panflute.tools import convert_text
+
+logger = getLogger(__name__)
 
 if TYPE_CHECKING:
     from typing import TypeVar
@@ -102,6 +105,43 @@ def merge_consecutive_type(
 
 
 merge_emph = merge_consecutive_type
+
+
+def cite_to_id_mode(elem: pf.Cite) -> tuple[str, str] | None:
+    if len(elem.citations) != 1:
+        logger.warning("Not only have 1 citations in Cite: %s. Ignoring...", elem)
+        return None
+    citation: pf.Citation = elem.citations[0]
+    id = citation.id
+    mode = citation.mode
+    return id, mode
+
+
+def cite_to_ref(elem: pf.Cite, doc: Doc, check_id: dict[str, str] | None = None) -> pf.RawInline | None:
+    """Cite to raw LaTeX ref/eqref.
+
+    :param check_id: if provided, transform only if id is in `check_id`
+
+    `[@...] -> \eqref{...}`
+
+    `@... -> \ref{...}`
+    """
+    if (
+        isinstance(elem, pf.Cite)
+        and (temp := cite_to_id_mode(elem)) is not None
+        and (check_id is None or (id := temp[0]) in check_id)
+    ):
+        mode = temp[1]
+        # @[...]
+        if mode == "NormalCitation":
+            return pf.RawInline(f"\\eqref{{{id}}}", format="latex")
+        # @...
+        elif mode == "AuthorInText":
+            return pf.RawInline(f"\\ref{{{id}}}", format="latex")
+        else:
+            logger.warning("Unknown citation mode %s from Cite: %s. Ignoring...", mode, elem)
+            return None
+    return None
 
 
 def parse_markdown_as_inline(markdown: str) -> list[Element]:

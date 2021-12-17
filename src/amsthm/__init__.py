@@ -3,13 +3,13 @@ from __future__ import annotations
 import re
 from collections import defaultdict
 from dataclasses import dataclass, field
-from functools import cached_property
+from functools import cached_property, partial
 from typing import TYPE_CHECKING
 
 import panflute as pf
 from panflute.tools import convert_text
 
-from .helper import cancel_emph, merge_emph, parse_markdown_as_inline, to_emph
+from .helper import cancel_emph, cite_to_id_mode, cite_to_ref, merge_emph, parse_markdown_as_inline, to_emph
 from .util import setup_logging
 
 if TYPE_CHECKING:
@@ -364,6 +364,27 @@ def amsthm(elem: Element, doc: Doc) -> None:
                 elem.content.append(pf.Para(r))
 
 
+def amsthm_latex_get_id(elem: Element, doc: Doc) -> pf.RawBlock | None:
+    """First pass getting all the id first.
+
+    This is done in 2 passes as the id may be cited/referenced earlier than definition.
+    """
+    # check if it is a Div, and the class is an amsthm environment
+    options: DocOptions = doc._amsthm
+    if isinstance(elem, pf.Div):
+        environments: set[str] = options.theorems_set.intersection(elem.classes)
+        if environments:
+            if len(environments) != 1:
+                logger.warning("Multiple environments found: %s", environments)
+                return None
+            id = elem.identifier
+            if id:
+                # in LaTeX output, we only need to keep a reference of the id
+                # the numbering (value of this dict) is handled by LaTeX
+                options.identifiers[id] = ""
+    return None
+
+
 def amsthm_latex(elem: Element, doc: Doc) -> pf.RawBlock | None:
     """when output format is LaTeX, all div is converted into native LaTeX amsthm environments"""
     # check if it is a Div, and the class is an amsthm environment
@@ -381,20 +402,23 @@ def amsthm_latex(elem: Element, doc: Doc) -> pf.RawBlock | None:
             id = elem.identifier
             res = [f"\\begin{{{theorem.env_name}}}"]
             if info:
-                res += [r"[", convert_text(info, output_format="latex"), r"]"]
+                # wrap in Para for walk
+                ast = pf.Para(*parse_markdown_as_inline(info))
+                ast.walk(partial(cite_to_ref, check_id=options.identifiers))
+                ast = convert_text(ast, input_format="panflute", output_format="latex").strip()
+                res += [f"[{ast}]"]
             if id:
                 res.append(f"\\label{{{id}}}")
-                # in LaTeX output, we only need to keep a reference of the id
-                # the numbering (value of this dict) is handled by LaTeX
-                options.identifiers[id] = ""
             res.append(f"\n{div_content}\n\\end{{{theorem.env_name}}}")
             return pf.RawBlock("".join(res), format="latex")
+    else:
+        return cite_to_ref(elem, doc, options.identifiers)
     return None
 
 
 def action_amsthm(elem: Element, doc: Doc) -> pf.RawBlock | None:
     if doc.format in LATEX_LIKE:
-        return amsthm_latex(elem, doc)
+        return amsthm_latex_get_id(elem, doc)
     else:
         amsthm(elem, doc)
         return None
@@ -403,10 +427,22 @@ def action_amsthm(elem: Element, doc: Doc) -> pf.RawBlock | None:
 def process_ref(elem: Element, doc: Doc) -> pf.Str | None:
     options: DocOptions = doc._amsthm
     # from [@...] to number
-    if isinstance(elem, pf.Cite):
-        text = pf.stringify(elem)[2:-1]
-        if text in options.identifiers:
-            return pf.Str(options.identifiers[text])
+    if (
+        isinstance(elem, pf.Cite)
+        and (temp := cite_to_id_mode(elem)) is not None
+        and (id := temp[0]) in options.identifiers
+    ):
+        mode = temp[1]
+        # @[...]
+        if mode == "NormalCitation":
+            return pf.Str(f"({options.identifiers[id]})")
+        # @...
+        elif mode == "AuthorInText":
+            return pf.Str(options.identifiers[id])
+        else:
+            logger.warning("Unknown citation mode %s from Cite: %s. Ignoring...", mode, elem)
+            return None
+
     # from \ref{...} to number
     elif isinstance(elem, pf.RawInline) and elem.format == "tex":
         text = elem.text
@@ -420,19 +456,9 @@ def process_ref(elem: Element, doc: Doc) -> pf.Str | None:
     return None
 
 
-def process_ref_latex(elem: Element, doc: Doc) -> pf.RawInline | None:
-    options: DocOptions = doc._amsthm
-    # from [@...] to \ref{...}
-    if isinstance(elem, pf.Cite):
-        text = pf.stringify(elem)[2:-1]
-        if text in options.identifiers:
-            return pf.RawInline(f"\\ref{{{text}}}", format="latex")
-    return None
-
-
 def action_process_ref(elem: Element, doc: Doc) -> pf.Str | pf.RawInline | None:
     if doc.format in LATEX_LIKE:
-        return process_ref_latex(elem, doc)
+        return amsthm_latex(elem, doc)
     else:
         return process_ref(elem, doc)
 
