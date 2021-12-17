@@ -296,6 +296,12 @@ Should be used with counter_depth to match LaTeX and non-LaTeX output.</p>
 <code class="sig-name descname"><span class="pre">text</span></code><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><em class="property"> <span class="pre">=</span> <span class="pre">'proof'</span></em><a class="headerlink" href="#amsthm.Proof.text" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
+<dl class="py method">
+<dt id="amsthm.Proof.to_panflute_theorem_header">
+<code class="sig-name descname"><span class="pre">to_panflute_theorem_header</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">options</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#amsthm.DocOptions" title="amsthm.DocOptions"><span class="pre">DocOptions</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span> <span class="p"><span class="pre">|</span></span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">info</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span> <span class="p"><span class="pre">|</span></span> <span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">pf.Element</span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="../../_modules/amsthm/#Proof.to_panflute_theorem_header"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#amsthm.Proof.to_panflute_theorem_header" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a theorem header as panflute AST.</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="py function">
@@ -333,6 +339,17 @@ Should be used with counter_depth to match LaTeX and non-LaTeX output.</p>
 <dl class="py function">
 <dt id="amsthm.main">
 <code class="sig-prename descclassname"><span class="pre">amsthm.</span></code><code class="sig-name descname"><span class="pre">main</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">doc</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Doc</span> <span class="p"><span class="pre">|</span></span> <span class="pre">None</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="reference internal" href="../../_modules/amsthm/#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#amsthm.main" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="amsthm.parse_info">
+<code class="sig-prename descclassname"><span class="pre">amsthm.</span></code><code class="sig-name descname"><span class="pre">parse_info</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">info</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span> <span class="p"><span class="pre">|</span></span> <span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">Element</span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="../../_modules/amsthm/#parse_info"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#amsthm.parse_info" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert markdown string to panflute AST inline elements.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="amsthm.parse_markdown">
+<code class="sig-prename descclassname"><span class="pre">amsthm.</span></code><code class="sig-name descname"><span class="pre">parse_markdown</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">markdown</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">Element</span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="../../_modules/amsthm/#parse_markdown"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#amsthm.parse_markdown" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">

@@ -52,8 +52,17 @@ Or we can use pandoc-crossref style 1.0.2 as well.
 
 .. container:: proof
 
-   *proof* (Proof of the Main Theorem)\ *.* Predefined proof
+   *Proof* *of* *the* *Main* *Theorem*\ *.* Predefined proof
    theoremstyle here
+
+.. container:: proof
+
+   *Proof* *of* *the* little *theorem*\ *.* Predefined proof
+   theoremstyle here with markdown info.
+
+.. container:: proof
+
+   *Proof.* Bare proof here.
 
 .. container:: KL
 

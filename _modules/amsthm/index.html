@@ -183,6 +183,22 @@
         <span class="k">return</span> <span class="kc">None</span></div>
 
 
+<div class="viewcode-block" id="parse_markdown"><a class="viewcode-back" href="../../api/amsthm/#amsthm.parse_markdown">[docs]</a><span class="k">def</span> <span class="nf">parse_markdown</span><span class="p">(</span><span class="n">markdown</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Element</span><span class="p">]:</span>
+    <span class="n">ast</span> <span class="o">=</span> <span class="n">convert_text</span><span class="p">(</span><span class="n">markdown</span><span class="p">)</span>
+    <span class="n">res</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Element</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">ast</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">pf</span><span class="o">.</span><span class="n">Para</span><span class="p">):</span>
+            <span class="n">res</span> <span class="o">+=</span> <span class="nb">list</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">res</span></div>
+
+
+<div class="viewcode-block" id="parse_info"><a class="viewcode-back" href="../../api/amsthm/#amsthm.parse_info">[docs]</a><span class="k">def</span> <span class="nf">parse_info</span><span class="p">(</span><span class="n">info</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Element</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;Convert markdown string to panflute AST inline elements.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">pf</span><span class="o">.</span><span class="n">Space</span><span class="p">,</span> <span class="n">pf</span><span class="o">.</span><span class="n">Str</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;(&quot;</span><span class="p">)]</span> <span class="o">+</span> <span class="n">parse_markdown</span><span class="p">(</span><span class="n">info</span><span class="p">)</span> <span class="o">+</span> <span class="p">[</span><span class="n">pf</span><span class="o">.</span><span class="n">Str</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;)&quot;</span><span class="p">)]</span> <span class="k">if</span> <span class="n">info</span> <span class="k">else</span> <span class="p">[]</span></div>
+
+
 <div class="viewcode-block" id="NewTheorem"><a class="viewcode-back" href="../../api/amsthm/#amsthm.NewTheorem">[docs]</a><span class="nd">@dataclass</span>
 <span class="k">class</span> <span class="nc">NewTheorem</span><span class="p">:</span>
     <span class="n">style</span><span class="p">:</span> <span class="nb">str</span>
@@ -264,20 +280,7 @@
             <span class="n">theorem_number</span> <span class="o">=</span> <span class="kc">None</span>
 
         <span class="c1"># no additional styling here</span>
-        <span class="n">info_list</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Element</span><span class="p">]</span>
-        <span class="k">if</span> <span class="n">info</span><span class="p">:</span>
-            <span class="n">info_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">pf</span><span class="o">.</span><span class="n">Space</span><span class="p">,</span> <span class="n">pf</span><span class="o">.</span><span class="n">Str</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;(&quot;</span><span class="p">)]</span>
-            <span class="n">info_ast</span> <span class="o">=</span> <span class="n">convert_text</span><span class="p">(</span><span class="n">info</span><span class="p">)</span>
-            <span class="n">temp</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Element</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
-            <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">info_ast</span><span class="p">:</span>
-                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">pf</span><span class="o">.</span><span class="n">Para</span><span class="p">):</span>
-                    <span class="n">temp</span> <span class="o">+=</span> <span class="nb">list</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="n">temp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
-            <span class="n">info_list</span> <span class="o">+=</span> <span class="n">temp</span>
-            <span class="n">info_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pf</span><span class="o">.</span><span class="n">Str</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;)&quot;</span><span class="p">))</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">info_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">info_list</span> <span class="o">=</span> <span class="n">parse_info</span><span class="p">(</span><span class="n">info</span><span class="p">)</span>
 
         <span class="c1"># append TextType of &quot;.&quot;, Space</span>
 
@@ -328,7 +331,24 @@
     <span class="n">text</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;proof&quot;</span>
     <span class="n">parent_counter</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">shared_counter</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="n">numbered</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span></div>
+    <span class="n">numbered</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+
+<div class="viewcode-block" id="Proof.to_panflute_theorem_header"><a class="viewcode-back" href="../../api/amsthm/#amsthm.Proof.to_panflute_theorem_header">[docs]</a>    <span class="k">def</span> <span class="nf">to_panflute_theorem_header</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">options</span><span class="p">:</span> <span class="n">DocOptions</span><span class="p">,</span>
+        <span class="nb">id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">info</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">pf</span><span class="o">.</span><span class="n">Element</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Return a theorem header as panflute AST.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">info</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[</span><span class="n">pf</span><span class="o">.</span><span class="n">Emph</span><span class="p">(</span><span class="n">pf</span><span class="o">.</span><span class="n">Str</span><span class="p">(</span><span class="s2">&quot;Proof.&quot;</span><span class="p">)),</span> <span class="n">pf</span><span class="o">.</span><span class="n">Space</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># put it into a Para then walk</span>
+            <span class="n">ast</span> <span class="o">=</span> <span class="n">parse_markdown</span><span class="p">(</span><span class="n">info</span><span class="p">)</span>
+            <span class="n">info_list</span> <span class="o">=</span> <span class="n">pf</span><span class="o">.</span><span class="n">Para</span><span class="p">(</span><span class="o">*</span><span class="n">ast</span><span class="p">)</span>
+            <span class="n">info_list</span><span class="o">.</span><span class="n">walk</span><span class="p">(</span><span class="n">to_emph</span><span class="p">)</span>
+            <span class="n">info_list</span><span class="o">.</span><span class="n">walk</span><span class="p">(</span><span class="n">cancel_emph</span><span class="p">)</span>
+            <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">info_list</span><span class="o">.</span><span class="n">content</span><span class="p">)</span> <span class="o">+</span> <span class="p">[</span><span class="n">pf</span><span class="o">.</span><span class="n">Emph</span><span class="p">(</span><span class="n">pf</span><span class="o">.</span><span class="n">Str</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)),</span> <span class="n">pf</span><span class="o">.</span><span class="n">Space</span><span class="p">]</span></div></div>
 
 
 <div class="viewcode-block" id="DocOptions"><a class="viewcode-back" href="../../api/amsthm/#amsthm.DocOptions">[docs]</a><span class="nd">@dataclass</span>
