@@ -112,10 +112,13 @@
   <h1>Source code for amsthm.helper</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
 
+<span class="kn">from</span> <span class="nn">logging</span> <span class="kn">import</span> <span class="n">getLogger</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span>
 
 <span class="kn">import</span> <span class="nn">panflute</span> <span class="k">as</span> <span class="nn">pf</span>
 <span class="kn">from</span> <span class="nn">panflute.tools</span> <span class="kn">import</span> <span class="n">convert_text</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 <span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
     <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TypeVar</span>
@@ -214,6 +217,43 @@
 
 
 <span class="n">merge_emph</span> <span class="o">=</span> <span class="n">merge_consecutive_type</span>
+
+
+<div class="viewcode-block" id="cite_to_id_mode"><a class="viewcode-back" href="../../../api/amsthm.helper/#amsthm.helper.cite_to_id_mode">[docs]</a><span class="k">def</span> <span class="nf">cite_to_id_mode</span><span class="p">(</span><span class="n">elem</span><span class="p">:</span> <span class="n">pf</span><span class="o">.</span><span class="n">Cite</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">elem</span><span class="o">.</span><span class="n">citations</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Not only have 1 citations in Cite: </span><span class="si">%s</span><span class="s2">. Ignoring...&quot;</span><span class="p">,</span> <span class="n">elem</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="n">citation</span><span class="p">:</span> <span class="n">pf</span><span class="o">.</span><span class="n">Citation</span> <span class="o">=</span> <span class="n">elem</span><span class="o">.</span><span class="n">citations</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="nb">id</span> <span class="o">=</span> <span class="n">citation</span><span class="o">.</span><span class="n">id</span>
+    <span class="n">mode</span> <span class="o">=</span> <span class="n">citation</span><span class="o">.</span><span class="n">mode</span>
+    <span class="k">return</span> <span class="nb">id</span><span class="p">,</span> <span class="n">mode</span></div>
+
+
+<div class="viewcode-block" id="cite_to_ref"><a class="viewcode-back" href="../../../api/amsthm.helper/#amsthm.helper.cite_to_ref">[docs]</a><span class="k">def</span> <span class="nf">cite_to_ref</span><span class="p">(</span><span class="n">elem</span><span class="p">:</span> <span class="n">pf</span><span class="o">.</span><span class="n">Cite</span><span class="p">,</span> <span class="n">doc</span><span class="p">:</span> <span class="n">Doc</span><span class="p">,</span> <span class="n">check_id</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pf</span><span class="o">.</span><span class="n">RawInline</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Cite to raw LaTeX ref/eqref.</span>
+
+<span class="sd">    :param check_id: if provided, transform only if id is in `check_id`</span>
+
+<span class="sd">    `[@...] -&gt; \eqref{...}`</span>
+
+<span class="sd">    `@... -&gt; \ref{...}`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="p">(</span>
+        <span class="nb">isinstance</span><span class="p">(</span><span class="n">elem</span><span class="p">,</span> <span class="n">pf</span><span class="o">.</span><span class="n">Cite</span><span class="p">)</span>
+        <span class="ow">and</span> <span class="p">(</span><span class="n">temp</span> <span class="o">:=</span> <span class="n">cite_to_id_mode</span><span class="p">(</span><span class="n">elem</span><span class="p">))</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="ow">and</span> <span class="p">(</span><span class="n">check_id</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="p">(</span><span class="nb">id</span> <span class="o">:=</span> <span class="n">temp</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="ow">in</span> <span class="n">check_id</span><span class="p">)</span>
+    <span class="p">):</span>
+        <span class="n">mode</span> <span class="o">=</span> <span class="n">temp</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="c1"># @[...]</span>
+        <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;NormalCitation&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">pf</span><span class="o">.</span><span class="n">RawInline</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">eqref</span><span class="se">{{</span><span class="si">{</span><span class="nb">id</span><span class="si">}</span><span class="se">}}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;latex&quot;</span><span class="p">)</span>
+        <span class="c1"># @...</span>
+        <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;AuthorInText&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">pf</span><span class="o">.</span><span class="n">RawInline</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">ref</span><span class="se">{{</span><span class="si">{</span><span class="nb">id</span><span class="si">}</span><span class="se">}}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;latex&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Unknown citation mode </span><span class="si">%s</span><span class="s2"> from Cite: </span><span class="si">%s</span><span class="s2">. Ignoring...&quot;</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">elem</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span>
+    <span class="k">return</span> <span class="kc">None</span></div>
 
 
 <div class="viewcode-block" id="parse_markdown_as_inline"><a class="viewcode-back" href="../../../api/amsthm.helper/#amsthm.helper.parse_markdown_as_inline">[docs]</a><span class="k">def</span> <span class="nf">parse_markdown_as_inline</span><span class="p">(</span><span class="n">markdown</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Element</span><span class="p">]:</span>

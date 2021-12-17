@@ -16,6 +16,9 @@ Demo
    **Theorem 1.0.1** (within parenthesis)\ **.** *plain theoremstyle*
    here
 
+   *We can use pandoc-crossref style* 1.0.2 *and* (1.0.2) *and cite
+   before definition.*
+
 .. container:: Theorem
    :name: simplestEquation
 
@@ -24,8 +27,6 @@ Demo
    .. math:: E=mc^2
 
 From the 1.0.2, we see that…
-
-Or we can use pandoc-crossref style 1.0.2 as well.
 
 .. container:: With_Space
 
@@ -37,14 +38,10 @@ Or we can use pandoc-crossref style 1.0.2 as well.
    **Lemma 1.0.3** (can cite 1.0.2)\ **.** *This one share counter with
    Theorem.*
 
-   *Cite inside info only works with* ``ref{...}`` *syntax.* *As the
-   conversion using* ``[@...]`` *to AST and walk and back to LaTeX would
-   be too complex.*
-
 .. container:: Definition
 
-   **Definition 1.0.1** (within parenthesis)\ **.** definition
-   theoremstyle here
+   **Definition 1.0.1** (pandoc-crossref style cite 1.0.2)\ **.**
+   definition theoremstyle here
 
 .. container:: Case
 

@@ -157,6 +157,8 @@
 <div class="theorem docutils container">
 <p><strong>Theorem 1.0.1</strong> (within parenthesis)<strong>.</strong> <em>plain theoremstyle</em>
 here</p>
+<p><em>We can use pandoc-crossref style</em> 1.0.2 <em>and</em> (1.0.2) <em>and cite
+before definition.</em></p>
 </div>
 <div class="theorem docutils container" id="simplestequation">
 <p><strong>Theorem 1.0.2.</strong> <em>Label and reference:</em></p>
@@ -164,7 +166,6 @@ here</p>
 \[E=mc^2\]</div>
 </div>
 <p>From the 1.0.2, we see that…</p>
-<p>Or we can use pandoc-crossref style 1.0.2 as well.</p>
 <div class="with-space docutils container">
 <p><strong>With Space</strong> (<strong>This</strong> is <em>markdown</em>.)<strong>.</strong> <em>Environment name has
 a space, and is unnumbered.</em></p>
@@ -172,13 +173,10 @@ a space, and is unnumbered.</em></p>
 <div class="lemma docutils container">
 <p><strong>Lemma 1.0.3</strong> (can cite 1.0.2)<strong>.</strong> <em>This one share counter with
 Theorem.</em></p>
-<p><em>Cite inside info only works with</em> <code class="docutils literal notranslate"><span class="pre">ref{...}</span></code> <em>syntax.</em> <em>As the
-conversion using</em> <code class="docutils literal notranslate"><span class="pre">[&#64;...]</span></code> <em>to AST and walk and back to LaTeX would
-be too complex.</em></p>
 </div>
 <div class="definition docutils container">
-<p><strong>Definition 1.0.1</strong> (within parenthesis)<strong>.</strong> definition
-theoremstyle here</p>
+<p><strong>Definition 1.0.1</strong> (pandoc-crossref style cite 1.0.2)<strong>.</strong>
+definition theoremstyle here</p>
 </div>
 <div class="case docutils container">
 <p><em>Case</em> 1.0.1 (within parenthesis)<em>.</em> remark theoremstyle here</p>

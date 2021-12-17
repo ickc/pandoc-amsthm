@@ -158,6 +158,9 @@ header-includes: |
 
 ::: {.Theorem info=&quot;within parenthesis&quot;}
 plain theoremstyle <span class="ge">*here*</span>
+
+We can use pandoc-crossref style <span class="ni">@simplestEquation</span> and [@simplestEquation]
+and cite before definition.
 :::
 
 ::: {#simplestEquation .Theorem}
@@ -168,20 +171,15 @@ $$E=mc^2$$
 
 From the \ref{simplestEquation}, we see that...
 
-Or we can use pandoc-crossref style [@simplestEquation] as well.
-
 ::: {.With_Space info=&quot;**This** is <span class="ge">*markdown*</span>.&quot;}
 Environment name has a space, and is unnumbered.
 :::
 
 ::: {.Lemma info=&quot;can cite \ref{simplestEquation}&quot;}
 This one share counter with Theorem.
-
-Cite inside info only works with <span class="sb">`ref{...}`</span> syntax.
-As the conversion using <span class="sb">`[@...]`</span> to AST and walk and back to LaTeX would be too complex.
 :::
 
-::: {.Definition info=&quot;within parenthesis&quot;}
+::: {.Definition info=&quot;pandoc-crossref style cite <span class="ni">@simplestEquation</span>&quot;}
 definition theoremstyle here
 :::
 

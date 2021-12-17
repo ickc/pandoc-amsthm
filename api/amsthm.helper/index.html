@@ -137,6 +137,27 @@
 </dd></dl>
 
 <dl class="py function">
+<dt id="amsthm.helper.cite_to_id_mode">
+<code class="sig-prename descclassname"><span class="pre">amsthm.helper.</span></code><code class="sig-name descname"><span class="pre">cite_to_id_mode</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">elem</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">pf.Cite</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span> <span class="p"><span class="pre">|</span></span> <span class="pre">None</span><a class="reference internal" href="../../_modules/amsthm/helper/#cite_to_id_mode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#amsthm.helper.cite_to_id_mode" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="amsthm.helper.cite_to_ref">
+<code class="sig-prename descclassname"><span class="pre">amsthm.helper.</span></code><code class="sig-name descname"><span class="pre">cite_to_ref</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">elem</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">pf.Cite</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doc</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Doc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_id</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span> <span class="p"><span class="pre">|</span></span> <span class="pre">None</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">pf.RawInline</span> <span class="p"><span class="pre">|</span></span> <span class="pre">None</span><a class="reference internal" href="../../_modules/amsthm/helper/#cite_to_ref"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#amsthm.helper.cite_to_ref" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cite to raw LaTeX ref/eqref.</p>
+<blockquote>
+<div><dl class="field-list simple">
+<dt class="field-odd">param check_id</dt>
+<dd class="field-odd"><p>if provided, transform only if id is in <cite>check_id</cite></p>
+</dd>
+</dl>
+<p><cite>[&#64;…] -&gt; eqref{…}</cite></p>
+<p><a href="#id1"><span class="problematic" id="id2">`</span></a>&#64;… -&gt;</p>
+</div></blockquote>
+<p>ef{…}`</p>
+</dd></dl>
+
+<dl class="py function">
 <dt id="amsthm.helper.merge_consecutive_type">
 <code class="sig-prename descclassname"><span class="pre">amsthm.helper.</span></code><code class="sig-name descname"><span class="pre">merge_consecutive_type</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="pre">elem:</span> <span class="pre">Element</span></em>, <em class="sig-param"><span class="pre">doc:</span> <span class="pre">Doc</span></em>, <em class="sig-param"><span class="pre">ElementType:</span> <span class="pre">type[EmphLike]</span> <span class="pre">=</span> <span class="pre">&lt;class</span> <span class="pre">'panflute.elements.Emph'&gt;</span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">EmphLike</span><span class="p"><span class="pre">]</span></span> <span class="p"><span class="pre">|</span></span> <span class="pre">None</span><a class="reference internal" href="../../_modules/amsthm/helper/#merge_consecutive_type"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#amsthm.helper.merge_consecutive_type" title="Permalink to this definition">¶</a></dt>
 <dd><p>Merge neighboring Emph with optionally Space between them.</p>
