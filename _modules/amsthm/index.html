@@ -125,21 +125,11 @@
 <span class="kn">from</span> <span class="nn">.util</span> <span class="kn">import</span> <span class="n">setup_logging</span>
 
 <span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
-    <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Union</span>
+    <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span>
 
     <span class="kn">from</span> <span class="nn">panflute.elements</span> <span class="kn">import</span> <span class="n">Doc</span><span class="p">,</span> <span class="n">Element</span>
 
     <span class="n">THM_DEF</span> <span class="o">=</span> <span class="nb">list</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]]]]</span>
-
-    <span class="n">PANFLUTE_ACTION</span> <span class="o">=</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Element</span><span class="p">,</span> <span class="n">Doc</span><span class="p">],</span> <span class="n">Union</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="n">Element</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="n">Element</span><span class="p">]]]</span>
-    <span class="n">PANFLUTE_PREPARE</span> <span class="o">=</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="n">Doc</span><span class="p">],</span> <span class="kc">None</span><span class="p">]]</span>
-    <span class="n">PANFLUTE_FINALIZE</span> <span class="o">=</span> <span class="n">PANFLUTE_PREPARE</span>
-    <span class="c1"># see https://panflute.readthedocs.io/en/latest/code.html?highlight=run_filters#panflute.io.run_filters</span>
-    <span class="c1"># PANFLUTE_FILTER can either be just an action, or a tuple of action, prepare, finalize</span>
-    <span class="n">PANFLUTE_FILTER</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span>
-        <span class="n">PANFLUTE_ACTION</span><span class="p">,</span>
-        <span class="nb">tuple</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="n">PANFLUTE_ACTION</span><span class="p">],</span> <span class="n">PANFLUTE_PREPARE</span><span class="p">,</span> <span class="n">PANFLUTE_FINALIZE</span><span class="p">],</span>
-    <span class="p">]</span>
 
 <span class="n">PARENT_COUNTERS</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s2">&quot;part&quot;</span><span class="p">,</span>
@@ -571,7 +561,7 @@
     <span class="k">return</span> <span class="kc">None</span></div>
 
 
-<div class="viewcode-block" id="action_amsthm"><a class="viewcode-back" href="../../api/amsthm/#amsthm.action_amsthm">[docs]</a><span class="k">def</span> <span class="nf">action_amsthm</span><span class="p">(</span><span class="n">elem</span><span class="p">:</span> <span class="n">Element</span><span class="p">,</span> <span class="n">doc</span><span class="p">:</span> <span class="n">Doc</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pf</span><span class="o">.</span><span class="n">RawBlock</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<div class="viewcode-block" id="action1"><a class="viewcode-back" href="../../api/amsthm/#amsthm.action1">[docs]</a><span class="k">def</span> <span class="nf">action1</span><span class="p">(</span><span class="n">elem</span><span class="p">:</span> <span class="n">Element</span><span class="p">,</span> <span class="n">doc</span><span class="p">:</span> <span class="n">Doc</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pf</span><span class="o">.</span><span class="n">RawBlock</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
     <span class="k">if</span> <span class="n">doc</span><span class="o">.</span><span class="n">format</span> <span class="ow">in</span> <span class="n">LATEX_LIKE</span><span class="p">:</span>
         <span class="n">collect_ref_id</span><span class="p">(</span><span class="n">elem</span><span class="p">,</span> <span class="n">doc</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
@@ -579,7 +569,7 @@
     <span class="k">return</span> <span class="kc">None</span></div>
 
 
-<div class="viewcode-block" id="action_process_ref"><a class="viewcode-back" href="../../api/amsthm/#amsthm.action_process_ref">[docs]</a><span class="k">def</span> <span class="nf">action_process_ref</span><span class="p">(</span><span class="n">elem</span><span class="p">:</span> <span class="n">Element</span><span class="p">,</span> <span class="n">doc</span><span class="p">:</span> <span class="n">Doc</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pf</span><span class="o">.</span><span class="n">Str</span> <span class="o">|</span> <span class="n">pf</span><span class="o">.</span><span class="n">RawInline</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<div class="viewcode-block" id="action2"><a class="viewcode-back" href="../../api/amsthm/#amsthm.action2">[docs]</a><span class="k">def</span> <span class="nf">action2</span><span class="p">(</span><span class="n">elem</span><span class="p">:</span> <span class="n">Element</span><span class="p">,</span> <span class="n">doc</span><span class="p">:</span> <span class="n">Doc</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pf</span><span class="o">.</span><span class="n">Str</span> <span class="o">|</span> <span class="n">pf</span><span class="o">.</span><span class="n">RawInline</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
     <span class="k">if</span> <span class="n">doc</span><span class="o">.</span><span class="n">format</span> <span class="ow">in</span> <span class="n">LATEX_LIKE</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">amsthm_latex</span><span class="p">(</span><span class="n">elem</span><span class="p">,</span> <span class="n">doc</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
@@ -590,13 +580,13 @@
     <span class="k">del</span> <span class="n">doc</span><span class="o">.</span><span class="n">_amsthm</span></div>
 
 
-<span class="n">actions</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">PANFLUTE_ACTION</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">action_amsthm</span><span class="p">,</span> <span class="n">action_process_ref</span><span class="p">)</span>  <span class="c1"># type: ignore[assignment] # type limitation</span>
-<span class="c1">#: equiv. to the texp cli, but provided as a Python interface</span>
-<span class="n">FILTER</span><span class="p">:</span> <span class="n">PANFLUTE_FILTER</span> <span class="o">=</span> <span class="p">(</span><span class="n">actions</span><span class="p">,</span> <span class="n">prepare</span><span class="p">,</span> <span class="n">finalize</span><span class="p">)</span>
-
-
 <div class="viewcode-block" id="main"><a class="viewcode-back" href="../../api/amsthm/#amsthm.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">doc</span><span class="p">:</span> <span class="n">Doc</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-    <span class="k">return</span> <span class="n">pf</span><span class="o">.</span><span class="n">run_filters</span><span class="p">(</span><span class="n">actions</span><span class="p">,</span> <span class="n">prepare</span><span class="o">=</span><span class="n">prepare</span><span class="p">,</span> <span class="n">finalize</span><span class="o">=</span><span class="n">finalize</span><span class="p">,</span> <span class="n">doc</span><span class="o">=</span><span class="n">doc</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">pf</span><span class="o">.</span><span class="n">run_filters</span><span class="p">(</span>
+        <span class="p">(</span><span class="n">action1</span><span class="p">,</span> <span class="n">action2</span><span class="p">),</span>
+        <span class="n">prepare</span><span class="o">=</span><span class="n">prepare</span><span class="p">,</span>
+        <span class="n">finalize</span><span class="o">=</span><span class="n">finalize</span><span class="p">,</span>
+        <span class="n">doc</span><span class="o">=</span><span class="n">doc</span><span class="p">,</span>
+    <span class="p">)</span></div>
 </pre></div>
 
     </div>
@@ -611,7 +601,7 @@
     </p>
     <p>
         &copy; Copyright 2016-2021, Kolen Cheung.<br/>
-      Last updated on Dec 17, 2021.<br/>
+      Last updated on Dec 18, 2021.<br/>
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.5.4.<br/>
     </p>
   </div>
