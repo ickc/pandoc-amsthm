@@ -13,21 +13,11 @@ from .helper import cancel_emph, cite_to_id_mode, cite_to_ref, merge_emph, parse
 from .util import setup_logging
 
 if TYPE_CHECKING:
-    from typing import Callable, Optional, Sequence, Union
+    from typing import Union
 
     from panflute.elements import Doc, Element
 
     THM_DEF = list[Union[str, dict[str, str], dict[str, list[str]]]]
-
-    PANFLUTE_ACTION = Callable[[Element, Doc], Union[None, Element, list[Element]]]
-    PANFLUTE_PREPARE = Optional[Callable[[Doc], None]]
-    PANFLUTE_FINALIZE = PANFLUTE_PREPARE
-    # see https://panflute.readthedocs.io/en/latest/code.html?highlight=run_filters#panflute.io.run_filters
-    # PANFLUTE_FILTER can either be just an action, or a tuple of action, prepare, finalize
-    PANFLUTE_FILTER = Union[
-        PANFLUTE_ACTION,
-        tuple[Sequence[PANFLUTE_ACTION], PANFLUTE_PREPARE, PANFLUTE_FINALIZE],
-    ]
 
 PARENT_COUNTERS: set[str] = {
     "part",
@@ -459,7 +449,7 @@ def amsthm_latex(elem: Element, doc: Doc) -> pf.RawBlock | None:
     return None
 
 
-def action_amsthm(elem: Element, doc: Doc) -> pf.RawBlock | None:
+def action1(elem: Element, doc: Doc) -> pf.RawBlock | None:
     if doc.format in LATEX_LIKE:
         collect_ref_id(elem, doc)
     else:
@@ -467,7 +457,7 @@ def action_amsthm(elem: Element, doc: Doc) -> pf.RawBlock | None:
     return None
 
 
-def action_process_ref(elem: Element, doc: Doc) -> pf.Str | pf.RawInline | None:
+def action2(elem: Element, doc: Doc) -> pf.Str | pf.RawInline | None:
     if doc.format in LATEX_LIKE:
         return amsthm_latex(elem, doc)
     else:
@@ -478,10 +468,10 @@ def finalize(doc: Doc) -> None:
     del doc._amsthm
 
 
-actions: tuple[PANFLUTE_ACTION] = (action_amsthm, action_process_ref)  # type: ignore[assignment] # type limitation
-#: equiv. to the texp cli, but provided as a Python interface
-FILTER: PANFLUTE_FILTER = (actions, prepare, finalize)
-
-
 def main(doc: Doc | None = None) -> None:
-    return pf.run_filters(actions, prepare=prepare, finalize=finalize, doc=doc)
+    return pf.run_filters(
+        (action1, action2),
+        prepare=prepare,
+        finalize=finalize,
+        doc=doc,
+    )
