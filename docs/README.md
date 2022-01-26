@@ -9,7 +9,7 @@ title: amsthm---provide a syntax to use amsthm environments in pandoc,
 ![GitHub Actions](https://github.com/ickc/pandoc-amsthm/workflows/Python%20package/badge.svg)
 [![Coverage Status](https://codecov.io/gh/ickc/pandoc-amsthm/branch/master/graphs/badge.svg?branch=master)](https://codecov.io/github/ickc/pandoc-amsthm)
 [![Coverage Status](https://coveralls.io/repos/ickc/pandoc-amsthm/badge.svg?branch=master&service=github)](https://coveralls.io/r/ickc/pandoc-amsthm)
-[![Codacy Code Quality Status](https://img.shields.io/codacy/grade/078ebc537c5747f68c1d4ad3d3594bbf.svg)](https://www.codacy.com/app/ickc/pandoc-amsthm)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/9631bb6bae2746e6947ede3b4b042e67)](https://www.codacy.com/gh/ickc/pandoc-amsthm/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=ickc/pandoc-amsthm&amp;utm_campaign=Badge_Grade)
 [![Scrutinizer Status](https://img.shields.io/scrutinizer/quality/g/ickc/pandoc-amsthm/master.svg)](https://scrutinizer-ci.com/g/ickc/pandoc-amsthm/)
 [![CodeClimate Quality Status](https://codeclimate.com/github/ickc/pandoc-amsthm/badges/gpa.svg)](https://codeclimate.com/github/ickc/pandoc-amsthm)
 
