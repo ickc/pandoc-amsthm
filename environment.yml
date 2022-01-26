@@ -29,7 +29,6 @@ dependencies:
   - sphinxcontrib-apidoc
   - nbsphinx >=0.8
   - ipykernel
-  - pantable
   # dev:
   - pandoc
   - isort

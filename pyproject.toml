@@ -59,7 +59,6 @@ sphinx-bootstrap-theme = { optional = true, version = "*" }
 sphinxcontrib-apidoc = { optional = true, version = "*" }
 nbsphinx = { optional = true, version = ">=0.8" }
 ipykernel = { optional = true, version = "*" }
-pantable = { optional = true, version = "*" }
 
 [tool.poetry.dev-dependencies]
 isort = "*"
@@ -89,7 +88,6 @@ docs = [
     "sphinxcontrib-apidoc",
     "nbsphinx",
     "ipykernel",
-    "pantable",
 ]
 
 [tool.poetry.scripts]
