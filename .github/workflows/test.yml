@@ -16,15 +16,8 @@ jobs:
         # other wise e.g. an older version of a dependency may not work well with a newer version of Python
         include:
           - python-version: "3.8"
-            pandoc-version: "2.11.0.4"
+            pandoc-version: "2.14"
           - python-version: "3.8"
-            pandoc-version: "2.11.4"
-          - python-version: "3.8"
-            pandoc-version: "2.12"
-
-          - python-version: "3.9"
-            pandoc-version: "2.13"
-          - python-version: "3.9"
             pandoc-version: "2.14.2"
           - python-version: "3.9"
             pandoc-version: "2.15"
