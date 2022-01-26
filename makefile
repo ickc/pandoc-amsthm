@@ -63,7 +63,7 @@ dist/docs/:
 # Deploy to PyPI
 ## by CI, properly git tagged
 pypi:
-	git push origin v1.2.3
+	git push origin v2.0.0
 ## Manually
 pypiManual:
 	rm -rf dist
@@ -88,9 +88,9 @@ print-%:
 
 setup.py:
 	poetry build
-	cd dist; tar -xf amsthm-1.2.3.tar.gz amsthm-1.2.3/setup.py
-	mv dist/amsthm-1.2.3/setup.py .
-	rm -rf dist/amsthm-1.2.3
+	cd dist; tar -xf amsthm-2.0.0.tar.gz amsthm-2.0.0/setup.py
+	mv dist/amsthm-2.0.0/setup.py .
+	rm -rf dist/amsthm-2.0.0
 
 .PHONY: editable
 # since poetry doesn't support editable, we can build and extract the setup.py,

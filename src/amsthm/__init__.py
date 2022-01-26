@@ -19,7 +19,7 @@ if TYPE_CHECKING:
 
     THM_DEF = list[Union[str, dict[str, str], dict[str, list[str]]]]
 
-__version__: str = "1.2.3"
+__version__: str = "2.0.0"
 
 PARENT_COUNTERS: set[str] = {
     "part",

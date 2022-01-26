@@ -96,8 +96,8 @@ pandoc versioning semantics is `MAJOR.MAJOR.MINOR.PATCH <https://pvp.haskell.org
    :target: https://pypi.python.org/pypi/amsthm/
 .. |Downloads| image:: https://img.shields.io/pypi/dm/amsthm.svg
    :target: https://pypi.python.org/pypi/amsthm/
-.. |Commits since latest release| image:: https://img.shields.io/github/commits-since/ickc/pandoc-amsthm/v1.2.3.svg
-   :target: https://github.com/ickc/pandoc-amsthm/compare/v1.2.3...master
+.. |Commits since latest release| image:: https://img.shields.io/github/commits-since/ickc/pandoc-amsthm/v2.0.0.svg
+   :target: https://github.com/ickc/pandoc-amsthm/compare/v2.0.0...master
 .. |License| image:: https://img.shields.io/pypi/l/amsthm.svg
 .. |Conda Recipe| image:: https://img.shields.io/badge/recipe-amsthm-green.svg
    :target: https://anaconda.org/conda-forge/amsthm

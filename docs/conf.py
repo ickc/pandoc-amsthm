@@ -23,7 +23,7 @@ project = "amsthm"
 year = "2016-2021"
 author = "Kolen Cheung"
 copyright = f"{year}, {author}"
-version = release = "1.2.3"
+version = release = "2.0.0"
 
 pygments_style = "solarized-light"
 html_theme = "bootstrap"
