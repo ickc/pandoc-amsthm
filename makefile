@@ -55,7 +55,7 @@ docs/api/:
 
 dist/docs/:
 	sphinx-build -E -b dirhtml docs dist/docs
-	# sphinx-build -b linkcheck docs dist/docs
+	sphinx-build -b linkcheck docs dist/docs
 
 # maintenance ##################################################################
 
