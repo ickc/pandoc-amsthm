@@ -13,7 +13,6 @@
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/doctools.js"></script>
-    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <link rel="index" title="Index" href="../../genindex/" />
     <link rel="search" title="Search" href="../../search/" />
     <link rel="next" title="amsthm.util module" href="../amsthm.util/" />
@@ -145,16 +144,12 @@
 <dt id="amsthm.helper.cite_to_ref">
 <code class="sig-prename descclassname"><span class="pre">amsthm.helper.</span></code><code class="sig-name descname"><span class="pre">cite_to_ref</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">elem</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">pf.Cite</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doc</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Doc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_id</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span> <span class="p"><span class="pre">|</span></span> <span class="pre">None</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">pf.RawInline</span> <span class="p"><span class="pre">|</span></span> <span class="pre">None</span><a class="reference internal" href="../../_modules/amsthm/helper/#cite_to_ref"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#amsthm.helper.cite_to_ref" title="Permalink to this definition">¶</a></dt>
 <dd><p>Cite to raw LaTeX ref/eqref.</p>
-<blockquote>
-<div><dl class="field-list simple">
-<dt class="field-odd">param check_id</dt>
-<dd class="field-odd"><p>if provided, transform only if id is in <cite>check_id</cite></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>check_id</strong> – if provided, transform only if id is in <cite>check_id</cite></p>
 </dd>
 </dl>
-<p><cite>[&#64;…] -&gt; eqref{…}</cite></p>
-<p><a href="#id1"><span class="problematic" id="id2">`</span></a>&#64;… -&gt;</p>
-</div></blockquote>
-<p>ef{…}`</p>
+<p>This maps <cite>[&#64;…]</cite> to <cite>eqref{…}</cite> and <cite>&#64;…</cite> to <cite>ref{…}</cite>.</p>
 </dd></dl>
 
 <dl class="py function">

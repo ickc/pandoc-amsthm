@@ -13,7 +13,6 @@
     <script src="../../../_static/jquery.js"></script>
     <script src="../../../_static/underscore.js"></script>
     <script src="../../../_static/doctools.js"></script>
-    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <link rel="index" title="Index" href="../../../genindex/" />
     <link rel="search" title="Search" href="../../../search/" />
 <meta charset='utf-8'>
@@ -234,9 +233,7 @@
 
 <span class="sd">    :param check_id: if provided, transform only if id is in `check_id`</span>
 
-<span class="sd">    `[@...] -&gt; \eqref{...}`</span>
-
-<span class="sd">    `@... -&gt; \ref{...}`</span>
+<span class="sd">    This maps `[@...]` to `\\eqref{...}` and `@...` to `\\ref{...}`.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="p">(</span>
         <span class="nb">isinstance</span><span class="p">(</span><span class="n">elem</span><span class="p">,</span> <span class="n">pf</span><span class="o">.</span><span class="n">Cite</span><span class="p">)</span>
