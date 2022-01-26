@@ -84,6 +84,7 @@
 <li><a class="reference internal" href="#usage">Usage</a></li>
 <li><a class="reference internal" href="#syntax">Syntax</a></li>
 <li><a class="reference internal" href="#tips">Tips</a></li>
+<li><a class="reference internal" href="#supported-pandoc-versions">Supported pandoc versions</a></li>
 </ul>
 </li>
 </ul>
@@ -128,7 +129,7 @@
     <div class="body col-md-12 content" role="main">
       
   <div class="section" id="amsthmprovide-a-syntax-to-use-amsthm-environments-in-pandoc-with-output-in-latex-and-html">
-<h1><a class="toc-backref" href="#id1">amsthm—provide a syntax to use amsthm environments in pandoc, with output in LaTeX and HTML</a><a class="headerlink" href="#amsthmprovide-a-syntax-to-use-amsthm-environments-in-pandoc-with-output-in-latex-and-html" title="Permalink to this headline">¶</a></h1>
+<h1><a class="toc-backref" href="#id4">amsthm—provide a syntax to use amsthm environments in pandoc, with output in LaTeX and HTML</a><a class="headerlink" href="#amsthmprovide-a-syntax-to-use-amsthm-environments-in-pandoc-with-output-in-latex-and-html" title="Permalink to this headline">¶</a></h1>
 <dl class="field-list simple">
 <dt class="field-odd">Date</dt>
 <dd class="field-odd"><p>January 26, 2022</p>
@@ -137,12 +138,13 @@
 <div class="contents topic" id="contents">
 <p class="topic-title">Contents</p>
 <ul class="simple">
-<li><p><a class="reference internal" href="#amsthmprovide-a-syntax-to-use-amsthm-environments-in-pandoc-with-output-in-latex-and-html" id="id1">amsthm—provide a syntax to use amsthm environments in pandoc, with output in LaTeX and HTML</a></p>
+<li><p><a class="reference internal" href="#amsthmprovide-a-syntax-to-use-amsthm-environments-in-pandoc-with-output-in-latex-and-html" id="id4">amsthm—provide a syntax to use amsthm environments in pandoc, with output in LaTeX and HTML</a></p>
 <ul>
-<li><p><a class="reference internal" href="#introduction" id="id2">Introduction</a></p></li>
-<li><p><a class="reference internal" href="#usage" id="id3">Usage</a></p></li>
-<li><p><a class="reference internal" href="#syntax" id="id4">Syntax</a></p></li>
-<li><p><a class="reference internal" href="#tips" id="id5">Tips</a></p></li>
+<li><p><a class="reference internal" href="#introduction" id="id5">Introduction</a></p></li>
+<li><p><a class="reference internal" href="#usage" id="id6">Usage</a></p></li>
+<li><p><a class="reference internal" href="#syntax" id="id7">Syntax</a></p></li>
+<li><p><a class="reference internal" href="#tips" id="id8">Tips</a></p></li>
+<li><p><a class="reference internal" href="#supported-pandoc-versions" id="id9">Supported pandoc versions</a></p></li>
 </ul>
 </li>
 </ul>
@@ -152,11 +154,11 @@
 <p><a class="reference external" href="https://pypi.org/project/amsthm"><img alt="Supported versions" src="https://img.shields.io/pypi/pyversions/amsthm.svg" /></a> <a class="reference external" href="https://pypi.org/project/amsthm"><img alt="Supported implementations" src="https://img.shields.io/pypi/implementation/amsthm.svg" /></a> <a class="reference external" href="https://pypi.org/project/amsthm"><img alt="PyPI Wheel" src="https://img.shields.io/pypi/wheel/amsthm.svg" /></a> <a class="reference external" href="https://pypi.org/project/amsthm"><img alt="PyPI Package latest release" src="https://img.shields.io/pypi/v/amsthm.svg" /></a> <a class="reference external" href="https://github.com/ickc/pandoc-amsthm/releases"><img alt="GitHub Releases" src="https://img.shields.io/github/tag/ickc/pandoc-amsthm.svg?label=github+release" /></a> <a class="reference external" href="https://pypi.python.org/pypi/amsthm/"><img alt="Development Status" src="https://img.shields.io/pypi/status/amsthm.svg" /></a> <a class="reference external" href="https://pypi.python.org/pypi/amsthm/"><img alt="Downloads" src="https://img.shields.io/pypi/dm/amsthm.svg" /></a> <a class="reference external" href="https://github.com/ickc/pandoc-amsthm/compare/v1.2.3...master"><img alt="Commits since latest release" src="https://img.shields.io/github/commits-since/ickc/pandoc-amsthm/v1.2.3.svg" /></a> <img alt="License" src="https://img.shields.io/pypi/l/amsthm.svg" /></p>
 <p><a class="reference external" href="https://anaconda.org/conda-forge/amsthm"><img alt="Conda Recipe" src="https://img.shields.io/badge/recipe-amsthm-green.svg" /></a> <a class="reference external" href="https://anaconda.org/conda-forge/amsthm"><img alt="Conda Downloads" src="https://img.shields.io/conda/dn/conda-forge/amsthm.svg" /></a> <a class="reference external" href="https://anaconda.org/conda-forge/amsthm"><img alt="Conda Version" src="https://img.shields.io/conda/vn/conda-forge/amsthm.svg" /></a> <a class="reference external" href="https://anaconda.org/conda-forge/amsthm"><img alt="Conda Platforms" src="https://img.shields.io/conda/pn/conda-forge/amsthm.svg" /></a></p>
 <div class="section" id="introduction">
-<h2><a class="toc-backref" href="#id2">Introduction</a><a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id5">Introduction</a><a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
 <p>amsthm provide a syntax to use amsthm environments in pandoc, with output in LaTeX and HTML.</p>
 </div>
 <div class="section" id="usage">
-<h2><a class="toc-backref" href="#id3">Usage</a><a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id6">Usage</a><a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
 <p>From <code class="docutils literal notranslate"><span class="pre">makefile</span></code>:</p>
 <div class="highlight-makefile notranslate"><div class="highlight"><pre><span></span><span class="nf">tests/model-target.md</span><span class="o">:</span> <span class="n">tests</span>/<span class="n">model</span>-<span class="n">source</span>.<span class="n">md</span>
     pandoc -F amsthm $&lt; -o <span class="nv">$@</span>
@@ -170,11 +172,11 @@
 </div>
 </div>
 <div class="section" id="syntax">
-<h2><a class="toc-backref" href="#id4">Syntax</a><a class="headerlink" href="#syntax" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id7">Syntax</a><a class="headerlink" href="#syntax" title="Permalink to this headline">¶</a></h2>
 <p>See <code class="docutils literal notranslate"><span class="pre">tests/model-source.md</span></code> (or next page in documentation site) for an example.</p>
 </div>
 <div class="section" id="tips">
-<h2><a class="toc-backref" href="#id5">Tips</a><a class="headerlink" href="#tips" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id8">Tips</a><a class="headerlink" href="#tips" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li><p>Use <code class="docutils literal notranslate"><span class="pre">-N</span></code>, <code class="docutils literal notranslate"><span class="pre">--number-sections</span></code> to enable numbering in pandoc. This is mandatory for LaTeX output.</p></li>
 <li><p>To match LaTeX and non-LaTeX output numbering scheme, match these 2 settings manually</p>
@@ -184,6 +186,38 @@
 </ul>
 </li>
 </ul>
+</div>
+<div class="section" id="supported-pandoc-versions">
+<h2><a class="toc-backref" href="#id9">Supported pandoc versions</a><a class="headerlink" href="#supported-pandoc-versions" title="Permalink to this headline">¶</a></h2>
+<p>pandoc versioning semantics is <a class="reference external" href="https://pvp.haskell.org">MAJOR.MAJOR.MINOR.PATCH</a> and panflute’s is MAJOR.MINOR.PATCH. Below we shows matching versions of pandoc that panflute supports, in descending order. Only major version is shown as long as the minor versions doesn’t matter.</p>
+<table class="docutils align-default" id="id3">
+<caption><span class="caption-text">Version Matching <a class="footnote-reference brackets" href="#id2" id="id1">1</a></span><a class="headerlink" href="#id3" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 16%" />
+<col style="width: 20%" />
+<col style="width: 30%" />
+<col style="width: 34%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>pandoc-amsthm</p></th>
+<th class="head"><p>panflute version</p></th>
+<th class="head"><p>supported pandoc versions</p></th>
+<th class="head"><p>supported pandoc API versions</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>2.0.0</p></td>
+<td><p>2.1.3</p></td>
+<td><p>2.14.0.3–2.17.x</p></td>
+<td><p>1.22–1.22.1</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="footnote brackets">
+<dt class="label" id="id2"><span class="brackets"><a class="fn-backref" href="#id1">1</a></span></dt>
+<dd><p>For pandoc API verion, check <a class="reference external" href="https://hackage.haskell.org/package/pandoc">https://hackage.haskell.org/package/pandoc</a> for pandoc-types, which is the same thing.</p>
+</dd>
+</dl>
 </div>
 </div>
 
