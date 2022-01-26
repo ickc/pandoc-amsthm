@@ -62,3 +62,13 @@ See `tests/model-source.md` (or next page in documentation site) for an example.
         `--top-level-division=[section|chapter|part]` and the use of
         `parent_counter` in pandoc-amsthm
     -   non-LaTeX output: `counter_depth` in pandoc-amsthm
+
+# Supported pandoc versions
+
+pandoc versioning semantics is [MAJOR.MAJOR.MINOR.PATCH](https://pvp.haskell.org) and panflute's is MAJOR.MINOR.PATCH. Below we shows matching versions of pandoc that panflute supports, in descending order. Only major version is shown as long as the minor versions doesn't matter.
+
+| pandoc-amsthm | panflute version | supported pandoc versions | supported pandoc API versions |
+| ------------- | ---------------- | ------------------------- | ----------------------------- |
+| 2.0.0         | 2.1.3            | 2.14.0.3–2.17.x           | 1.22–1.22.1                   |
+
+: Version Matching^[For pandoc API verion, check https://hackage.haskell.org/package/pandoc for pandoc-types, which is the same thing.]
