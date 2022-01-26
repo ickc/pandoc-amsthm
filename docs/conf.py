@@ -32,7 +32,7 @@ html_theme_options = {
     "navbar_links": [
         (
             "GitHub",
-            "https://github.com/ickc/amsthm/",
+            "https://github.com/ickc/pandoc-amsthm/",
             True,
         )
     ],
