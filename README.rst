@@ -2,7 +2,7 @@
 amsthm—provide a syntax to use amsthm environments in pandoc, with output in LaTeX and HTML
 ===========================================================================================
 
-:Date:   January 25, 2022
+:Date:   January 26, 2022
 
 .. contents::
    :depth: 3
@@ -10,7 +10,7 @@ amsthm—provide a syntax to use amsthm environments in pandoc, with output in L
 
 |Documentation Status| |image1|
 
-|GitHub Actions| |Coverage Status| |image2| |Codacy Code Quality Status| |Scrutinizer Status| |CodeClimate Quality Status|
+|GitHub Actions| |Coverage Status| |image2| |Codacy Badge| |Scrutinizer Status| |CodeClimate Quality Status|
 
 |Supported versions| |Supported implementations| |PyPI Wheel| |PyPI Package latest release| |GitHub Releases| |Development Status| |Downloads| |Commits since latest release| |License|
 
@@ -76,8 +76,8 @@ pandoc versioning semantics is `MAJOR.MAJOR.MINOR.PATCH <https://pvp.haskell.org
    :target: https://codecov.io/github/ickc/pandoc-amsthm
 .. |image2| image:: https://coveralls.io/repos/ickc/pandoc-amsthm/badge.svg?branch=master&service=github
    :target: https://coveralls.io/r/ickc/pandoc-amsthm
-.. |Codacy Code Quality Status| image:: https://img.shields.io/codacy/grade/078ebc537c5747f68c1d4ad3d3594bbf.svg
-   :target: https://www.codacy.com/app/ickc/pandoc-amsthm
+.. |Codacy Badge| image:: https://app.codacy.com/project/badge/Grade/9631bb6bae2746e6947ede3b4b042e67
+   :target: https://www.codacy.com/gh/ickc/pandoc-amsthm/dashboard?utm_source=github.com&utm_medium=referral&utm_content=ickc/pandoc-amsthm&utm_campaign=Badge_Grade
 .. |Scrutinizer Status| image:: https://img.shields.io/scrutinizer/quality/g/ickc/pandoc-amsthm/master.svg
    :target: https://scrutinizer-ci.com/g/ickc/pandoc-amsthm/
 .. |CodeClimate Quality Status| image:: https://codeclimate.com/github/ickc/pandoc-amsthm/badges/gpa.svg
