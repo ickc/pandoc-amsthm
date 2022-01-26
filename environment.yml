@@ -19,7 +19,7 @@ dependencies:
   # run_constrained:
   - coloredlogs >=14,<16
   # tests:
-  - coverage
+  - coverage>=6.3,<7
   - coveralls
   - pytest
   - pytest-parallel >=0.1.1,<0.2
