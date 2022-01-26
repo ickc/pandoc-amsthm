@@ -2,4 +2,4 @@
 Authors
 =======
 
-* Kolen Cheung - https://amsthm.readthedocs.io/
+* Kolen Cheung - https://pandoc-amsthm.readthedocs.io/
