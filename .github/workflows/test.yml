@@ -50,6 +50,10 @@ jobs:
     - name: Tests
       run: |
         make test
+    - name: Coverage—Codecov
+      uses: codecov/codecov-action@v1
+      with:
+        file: ./coverage.xml
     - name: Coveralls Parallel
       uses: coverallsapp/github-action@master
       with:
