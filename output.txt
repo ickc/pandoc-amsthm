@@ -1,7 +1,7 @@
-readme.rst:13: [redirected with Found] https://codeclimate.com/github/ickc/pandoc-amsthm/badges/gpa.svg to https://api.codeclimate.com/v1/badges/f1c767d075cbffec6adc/maintainability.svg
 readme.rst:17: [redirected with Found] https://anaconda.org/conda-forge/amsthm to https://anaconda.org/account/login?next=%2Fconda-forge%2Famsthm
-readme.rst:13: [redirected permanently] https://coveralls.io/r/ickc/pandoc-amsthm to https://coveralls.io/github/ickc/pandoc-amsthm
+readme.rst:13: [redirected with Found] https://codeclimate.com/github/ickc/pandoc-amsthm/badges/gpa.svg to https://api.codeclimate.com/v1/badges/f1c767d075cbffec6adc/maintainability.svg
 readme.rst:13: [redirected with Found] https://coveralls.io/repos/ickc/pandoc-amsthm/badge.svg?branch=master&service=github to https://s3.amazonaws.com/assets.coveralls.io/badges/coveralls_unknown.svg
+readme.rst:13: [redirected permanently] https://coveralls.io/r/ickc/pandoc-amsthm to https://coveralls.io/github/ickc/pandoc-amsthm
 readme.rst:15: [redirected permanently] https://img.shields.io/github/tag/ickc/pandoc-amsthm.svg?label=github+release to https://img.shields.io/github/v/tag/ickc/pandoc-amsthm.svg?label=github%20release&sort=semver
 authors.rst:5: [redirected with Found] https://pandoc-amsthm.readthedocs.io/ to https://pandoc-amsthm.readthedocs.io/en/latest/
 readme.rst:15: [redirected permanently] https://pypi.python.org/pypi/amsthm/ to https://pypi.org/project/amsthm/
