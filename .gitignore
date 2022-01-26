@@ -84,3 +84,4 @@ docs/_build
 
 dask-worker-space/
 .dmypy.json
+coverage.lcov
