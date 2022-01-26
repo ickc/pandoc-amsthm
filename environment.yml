@@ -27,8 +27,6 @@ dependencies:
   - sphinx
   - sphinx_bootstrap_theme
   - sphinxcontrib-apidoc
-  - nbsphinx >=0.8
-  - ipykernel
   # dev:
   - pandoc
   - isort

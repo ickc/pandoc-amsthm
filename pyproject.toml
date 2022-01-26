@@ -57,8 +57,6 @@ pytest-parallel = { optional = true, version = "^0.1.1" }
 sphinx = { optional = true, version = "^3.3" }
 sphinx-bootstrap-theme = { optional = true, version = "*" }
 sphinxcontrib-apidoc = { optional = true, version = "*" }
-nbsphinx = { optional = true, version = ">=0.8" }
-ipykernel = { optional = true, version = "*" }
 
 [tool.poetry.dev-dependencies]
 isort = "*"
@@ -86,8 +84,6 @@ docs = [
     "sphinx",
     "sphinx-bootstrap-theme",
     "sphinxcontrib-apidoc",
-    "nbsphinx",
-    "ipykernel",
 ]
 
 [tool.poetry.scripts]
