@@ -69,6 +69,7 @@ nbconvert = "^6"
 pylint = "*"
 rstcheck = "*"
 types-PyYAML = "*"
+twine = "*"
 
 [tool.poetry.extras]
 extras = [
