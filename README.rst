@@ -51,21 +51,21 @@ Tips
    -  LaTeX output: pandoc’s cli flag ``--top-level-division=[section|chapter|part]`` and the use of ``parent_counter`` in pandoc-amsthm
    -  non-LaTeX output: ``counter_depth`` in pandoc-amsthm
 
-.. |Documentation Status| image:: https://readthedocs.org/projects/amsthm/badge/?version=latest
-   :target: https://amsthm.readthedocs.io/en/latest/?badge=latest&style=plastic
-.. |image1| image:: https://github.com/ickc/amsthm/workflows/GitHub%20Pages/badge.svg
-   :target: https://ickc.github.io/amsthm
-.. |GitHub Actions| image:: https://github.com/ickc/amsthm/workflows/Python%20package/badge.svg
-.. |Coverage Status| image:: https://codecov.io/gh/ickc/amsthm/branch/master/graphs/badge.svg?branch=master
-   :target: https://codecov.io/github/ickc/amsthm
-.. |image2| image:: https://coveralls.io/repos/ickc/amsthm/badge.svg?branch=master&service=github
-   :target: https://coveralls.io/r/ickc/amsthm
+.. |Documentation Status| image:: https://readthedocs.org/projects/pandoc-amsthm/badge/?version=latest
+   :target: https://pandoc-amsthm.readthedocs.io/en/latest/?badge=latest&style=plastic
+.. |image1| image:: https://github.com/ickc/pandoc-amsthm/workflows/GitHub%20Pages/badge.svg
+   :target: https://ickc.github.io/pandoc-amsthm
+.. |GitHub Actions| image:: https://github.com/ickc/pandoc-amsthm/workflows/Python%20package/badge.svg
+.. |Coverage Status| image:: https://codecov.io/gh/ickc/pandoc-amsthm/branch/master/graphs/badge.svg?branch=master
+   :target: https://codecov.io/github/ickc/pandoc-amsthm
+.. |image2| image:: https://coveralls.io/repos/ickc/pandoc-amsthm/badge.svg?branch=master&service=github
+   :target: https://coveralls.io/r/ickc/pandoc-amsthm
 .. |Codacy Code Quality Status| image:: https://img.shields.io/codacy/grade/078ebc537c5747f68c1d4ad3d3594bbf.svg
-   :target: https://www.codacy.com/app/ickc/amsthm
-.. |Scrutinizer Status| image:: https://img.shields.io/scrutinizer/quality/g/ickc/amsthm/master.svg
-   :target: https://scrutinizer-ci.com/g/ickc/amsthm/
-.. |CodeClimate Quality Status| image:: https://codeclimate.com/github/ickc/amsthm/badges/gpa.svg
-   :target: https://codeclimate.com/github/ickc/amsthm
+   :target: https://www.codacy.com/app/ickc/pandoc-amsthm
+.. |Scrutinizer Status| image:: https://img.shields.io/scrutinizer/quality/g/ickc/pandoc-amsthm/master.svg
+   :target: https://scrutinizer-ci.com/g/ickc/pandoc-amsthm/
+.. |CodeClimate Quality Status| image:: https://codeclimate.com/github/ickc/pandoc-amsthm/badges/gpa.svg
+   :target: https://codeclimate.com/github/ickc/pandoc-amsthm
 .. |Supported versions| image:: https://img.shields.io/pypi/pyversions/amsthm.svg
    :target: https://pypi.org/project/amsthm
 .. |Supported implementations| image:: https://img.shields.io/pypi/implementation/amsthm.svg
@@ -74,14 +74,14 @@ Tips
    :target: https://pypi.org/project/amsthm
 .. |PyPI Package latest release| image:: https://img.shields.io/pypi/v/amsthm.svg
    :target: https://pypi.org/project/amsthm
-.. |GitHub Releases| image:: https://img.shields.io/github/tag/ickc/amsthm.svg?label=github+release
-   :target: https://github.com/ickc/amsthm/releases
+.. |GitHub Releases| image:: https://img.shields.io/github/tag/ickc/pandoc-amsthm.svg?label=github+release
+   :target: https://github.com/ickc/pandoc-amsthm/releases
 .. |Development Status| image:: https://img.shields.io/pypi/status/amsthm.svg
    :target: https://pypi.python.org/pypi/amsthm/
 .. |Downloads| image:: https://img.shields.io/pypi/dm/amsthm.svg
    :target: https://pypi.python.org/pypi/amsthm/
-.. |Commits since latest release| image:: https://img.shields.io/github/commits-since/ickc/amsthm/v1.2.3.svg
-   :target: https://github.com/ickc/amsthm/compare/v1.2.3...master
+.. |Commits since latest release| image:: https://img.shields.io/github/commits-since/ickc/pandoc-amsthm/v1.2.3.svg
+   :target: https://github.com/ickc/pandoc-amsthm/compare/v1.2.3...master
 .. |License| image:: https://img.shields.io/pypi/l/amsthm.svg
 .. |Conda Recipe| image:: https://img.shields.io/badge/recipe-amsthm-green.svg
    :target: https://anaconda.org/conda-forge/amsthm
