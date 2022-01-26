@@ -22,6 +22,7 @@ test:
 	$(_python) \
 		-m coverage run \
 		-m pytest -vv --workers=auto tests
+coverage: test
 	coverage combine; coverage report
 	coverage html
 	coverage xml

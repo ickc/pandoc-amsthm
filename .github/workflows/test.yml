@@ -50,6 +50,10 @@ jobs:
     - name: Tests
       run: |
         make test
+        coverage combine | true
+        coverage report
+        coverage xml
+        coverage lcov
     - name: Coverage—Codecov
       uses: codecov/codecov-action@v1
       with:
