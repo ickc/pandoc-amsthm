@@ -19,10 +19,12 @@ html: dist/docs/
 
 test:
 	rm -f .coverage*
-	coverage run -m pytest -vv --workers=auto \
-		tests
+	$(_python) \
+		-m coverage run \
+		-m pytest -vv --workers=auto tests
 	coverage combine; coverage report
 	coverage html
+	coverage xml
 
 clean:
 	rm -f $(RSTs) .coverage* tests/model-latex.pdf tests/model-html.html
