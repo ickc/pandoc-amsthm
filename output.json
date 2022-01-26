@@ -1,39 +1,39 @@
 {"filename": "index.rst", "lineno": 20, "status": "unchecked", "code": 0, "uri": "", "info": ""}
 {"filename": "readme.rst", "lineno": 13, "status": "working", "code": 0, "uri": "https://codecov.io/gh/ickc/pandoc-amsthm/branch/master/graphs/badge.svg?branch=master", "info": ""}
-{"filename": "readme.rst", "lineno": 13, "status": "working", "code": 0, "uri": "https://codeclimate.com/github/ickc/pandoc-amsthm", "info": ""}
 {"filename": "readme.rst", "lineno": 17, "status": "redirected", "code": 302, "uri": "https://anaconda.org/conda-forge/amsthm", "info": "https://anaconda.org/account/login?next=%2Fconda-forge%2Famsthm", "text": "with Found"}
 {"filename": "readme.rst", "lineno": 13, "status": "working", "code": 0, "uri": "https://codecov.io/github/ickc/pandoc-amsthm", "info": ""}
 {"filename": "readme.rst", "lineno": 13, "status": "redirected", "code": 302, "uri": "https://codeclimate.com/github/ickc/pandoc-amsthm/badges/gpa.svg", "info": "https://api.codeclimate.com/v1/badges/f1c767d075cbffec6adc/maintainability.svg", "text": "with Found"}
 {"filename": "readme.rst", "lineno": 13, "status": "working", "code": 0, "uri": "https://app.codacy.com/project/badge/Grade/9631bb6bae2746e6947ede3b4b042e67", "info": ""}
-{"filename": "contributing.rst", "lineno": 11, "status": "working", "code": 0, "uri": "https://github.com/ickc/pandoc-amsthm/issues", "info": ""}
-{"filename": "readme.rst", "lineno": 13, "status": "redirected", "code": 301, "uri": "https://coveralls.io/r/ickc/pandoc-amsthm", "info": "https://coveralls.io/github/ickc/pandoc-amsthm", "text": "permanently"}
 {"filename": "readme.rst", "lineno": 13, "status": "redirected", "code": 302, "uri": "https://coveralls.io/repos/ickc/pandoc-amsthm/badge.svg?branch=master&service=github", "info": "https://s3.amazonaws.com/assets.coveralls.io/badges/coveralls_unknown.svg", "text": "with Found"}
-{"filename": "readme.rst", "lineno": 15, "status": "working", "code": 0, "uri": "https://github.com/ickc/pandoc-amsthm/compare/v2.0.0...master", "info": ""}
-{"filename": "readme.rst", "lineno": 74, "status": "working", "code": 0, "uri": "https://github.com/ickc/pandoc-amsthm/workflows/Python%20package/badge.svg", "info": ""}
-{"filename": "readme.rst", "lineno": 11, "status": "working", "code": 0, "uri": "https://github.com/ickc/pandoc-amsthm/workflows/GitHub%20Pages/badge.svg", "info": ""}
-{"filename": "readme.rst", "lineno": 11, "status": "working", "code": 0, "uri": "https://ickc.github.io/pandoc-amsthm", "info": ""}
-{"filename": "readme.rst", "lineno": 68, "status": "working", "code": 0, "uri": "https://hackage.haskell.org/package/pandoc", "info": ""}
+{"filename": "readme.rst", "lineno": 13, "status": "redirected", "code": 301, "uri": "https://coveralls.io/r/ickc/pandoc-amsthm", "info": "https://coveralls.io/github/ickc/pandoc-amsthm", "text": "permanently"}
 {"filename": "contributing.rst", "lineno": 40, "status": "working", "code": 0, "uri": "https://github.com/ickc/pandoc-amsthm", "info": ""}
-{"filename": "readme.rst", "lineno": 17, "status": "working", "code": 0, "uri": "https://img.shields.io/badge/recipe-amsthm-green.svg", "info": ""}
+{"filename": "readme.rst", "lineno": 15, "status": "working", "code": 0, "uri": "https://github.com/ickc/pandoc-amsthm/compare/v2.0.0...master", "info": ""}
+{"filename": "contributing.rst", "lineno": 11, "status": "working", "code": 0, "uri": "https://github.com/ickc/pandoc-amsthm/issues", "info": ""}
+{"filename": "readme.rst", "lineno": 11, "status": "working", "code": 0, "uri": "https://github.com/ickc/pandoc-amsthm/workflows/GitHub%20Pages/badge.svg", "info": ""}
+{"filename": "readme.rst", "lineno": 68, "status": "working", "code": 0, "uri": "https://hackage.haskell.org/package/pandoc", "info": ""}
+{"filename": "readme.rst", "lineno": 74, "status": "working", "code": 0, "uri": "https://github.com/ickc/pandoc-amsthm/workflows/Python%20package/badge.svg", "info": ""}
+{"filename": "readme.rst", "lineno": 11, "status": "working", "code": 0, "uri": "https://ickc.github.io/pandoc-amsthm", "info": ""}
 {"filename": "readme.rst", "lineno": 15, "status": "working", "code": 0, "uri": "https://github.com/ickc/pandoc-amsthm/releases", "info": ""}
-{"filename": "readme.rst", "lineno": 17, "status": "working", "code": 0, "uri": "https://img.shields.io/conda/vn/conda-forge/amsthm.svg", "info": ""}
 {"filename": "readme.rst", "lineno": 17, "status": "working", "code": 0, "uri": "https://img.shields.io/conda/dn/conda-forge/amsthm.svg", "info": ""}
+{"filename": "readme.rst", "lineno": 17, "status": "working", "code": 0, "uri": "https://img.shields.io/badge/recipe-amsthm-green.svg", "info": ""}
 {"filename": "readme.rst", "lineno": 17, "status": "working", "code": 0, "uri": "https://img.shields.io/conda/pn/conda-forge/amsthm.svg", "info": ""}
-{"filename": "readme.rst", "lineno": 15, "status": "working", "code": 0, "uri": "https://img.shields.io/github/commits-since/ickc/pandoc-amsthm/v2.0.0.svg", "info": ""}
-{"filename": "readme.rst", "lineno": 15, "status": "working", "code": 0, "uri": "https://img.shields.io/pypi/implementation/amsthm.svg", "info": ""}
+{"filename": "readme.rst", "lineno": 17, "status": "working", "code": 0, "uri": "https://img.shields.io/conda/vn/conda-forge/amsthm.svg", "info": ""}
 {"filename": "readme.rst", "lineno": 15, "status": "working", "code": 0, "uri": "https://img.shields.io/pypi/dm/amsthm.svg", "info": ""}
+{"filename": "readme.rst", "lineno": 15, "status": "working", "code": 0, "uri": "https://img.shields.io/pypi/implementation/amsthm.svg", "info": ""}
+{"filename": "readme.rst", "lineno": 101, "status": "working", "code": 0, "uri": "https://img.shields.io/pypi/l/amsthm.svg", "info": ""}
+{"filename": "readme.rst", "lineno": 15, "status": "working", "code": 0, "uri": "https://img.shields.io/github/commits-since/ickc/pandoc-amsthm/v2.0.0.svg", "info": ""}
 {"filename": "readme.rst", "lineno": 15, "status": "redirected", "code": 301, "uri": "https://img.shields.io/github/tag/ickc/pandoc-amsthm.svg?label=github+release", "info": "https://img.shields.io/github/v/tag/ickc/pandoc-amsthm.svg?label=github%20release&sort=semver", "text": "permanently"}
 {"filename": "readme.rst", "lineno": 15, "status": "working", "code": 0, "uri": "https://img.shields.io/pypi/pyversions/amsthm.svg", "info": ""}
 {"filename": "readme.rst", "lineno": 15, "status": "working", "code": 0, "uri": "https://img.shields.io/pypi/v/amsthm.svg", "info": ""}
-{"filename": "readme.rst", "lineno": 15, "status": "working", "code": 0, "uri": "https://img.shields.io/pypi/wheel/amsthm.svg", "info": ""}
 {"filename": "readme.rst", "lineno": 15, "status": "working", "code": 0, "uri": "https://img.shields.io/pypi/status/amsthm.svg", "info": ""}
-{"filename": "readme.rst", "lineno": 101, "status": "working", "code": 0, "uri": "https://img.shields.io/pypi/l/amsthm.svg", "info": ""}
+{"filename": "readme.rst", "lineno": 15, "status": "working", "code": 0, "uri": "https://img.shields.io/pypi/wheel/amsthm.svg", "info": ""}
 {"filename": "readme.rst", "lineno": 11, "status": "working", "code": 0, "uri": "https://pandoc-amsthm.readthedocs.io/en/latest/?badge=latest&style=plastic", "info": ""}
-{"filename": "readme.rst", "lineno": 15, "status": "working", "code": 0, "uri": "https://pypi.org/project/amsthm", "info": ""}
 {"filename": "authors.rst", "lineno": 5, "status": "redirected", "code": 302, "uri": "https://pandoc-amsthm.readthedocs.io/", "info": "https://pandoc-amsthm.readthedocs.io/en/latest/", "text": "with Found"}
-{"filename": "readme.rst", "lineno": 57, "status": "working", "code": 0, "uri": "https://pvp.haskell.org", "info": ""}
-{"filename": "readme.rst", "lineno": 11, "status": "working", "code": 0, "uri": "https://readthedocs.org/projects/pandoc-amsthm/badge/?version=latest", "info": ""}
-{"filename": "readme.rst", "lineno": 15, "status": "redirected", "code": 301, "uri": "https://pypi.python.org/pypi/amsthm/", "info": "https://pypi.org/project/amsthm/", "text": "permanently"}
 {"filename": "readme.rst", "lineno": 13, "status": "working", "code": 0, "uri": "https://img.shields.io/scrutinizer/quality/g/ickc/pandoc-amsthm/master.svg", "info": ""}
-{"filename": "readme.rst", "lineno": 13, "status": "working", "code": 0, "uri": "https://scrutinizer-ci.com/g/ickc/pandoc-amsthm/", "info": ""}
+{"filename": "readme.rst", "lineno": 57, "status": "working", "code": 0, "uri": "https://pvp.haskell.org", "info": ""}
+{"filename": "readme.rst", "lineno": 15, "status": "working", "code": 0, "uri": "https://pypi.org/project/amsthm", "info": ""}
+{"filename": "readme.rst", "lineno": 15, "status": "redirected", "code": 301, "uri": "https://pypi.python.org/pypi/amsthm/", "info": "https://pypi.org/project/amsthm/", "text": "permanently"}
+{"filename": "readme.rst", "lineno": 11, "status": "working", "code": 0, "uri": "https://readthedocs.org/projects/pandoc-amsthm/badge/?version=latest", "info": ""}
 {"filename": "readme.rst", "lineno": 13, "status": "redirected", "code": 301, "uri": "https://www.codacy.com/gh/ickc/pandoc-amsthm/dashboard?utm_source=github.com&utm_medium=referral&utm_content=ickc/pandoc-amsthm&utm_campaign=Badge_Grade", "info": "https://app.codacy.com/gh/ickc/pandoc-amsthm/dashboard?utm_source=github.com&utm_medium=referral&utm_content=ickc/pandoc-amsthm&utm_campaign=Badge_Grade", "text": "permanently"}
+{"filename": "readme.rst", "lineno": 13, "status": "working", "code": 0, "uri": "https://scrutinizer-ci.com/g/ickc/pandoc-amsthm/", "info": ""}
+{"filename": "readme.rst", "lineno": 13, "status": "working", "code": 0, "uri": "https://codeclimate.com/github/ickc/pandoc-amsthm", "info": ""}
