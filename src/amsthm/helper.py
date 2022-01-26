@@ -122,9 +122,7 @@ def cite_to_ref(elem: pf.Cite, doc: Doc, check_id: dict[str, str] | None = None)
 
     :param check_id: if provided, transform only if id is in `check_id`
 
-    `[@...] -> \eqref{...}`
-
-    `@... -> \ref{...}`
+    This maps `[@...]` to `\\eqref{...}` and `@...` to `\\ref{...}`.
     """
     if (
         isinstance(elem, pf.Cite)
