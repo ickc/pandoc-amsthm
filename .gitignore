@@ -1,8 +1,15 @@
+# pixi env cache (pixi.lock is committed)
+.pixi/
+# luarocks tree (optional, when developing with real busted)
+.luarocks/
+
+# generated test artefacts
+tests/*.html
+tests/*.pdf
+
 # jupytext paired
 docs/core.py
 docs/api/
-tests/*.html
-tests/*.pdf
 
 .ipynb_checkpoints/
 runinfo
