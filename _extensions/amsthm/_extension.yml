@@ -1,0 +1,10 @@
+title: amsthm
+author: Kolen Cheung
+version: 3.0.0
+quarto-required: ">=1.4.0"
+contributes:
+  filters:
+    # Before Quarto parses the document into its own AST, so that `.proof`
+    # divs reach this filter instead of Quarto's proof environment.
+    - path: amsthm.lua
+      at: pre-ast

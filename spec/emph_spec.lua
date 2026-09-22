@@ -1,4 +1,4 @@
--- Unit tests for the Emph/Strong helpers (port of tests/test_emph.py).
+-- Unit tests for the Emph/Strong helpers.
 -- Parameterised over the inline element types the original test exercises.
 
 local amsthm = require("amsthm")

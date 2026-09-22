@@ -1,14 +1,12 @@
 --[[
-amsthm.lua — a native Pandoc Lua filter implementing the LaTeX amsthm
+amsthm.lua — a Pandoc Lua filter implementing the LaTeX amsthm
 theorem / proof environments for any output format.
 
-Port of pandoc-amsthm (Python / panflute, BSD-3-Clause).
+Usage: pandoc -L amsthm.lua input.md -N -o output.<ext>
+   or, in Quarto, `filters: [amsthm]` after `quarto add ickc/pandoc-amsthm`
 
-Usage: pandoc -L amsthm.lua input.md -o output.<ext>
-
-See tests/model-source.md for the full syntax (YAML frontmatter under
-the `amsthm:` key + Pandoc Divs with class names matching theorem
-environments).
+Documentation: https://ickc.github.io/pandoc-amsthm
+License: BSD-3-Clause
 ]]
 
 local M = {}
@@ -28,6 +26,7 @@ local METADATA_KEY = "amsthm"
 local LATEX_LIKE = { latex = true, beamer = true }
 local PLAIN_OR_DEF = { plain = true, definition = true }
 local COUNTER_DEPTH_DEFAULT = 0
+local QUARTO_PROOF_CLASSES = { proof = true, remark = true, solution = true }
 
 local function is_latex_like(format)
   return LATEX_LIKE[format or FORMAT] == true
@@ -35,7 +34,7 @@ end
 M.is_latex_like = is_latex_like
 
 ---------------------------------------------------------------------
--- Emph / Strong helpers (port of src/amsthm/helper.py:32-107)
+-- Emph / Strong helpers
 ---------------------------------------------------------------------
 
 -- Recognise the inline element constructors we wrap with.
@@ -90,8 +89,7 @@ local function merge_consecutive_type(elem_type)
     local content = el.content
     if content == nil then return nil end
     -- Only treat block-level (Inlines lists live on Para/Plain/Header/etc).
-    -- We detect by the presence of an Inlines content list — the same check
-    -- panflute makes by isinstance(elem, Block).
+    -- We detect by the presence of an Inlines content list.
     local n = #content
     if n < 2 then return nil end
     local mutated = false
@@ -135,7 +133,7 @@ M.merge_consecutive_type = merge_consecutive_type
 M.merge_emph = merge_consecutive_type("Emph")
 
 ---------------------------------------------------------------------
--- Cite / ref helpers (port of src/amsthm/helper.py:110-142)
+-- Cite / ref helpers
 ---------------------------------------------------------------------
 
 local function cite_to_id_mode(elem)
@@ -186,7 +184,7 @@ end
 M.parse_info = parse_info
 
 ---------------------------------------------------------------------
--- NewTheorem / Proof (port of src/amsthm/__init__.py:48-200)
+-- NewTheorem / Proof
 ---------------------------------------------------------------------
 
 local NewTheorem = {}
@@ -242,8 +240,7 @@ function NewTheorem:counter_name()
   return self.shared_counter or self.env_name
 end
 
--- Build the theorem header inline list, replicating the 6-branch logic
--- in __init__.py:101-171 that keeps Strong/Emph boundaries clean.
+-- Build the theorem header inline list, keeping Strong/Emph boundaries clean.
 function NewTheorem:to_header(options, id, info)
   local TextType, NumberType
   if PLAIN_OR_DEF[self.style] then
@@ -343,7 +340,7 @@ end
 M.Proof = Proof
 
 ---------------------------------------------------------------------
--- DocOptions (port of src/amsthm/__init__.py:202-295)
+-- DocOptions
 --
 -- The Python version relies on dict insertion order; Lua string-keyed
 -- tables have no order, so we maintain BOTH an ordered array of theorem
@@ -484,7 +481,7 @@ M.options_to_latex = options_to_latex
 M.from_meta = from_meta
 
 ---------------------------------------------------------------------
--- Filter passes (port of src/amsthm/__init__.py:298-479)
+-- Filter passes
 ---------------------------------------------------------------------
 
 local function find_theorem(options, classes)
@@ -542,6 +539,14 @@ local function amsthm_block(div, options)
       div.content[#div.content] = last
     else
       div.content[#div.content + 1] = pandoc.Para({ qed })
+    end
+  end
+
+  -- Quarto renders divs with these classes as its own proof environments,
+  -- which would add a second header. Rename them once handled here.
+  if quarto then
+    for i, cls in ipairs(div.classes) do
+      if QUARTO_PROOF_CLASSES[cls] then div.classes[i] = "amsthm-" .. cls end
     end
   end
 

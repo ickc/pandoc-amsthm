@@ -8,7 +8,7 @@
 local script_path = arg[0] or "spec/run.lua"
 local script_dir = script_path:match("(.*/)") or "./"
 package.path = script_dir .. "?.lua;" ..
-               script_dir .. "../?.lua;" .. package.path
+               script_dir .. "../_extensions/amsthm/?.lua;" .. package.path
 
 -- Try real busted first.
 local have_busted, busted = pcall(require, "busted.runner")
