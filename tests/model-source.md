@@ -22,10 +22,6 @@ amsthm:
   - List of Figures
   - List of Tables
   - List of Listings
-header-includes: |
-  ```{=latex}
-  \usepackage{amsthm}
-  ```
 ---
 
 # Demo

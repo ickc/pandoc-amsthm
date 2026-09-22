@@ -1,0 +1,14 @@
+# index.md is a symlink to tests/model-source.md, the input of the golden
+# tests, rendered here with the filter as a Quarto extension.
+title: Example
+filters:
+  - amsthm
+number-sections: true
+format:
+  html: default
+  # Quarto links the PDF from the page's "Other Formats"
+  pdf:
+    pdf-engine: lualatex
+    documentclass: scrreprt
+    top-level-division: chapter
+    toc: true

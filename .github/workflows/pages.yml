@@ -2,8 +2,7 @@ name: GitHub Pages
 
 on:
   push:
-    branches:
-      - master
+    branches: [main]
   pull_request:
   workflow_dispatch:
 
@@ -23,14 +22,17 @@ jobs:
         with:
           environments: docs
           locked: true
-      - name: Make docs
-        run: pixi run -e docs docs
-      - name: Check links
-        run: pixi run -e docs linkcheck
-        continue-on-error: true
+      # LuaLaTeX for the example's PDF; locally, `pixi run bootstrap-tinytex`
+      - uses: TeX-Live/setup-texlive-action@v4.1.1
+        with:
+          packages: |
+            scheme-medium
+            luatexbase
+            selnolig
+      - run: pixi run -e docs docs
       - uses: actions/upload-pages-artifact@v5
         with:
-          path: dist/docs
+          path: docs/_site
 
   deploy:
     if: github.event_name != 'pull_request'
