@@ -57,4 +57,18 @@ describe("metadata", function()
     has(out, "\\newtheorem{Theorem}{Theorem}\n")
     lacks(out, "[foo]")
   end)
+
+  it("defines the environments of a map in a fixed order", function()
+    local out = run("map-order.md", LATEX)
+    has(out, table.concat({
+      "\\newtheorem{Axiom}{Axiom}",
+      "\\newtheorem{Rule}[Axiom]{Rule}",
+      "\\newtheorem{Claim}{Claim}",
+      "\\newtheorem{Fact}[Claim]{Fact}",
+      "\\newtheorem{Theorem}{Theorem}",
+      "\\newtheorem{Lemma}[Theorem]{Lemma}",
+      "\\newtheorem{Zed}{Zed}",
+      "\\newtheorem{Why}[Zed]{Why}",
+    }, "\n"))
+  end)
 end)

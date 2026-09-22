@@ -429,7 +429,14 @@ local function from_meta(meta)
     for _, entry in ipairs(entries) do
       -- Each entry is either a MetaInlines (string) or a MetaMap (single-key).
       if is_meta_map(entry) then
-        for key, value in pairs(entry) do
+        -- pandoc hands over a YAML map with its keys sorted, not in the
+        -- order written, and pairs() has no order at all; sort, so the
+        -- output is reproducible and the same as with the Python filter.
+        local keys = {}
+        for key in pairs(entry) do keys[#keys + 1] = key end
+        table.sort(keys)
+        for _, key in ipairs(keys) do
+          local value = entry[key]
           local key_s = stringify(key)
           add(NewTheorem.new({
             style = style, env_name = key_s,
