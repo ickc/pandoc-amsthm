@@ -17,9 +17,17 @@ local M = {}
 
 local stringify = pandoc.utils.stringify
 
+-- LaTeX sectioning units, by depth. Also the valid values of parent_counter.
 local PARENT_COUNTERS = {
-  part = true, chapter = true, section = true, subsection = true,
-  subsubsection = true, paragraph = true, subparagraph = true,
+  part = 0, chapter = 1, section = 2, subsection = 3,
+  subsubsection = 4, paragraph = 5, subparagraph = 6,
+}
+-- Document classes for which pandoc's LaTeX writer makes level-1 headings
+-- chapters when --top-level-division is not given.
+local CHAPTER_CLASSES = {
+  memoir = true, book = true, report = true, scrreprt = true,
+  scrreport = true, scrbook = true, extreport = true, extbook = true,
+  ["tufte-book"] = true,
 }
 local STYLES = { "plain", "definition", "remark" }
 local METADATA_KEY = "amsthm"
@@ -32,6 +40,29 @@ local function is_latex_like(format)
   return LATEX_LIKE[format or FORMAT] == true
 end
 M.is_latex_like = is_latex_like
+
+-- Formats whose header-includes are HTML, so the filter can ship its CSS.
+local HTML_LIKE = {
+  html = true, html4 = true, html5 = true, chunkedhtml = true,
+  epub = true, epub2 = true, epub3 = true, revealjs = true, slidy = true,
+  slideous = true, dzslides = true, s5 = true,
+}
+local CSS = [[
+<style>
+.amsthm-qed { float: right; }
+</style>]]
+
+-- Append a block to header-includes, whatever form the user gave it in.
+local function add_header_include(meta, block, at_start)
+  local hi = meta["header-includes"]
+  if hi == nil then
+    hi = pandoc.MetaList({})
+  elseif pandoc.utils.type(hi) ~= "List" then
+    hi = pandoc.MetaList({ hi })
+  end
+  hi:insert(at_start and 1 or #hi + 1, pandoc.MetaBlocks({ block }))
+  meta["header-includes"] = hi
+end
 
 ---------------------------------------------------------------------
 -- Emph / Strong helpers
@@ -367,6 +398,16 @@ local function meta_string(node, default)
   return stringify(node)
 end
 
+-- The LaTeX unit that level-1 headings map to, as pandoc decides it.
+local function top_level_division(meta)
+  local tld = PANDOC_WRITER_OPTIONS and PANDOC_WRITER_OPTIONS.top_level_division
+  tld = tld and tld:gsub("^top%-level%-", "") or "default"
+  if PARENT_COUNTERS[tld] then return tld end
+  local class = meta and meta.documentclass and stringify(meta.documentclass)
+  return CHAPTER_CLASSES[class] and "chapter" or "section"
+end
+M.top_level_division = top_level_division
+
 local function from_meta(meta)
   local opt_node = meta and meta[METADATA_KEY] or nil
   local opt = {}
@@ -440,6 +481,11 @@ local function from_meta(meta)
   if opt.counter_depth then
     local s = stringify(opt.counter_depth)
     counter_depth = tonumber(s) or COUNTER_DEPTH_DEFAULT
+  elseif parent_counter and PARENT_COUNTERS[parent_counter] then
+    -- Number within the heading level that LaTeX would number within.
+    local top = top_level_division(meta)
+    counter_depth = math.max(0,
+      PARENT_COUNTERS[parent_counter] - PARENT_COUNTERS[top] + 1)
   end
 
   local ignore = {}
@@ -504,6 +550,10 @@ local function amsthm_block(div, options)
   local info = div.attributes.info
   local id = div.identifier
   local header = theorem:to_header(options, id, info)
+  -- to_header ends with a Space; keep it outside the title span.
+  local title = {}
+  for i = 1, #header - 1 do title[i] = header[i] end
+  header = { pandoc.Span(title, pandoc.Attr("", { "amsthm-title" })), header[#header] }
 
   if theorem.style == "plain" then
     div = div:walk({ Str = M.to_emph })
@@ -529,7 +579,8 @@ local function amsthm_block(div, options)
   end
 
   if theorem.style == "proof" then
-    local qed = pandoc.RawInline("html", "<span style='float: right'>\xe2\x97\xbb</span>")
+    local qed = pandoc.Span({ pandoc.Str("\xe2\x97\xbb") },
+      pandoc.Attr("", { "amsthm-qed" }))
     local last = div.content[#div.content]
     if last and last.content
        and (last.t == "Para" or last.t == "Plain" or last.t == "Header") then
@@ -548,6 +599,10 @@ local function amsthm_block(div, options)
     for i, cls in ipairs(div.classes) do
       if QUARTO_PROOF_CLASSES[cls] then div.classes[i] = "amsthm-" .. cls end
     end
+  end
+  div.classes:insert("amsthm")
+  if not div.classes:includes("amsthm-" .. theorem.style) then
+    div.classes:insert("amsthm-" .. theorem.style)
   end
 
   return div
@@ -630,8 +685,15 @@ local function build_filters()
     Pandoc = function(doc)
       options = from_meta(doc.meta)
       if latex_like then
-        table.insert(doc.blocks, 1,
+        -- Load amsthm first, so \newtheoremstyle in the user's own
+        -- header-includes works; define the environments last, so they can
+        -- use those styles.
+        add_header_include(doc.meta,
+          pandoc.RawBlock("latex", "\\usepackage{amsthm}"), true)
+        add_header_include(doc.meta,
           pandoc.RawBlock("latex", options_to_latex(options)))
+      elseif HTML_LIKE[FORMAT] then
+        add_header_include(doc.meta, pandoc.RawBlock("html", CSS))
       end
       return doc
     end,

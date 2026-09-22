@@ -1,119 +1,122 @@
 # Demo
 
-::: {.Theorem info="within parenthesis"}
-**Theorem 1.0.1** (within parenthesis)**.** *plain theoremstyle* here
+::: {.Theorem .amsthm .amsthm-plain info="within parenthesis"}
+[**Theorem 1.0.1** (within parenthesis)**.**]{.amsthm-title} *plain
+theoremstyle* here
 
 *We can use pandoc-crossref style* 1.0.2 *and* (1.0.2) *and cite before
 definition.*
 :::
 
-::: {#simplestEquation .Theorem}
-**Theorem 1.0.2.** *Label and reference:*
+::: {#simplestEquation .Theorem .amsthm .amsthm-plain}
+[**Theorem 1.0.2.**]{.amsthm-title} *Label and reference:*
 
 $$E=mc^2$$
 :::
 
 From the 1.0.2, we see that... Or (1.0.2), ...
 
-::: {.With_Space info="**This** is *markdown*."}
-**With Space** (**This** is *markdown*.)**.** *Environment name has a
-space, and is unnumbered.*
+::: {.With_Space .amsthm .amsthm-plain info="**This** is *markdown*."}
+[**With Space** (**This** is *markdown*.)**.**]{.amsthm-title}
+*Environment name has a space, and is unnumbered.*
 :::
 
-::: {.Lemma info="can cite \\ref{simplestEquation}"}
-**Lemma 1.0.3** (can cite 1.0.2)**.** *This one share counter with
-Theorem.*
+::: {.Lemma .amsthm .amsthm-plain info="can cite \\ref{simplestEquation}"}
+[**Lemma 1.0.3** (can cite 1.0.2)**.**]{.amsthm-title} *This one share
+counter with Theorem.*
 :::
 
-::: {.Definition info="pandoc-crossref style cite @simplestEquation"}
-**Definition 1.0.1** (pandoc-crossref style cite 1.0.2)**.** definition
+::: {.Definition .amsthm .amsthm-definition info="pandoc-crossref style cite @simplestEquation"}
+[**Definition 1.0.1** (pandoc-crossref style cite
+1.0.2)**.**]{.amsthm-title} definition theoremstyle here
+:::
+
+::: {.Case .amsthm .amsthm-remark info="within parenthesis"}
+[*Case* 1.0.1 (within parenthesis)*.*]{.amsthm-title} remark
 theoremstyle here
 :::
 
-::: {.Case info="within parenthesis"}
-*Case* 1.0.1 (within parenthesis)*.* remark theoremstyle here
+::: {.proof .amsthm .amsthm-proof info="Proof of the Main Theorem"}
+[*Proof of the Main Theorem**.*]{.amsthm-title} Predefined proof
+theoremstyle here[◻]{.amsthm-qed}
 :::
 
-::: {.proof info="Proof of the Main Theorem"}
-*Proof of the Main Theorem**.* Predefined proof theoremstyle
-here`<span style='float: right'>◻</span>`{=html}
+::: {.proof .amsthm .amsthm-proof info="Proof of the *little* theorem"}
+[*Proof of the* little *theorem**.*]{.amsthm-title} Predefined proof
+theoremstyle here with markdown info.[◻]{.amsthm-qed}
 :::
 
-::: {.proof info="Proof of the *little* theorem"}
-*Proof of the* little *theorem**.* Predefined proof theoremstyle here
-with markdown info.`<span style='float: right'>◻</span>`{=html}
+::: {.proof .amsthm .amsthm-proof}
+[*Proof.*]{.amsthm-title} Bare proof here.[◻]{.amsthm-qed}
 :::
 
-::: proof
-*Proof.* Bare proof here.`<span style='float: right'>◻</span>`{=html}
+::: {.KL .amsthm .amsthm-plain}
+[**Klein's Lemma 1.0.1.**]{.amsthm-title} *Klein's Lemma from amsthm
+doc.*
 :::
 
-::: KL
-**Klein's Lemma 1.0.1.** *Klein's Lemma from amsthm doc.*
-:::
-
-::: Definition
-**Definition 1.0.2.**
+::: {.Definition .amsthm .amsthm-definition}
+[**Definition 1.0.2.**]{.amsthm-title}
 
     code here
 :::
 
 # Counter test
 
-::: Theorem
-**Theorem 2.0.1.** *some theorem*
+::: {.Theorem .amsthm .amsthm-plain}
+[**Theorem 2.0.1.**]{.amsthm-title} *some theorem*
 :::
 
-::: Theorem
-**Theorem 2.0.2.** *some theorem*
+::: {.Theorem .amsthm .amsthm-plain}
+[**Theorem 2.0.2.**]{.amsthm-title} *some theorem*
 :::
 
 ## Next level
 
-::: Theorem
-**Theorem 2.1.1.** *some theorem*
+::: {.Theorem .amsthm .amsthm-plain}
+[**Theorem 2.1.1.**]{.amsthm-title} *some theorem*
 :::
 
-::: Theorem
-**Theorem 2.1.2.** *some theorem*
+::: {.Theorem .amsthm .amsthm-plain}
+[**Theorem 2.1.2.**]{.amsthm-title} *some theorem*
 :::
 
 ### Level 3
 
-::: Theorem
-**Theorem 2.1.3.** *some theorem*
+::: {.Theorem .amsthm .amsthm-plain}
+[**Theorem 2.1.3.**]{.amsthm-title} *some theorem*
 :::
 
-::: Theorem
-**Theorem 2.1.4.** *some theorem*
+::: {.Theorem .amsthm .amsthm-plain}
+[**Theorem 2.1.4.**]{.amsthm-title} *some theorem*
 :::
 
 #### Level 4
 
-::: Theorem
-**Theorem 2.1.5.** *some theorem*
+::: {.Theorem .amsthm .amsthm-plain}
+[**Theorem 2.1.5.**]{.amsthm-title} *some theorem*
 :::
 
-::: Theorem
-**Theorem 2.1.6.** *some theorem*
+::: {.Theorem .amsthm .amsthm-plain}
+[**Theorem 2.1.6.**]{.amsthm-title} *some theorem*
 :::
 
 ##### Level 5
 
-::: Theorem
-**Theorem 2.1.7.** *some theorem*
+::: {.Theorem .amsthm .amsthm-plain}
+[**Theorem 2.1.7.**]{.amsthm-title} *some theorem*
 :::
 
-::: Theorem
-**Theorem 2.1.8.** *some theorem*
+::: {.Theorem .amsthm .amsthm-plain}
+[**Theorem 2.1.8.**]{.amsthm-title} *some theorem*
 :::
 
 ###### Level 6
 
-::: Theorem
-**Theorem 2.1.9.** *some theorem*
+::: {.Theorem .amsthm .amsthm-plain}
+[**Theorem 2.1.9.**]{.amsthm-title} *some theorem*
 :::
 
-::: Theorem
-**Theorem 2.1.10.** *some theorem*
+::: {.Theorem .amsthm .amsthm-plain}
+[**Theorem 2.1.10.**]{.amsthm-title} *some theorem*
 :::

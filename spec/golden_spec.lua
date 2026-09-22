@@ -31,7 +31,7 @@ describe("golden", function()
   it("latex output matches model-latex.tex", function()
     local ok, out = run(
       "pandoc -L _extensions/amsthm/amsthm.lua " .. SRC ..
-      " --top-level-division=chapter --toc -N -t latex")
+      " --top-level-division=chapter -N -s --template tests/template.latex -t latex")
     assert.is_true(ok ~= nil and ok ~= false)
     local want = read(LATEX)
     if out ~= want then

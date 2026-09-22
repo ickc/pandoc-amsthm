@@ -8,6 +8,16 @@ Rewritten as a Pandoc Lua filter. The input syntax is unchanged.
   `pandoc -F amsthm`. Get `amsthm.lua` from the GitHub releases; the
   `amsthm` Python package is no longer developed.
 - **Breaking:** requires Pandoc 3.1.1 or later.
+- **Breaking:** LaTeX output loads `amsthm` itself and puts the
+  environment definitions in `header-includes` rather than at the start
+  of the body, so it needs a standalone document (`-s`).
+- **Breaking:** `counter_depth` defaults to follow `parent_counter` and
+  `--top-level-division`, so LaTeX and other output number alike. Set
+  `counter_depth: 0` for the old default.
+- **Breaking:** in HTML and other non-LaTeX output, environments get the
+  classes `amsthm` and `amsthm-<style>`, the heading is wrapped in an
+  `amsthm-title` span, and the end-of-proof symbol is an `amsthm-qed`
+  span, styled by CSS that the filter adds to HTML output.
 - Works as a Quarto extension: `quarto add ickc/pandoc-amsthm`.
 - LaTeX output no longer defines each theorem label twice.
 - Documentation moved to <https://ickc.github.io/pandoc-amsthm>.

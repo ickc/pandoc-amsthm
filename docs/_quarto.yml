@@ -1,9 +1,6 @@
 project:
   type: website
   output-dir: _site
-  resources:
-    # built by `pixi run docs-pdf`
-    - example.pdf
 
 website:
   title: "pandoc-amsthm"
@@ -27,7 +24,11 @@ website:
         href: https://github.com/ickc/pandoc-amsthm
         aria-label: GitHub
   page-footer:
-    left: "© Kolen Cheung · BSD-3-Clause"
+    left: "© {{< copyright-year 2016 >}} Kolen Cheung · BSD-3-Clause"
+
+shortcodes:
+  # {{< copyright-year 2016 >}}, as in blog.kolen.dev
+  - copyright-year.lua
 
 format:
   html:

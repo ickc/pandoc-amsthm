@@ -15,10 +15,13 @@ file drives the test suite.
 For LaTeX, the filter emits `amsthm` environments:
 
 ```sh
-pandoc -L amsthm.lua model-source.md --top-level-division=chapter --toc -N -o model-latex.tex
+pandoc -L amsthm.lua model-source.md --top-level-division=chapter -N -s -o model-latex.tex
 ```
+
+The preamble it adds, followed by the body:
 
 ``` {.latex include="../tests/model-latex.tex"}
 ```
 
-Typeset, this gives [this PDF](example.pdf).
+The [example](example/index.md) also links a PDF typeset from it by
+Quarto.

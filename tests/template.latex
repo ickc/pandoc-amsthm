@@ -1,0 +1,6 @@
+$-- Minimal template for the golden test: the filter's preamble and the body,
+$-- without the default template, which changes between pandoc versions.
+$for(header-includes)$
+$header-includes$
+$endfor$
+$body$

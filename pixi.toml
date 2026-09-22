@@ -13,10 +13,10 @@ pandoc = ">=3.1.1,<4"
 # The suite runs under pandoc's bundled Lua, so the `pandoc` module is
 # available to unit specs. spec/busted_shim.lua stands in for busted.
 test = { cmd = "pandoc lua spec/run.lua", description = "Run all specs" }
-test-unit = { cmd = "pandoc lua spec/run.lua spec/emph_spec.lua spec/cite_spec.lua", description = "Run unit specs only" }
+test-unit = { cmd = "pandoc lua spec/run.lua spec/emph_spec.lua spec/cite_spec.lua spec/options_spec.lua", description = "Run unit specs only" }
 test-golden = { cmd = "pandoc lua spec/run.lua spec/golden_spec.lua", description = "Compare filter output against tests/model-*" }
 gen-golden = { cmd = """
-pandoc -L _extensions/amsthm/amsthm.lua tests/model-source.md --top-level-division=chapter --toc -N -t latex -o tests/model-latex.tex && \
+pandoc -L _extensions/amsthm/amsthm.lua tests/model-source.md --top-level-division=chapter -N -s --template tests/template.latex -t latex -o tests/model-latex.tex && \
 pandoc -L _extensions/amsthm/amsthm.lua tests/model-source.md -t markdown -o tests/model-target.md
 """, description = "Regenerate the golden files in tests/" }
 
@@ -30,12 +30,11 @@ pandoc = "==3.1.1"
 
 [feature.docs.dependencies]
 quarto = ">=1.4"
-tectonic = "*"
 
 [feature.docs.tasks]
-docs-pdf = { cmd = "pandoc -L _extensions/amsthm/amsthm.lua tests/model-source.md --top-level-division=chapter --toc -N --pdf-engine=tectonic -o docs/example.pdf", description = "Build the LaTeX demo PDF shown on the site" }
-docs = { cmd = "quarto render docs", depends-on = ["docs-pdf"], description = "Render the documentation site to docs/_site" }
-docs-preview = { cmd = "quarto preview docs", depends-on = ["docs-pdf"], description = "Serve the documentation site with live reload" }
+docs = { cmd = "quarto render docs", description = "Render the documentation site to docs/_site" }
+docs-preview = { cmd = "quarto preview docs", description = "Serve the documentation site with live reload" }
+bootstrap-tinytex = { cmd = "quarto install tinytex --no-prompt", description = "Install TinyTeX for the PDF on the site (run once per machine; not tracked by pixi)" }
 
 [environments]
 pandoc-min = { features = ["pandoc-min"] }

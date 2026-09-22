@@ -22,6 +22,13 @@ jobs:
         with:
           environments: docs
           locked: true
+      # LuaLaTeX for the example's PDF; locally, `pixi run bootstrap-tinytex`
+      - uses: TeX-Live/setup-texlive-action@v4.1.1
+        with:
+          packages: |
+            scheme-medium
+            luatexbase
+            selnolig
       - run: pixi run -e docs docs
       - uses: actions/upload-pages-artifact@v5
         with:
