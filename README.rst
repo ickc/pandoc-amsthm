@@ -8,6 +8,10 @@ amsthm—provide a syntax to use amsthm environments in pandoc, with output in L
    :depth: 3
 ..
 
+.. important::
+
+   **This is the final release of the Python package ``amsthm`` (v2.1.1).** It is no longer maintained. pandoc-amsthm v3 is reimplemented as a pandoc Lua filter, and is not distributed on PyPI. Please check the repository at https://github.com/ickc/pandoc-amsthm/ or the documentation at https://ickc.github.io/pandoc-amsthm/.
+
 |Documentation Status|
 
 |GitHub Actions| |Coverage Status|
@@ -59,6 +63,8 @@ pandoc versioning semantics is `MAJOR.MAJOR.MINOR.PATCH <https://pvp.haskell.org
    +---------------+------------------+---------------------------+-------------------------------+
    | pandoc-amsthm | panflute version | supported pandoc versions | supported pandoc API versions |
    +===============+==================+===========================+===============================+
+   | 2.1.1         | 2.3.x            | 2.14.0.3–3.11             | 1.22–1.23.1                   |
+   +---------------+------------------+---------------------------+-------------------------------+
    | 2.1.0         | 2.3.x            | 2.14.0.3–3.11             | 1.22–1.23.1                   |
    +---------------+------------------+---------------------------+-------------------------------+
    | 2.0.0         | 2.1.3            | 2.14.0.3–2.17.x           | 1.22–1.22.1                   |
