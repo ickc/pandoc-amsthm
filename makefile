@@ -75,7 +75,7 @@ print-%:
 bump:
 	uv version --bump $(PART) --frozen
 	git commit -am "Bump version: $$(uv version --short)"
-	git tag "v$$(uv version --short)"
+	git tag -a "v$$(uv version --short)" -m "v$$(uv version --short)"
 	git push --follow-tags
 
 # test files ###################################################################
