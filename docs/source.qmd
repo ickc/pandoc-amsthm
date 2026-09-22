@@ -1,0 +1,24 @@
+---
+title: Example source
+filters:
+  - include-code.lua
+---
+
+The [example](example/index.md) is rendered from this Markdown. The same
+file drives the test suite.
+
+``` {.markdown include="../tests/model-source.md"}
+```
+
+## LaTeX output
+
+For LaTeX, the filter emits `amsthm` environments:
+
+```sh
+pandoc -L amsthm.lua model-source.md --top-level-division=chapter --toc -N -o model-latex.tex
+```
+
+``` {.latex include="../tests/model-latex.tex"}
+```
+
+Typeset, this gives [this PDF](example.pdf).
