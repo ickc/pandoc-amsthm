@@ -391,11 +391,6 @@ local function meta_list(node)
   return { node }
 end
 
-local function meta_string(node, default)
-  if node == nil then return default end
-  return stringify(node)
-end
-
 -- The LaTeX unit that level-1 headings map to, as pandoc decides it.
 local function top_level_division(meta)
   local tld = PANDOC_WRITER_OPTIONS and PANDOC_WRITER_OPTIONS.top_level_division
