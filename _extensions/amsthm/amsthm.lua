@@ -705,7 +705,9 @@ local function build_filters()
     end,
     Header = function(h)
       if latex_like then return nil end
-      if h.level <= options.counter_depth then
+      -- \section* and the like do not step LaTeX's counters.
+      if h.level <= options.counter_depth
+          and not h.classes:includes("unnumbered") then
         local s = stringify(h)
         if not options.counter_ignore_headings[s] then
           options.header_counters[h.level] =

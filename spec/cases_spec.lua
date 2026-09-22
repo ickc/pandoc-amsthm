@@ -42,6 +42,13 @@ end
 
 local LATEX = "-t latex -s --template tests/template.latex"
 
+describe("heading counters", function()
+  it("skip unnumbered headings", function()
+    local out = run("unnumbered.md", "-t markdown")
+    has(out, "**Theorem 2.1.**")
+  end)
+end)
+
 describe("metadata", function()
   it("takes a single value as a list of one", function()
     local out = run("scalar-meta.md", LATEX)
