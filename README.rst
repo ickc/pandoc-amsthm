@@ -14,8 +14,6 @@ amsthm—provide a syntax to use amsthm environments in pandoc, with output in L
 
 |Supported versions| |Supported implementations| |PyPI Wheel| |PyPI Package latest release| |GitHub Releases| |Development Status| |Downloads| |Commits since latest release| |License|
 
-|Conda Recipe| |Conda Downloads| |Conda Version| |Conda Platforms|
-
 Introduction
 ============
 
@@ -91,11 +89,3 @@ pandoc versioning semantics is `MAJOR.MAJOR.MINOR.PATCH <https://pvp.haskell.org
 .. |Commits since latest release| image:: https://img.shields.io/github/commits-since/ickc/pandoc-amsthm/latest.svg
    :target: https://github.com/ickc/pandoc-amsthm/releases/latest
 .. |License| image:: https://img.shields.io/pypi/l/amsthm.svg
-.. |Conda Recipe| image:: https://img.shields.io/badge/recipe-amsthm-green.svg
-   :target: https://anaconda.org/conda-forge/amsthm
-.. |Conda Downloads| image:: https://img.shields.io/conda/dn/conda-forge/amsthm.svg
-   :target: https://anaconda.org/conda-forge/amsthm
-.. |Conda Version| image:: https://img.shields.io/conda/vn/conda-forge/amsthm.svg
-   :target: https://anaconda.org/conda-forge/amsthm
-.. |Conda Platforms| image:: https://img.shields.io/conda/pn/conda-forge/amsthm.svg
-   :target: https://anaconda.org/conda-forge/amsthm

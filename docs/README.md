@@ -18,11 +18,6 @@ title: amsthm---provide a syntax to use amsthm environments in pandoc,
 [![Commits since latest release](https://img.shields.io/github/commits-since/ickc/pandoc-amsthm/latest.svg)](https://github.com/ickc/pandoc-amsthm/releases/latest)
 ![License](https://img.shields.io/pypi/l/amsthm.svg)
 
-[![Conda Recipe](https://img.shields.io/badge/recipe-amsthm-green.svg)](https://anaconda.org/conda-forge/amsthm)
-[![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/amsthm.svg)](https://anaconda.org/conda-forge/amsthm)
-[![Conda Version](https://img.shields.io/conda/vn/conda-forge/amsthm.svg)](https://anaconda.org/conda-forge/amsthm)
-[![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/amsthm.svg)](https://anaconda.org/conda-forge/amsthm)
-
 # Introduction
 
 amsthm provide a syntax to use amsthm environments in pandoc, with
