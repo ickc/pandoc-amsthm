@@ -181,6 +181,7 @@ pixi run gen-golden   # regenerate tests/model-{latex.tex,target.md}
 pixi run -e pandoc-min test   # against the oldest supported pandoc
 pixi run docs         # render the site into docs/_site
 pixi run docs-preview # serve it with live reload
+pixi run bootstrap-tinytex    # once per machine, for the site's PDF
 ```
 
 The filter is `_extensions/amsthm/amsthm.lua`. Specs under `spec/` use

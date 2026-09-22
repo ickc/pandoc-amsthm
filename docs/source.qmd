@@ -12,13 +12,16 @@ file drives the test suite.
 
 ## LaTeX output
 
-For LaTeX, the filter emits `amsthm` environments:
+For LaTeX, the filter emits `amsthm` environments, and loads the package
+and declares them in the preamble, so the output has to be standalone:
 
 ```sh
 pandoc -L amsthm.lua model-source.md --top-level-division=chapter -N -s -o model-latex.tex
 ```
 
-The preamble it adds, followed by the body:
+Below is the same output, minus pandoc's default template, which is how
+the golden test keeps it comparable across pandoc versions: what the
+filter adds to the preamble, followed by the body.
 
 ``` {.latex include="../tests/model-latex.tex"}
 ```

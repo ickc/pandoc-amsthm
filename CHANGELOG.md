@@ -6,7 +6,7 @@ Rewritten as a Pandoc Lua filter. The input syntax is unchanged.
 
 - **Breaking:** run it with `pandoc -L amsthm.lua` instead of
   `pandoc -F amsthm`. Get `amsthm.lua` from the GitHub releases; the
-  `amsthm` Python package is no longer developed.
+  `amsthm` Python package is deprecated.
 - **Breaking:** requires Pandoc 3.1.1 or later.
 - **Breaking:** LaTeX output loads `amsthm` itself and puts the
   environment definitions in `header-includes` rather than at the start
