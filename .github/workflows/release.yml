@@ -17,7 +17,10 @@ jobs:
           persist-credentials: false
       - uses: astral-sh/setup-uv@v10.2.0
       - name: Check tag matches version
-        run: test "${GITHUB_REF_NAME}" = "v$(uv version --short --frozen)"
+        run: |
+          version="$(python3 -c 'import tomllib; print(tomllib.load(open("pyproject.toml", "rb"))["project"]["version"])')"
+          echo "tag: ${GITHUB_REF_NAME}, pyproject.toml: ${version}"
+          test "${GITHUB_REF_NAME}" = "v${version}"
       - run: uv build
       - uses: actions/upload-artifact@v7
         with:
