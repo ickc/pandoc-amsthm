@@ -42,6 +42,30 @@ end
 
 local LATEX = "-t latex -s --template tests/template.latex"
 
+describe("nested theorems", function()
+  it("keep their own environments in LaTeX", function()
+    local out = run("nested.md", LATEX)
+    has(out, "\\begin{Theorem}\\label{thm-outer}")
+    has(out, "\\begin{Theorem}\\label{thm-inner}")
+    has(out, "\\begin{Definition}")
+    has(out, "\\begin{Theorem}\\label{thm-in-proof}")
+    assert.are.equal(4, count(out, "\\end{Theorem}") + count(out, "\\end{Definition}"))
+    -- Each label once: no second one from the LaTeX writer.
+    lacks(out, "phantomsection")
+    has(out, "See \\eqref{thm-inner} and \\eqref{thm-in-proof}.")
+  end)
+end)
+
+describe("theorem bodies in LaTeX", function()
+  it("go through the writer with the user's options", function()
+    local out = run("natbib.md", "-t latex --natbib")
+    has(out, "Outside a theorem, see \\citet{knuth}.")
+    has(out, "\\begin{Theorem}[as in \\citet{knuth}]")
+    has(out, "Inside a theorem, see \\citet{knuth}.")
+    lacks(out, "@knuth")
+  end)
+end)
+
 describe("heading counters", function()
   it("skip unnumbered headings", function()
     local out = run("unnumbered.md", "-t markdown")

@@ -663,33 +663,51 @@ local function collect_ref_id(div, options)
   return nil
 end
 
+-- Wrap the div's own blocks in \begin{env}…\end{env}, rather than render
+-- them to a string here: the blocks stay in the document, so theorems
+-- nested inside, citations, the user's writer options and anything run
+-- after this filter (citeproc, Quarto's crossrefs) still get to them.
 local function amsthm_latex_block(div, options)
   local theorem = find_theorem(options, div.classes)
   if not theorem then return nil end
-  -- Replace Cites inside the body with \ref{}/\eqref{} BEFORE rendering
-  -- to LaTeX; our topdown pass 2 has already consumed this Div, so the
-  -- Cite filter won't otherwise visit them.
-  local body = pandoc.Pandoc(div.content):walk({
-    Cite = function(c) return cite_to_ref(c, options.identifiers) end,
-  })
-  local div_content = pandoc.write(body, "latex")
+  local open = { pandoc.RawInline("latex", "\\begin{" .. theorem.env_name .. "}") }
   local info = div.attributes.info
-  local id = div.identifier
-  local parts = { "\\begin{" .. theorem.env_name .. "}" }
   if info and info ~= "" then
-    local ast = pandoc.Para(parse_markdown_as_inline(info))
-    ast = ast:walk({
-      Cite = function(c) return cite_to_ref(c, options.identifiers) end,
-    })
-    local rendered = pandoc.write(pandoc.Pandoc({ ast }), "latex")
-    rendered = rendered:gsub("%s+$", "")
-    parts[#parts + 1] = "[" .. rendered .. "]"
+    open[#open + 1] = pandoc.RawInline("latex", "[")
+    for _, e in ipairs(parse_markdown_as_inline(info)) do open[#open + 1] = e end
+    open[#open + 1] = pandoc.RawInline("latex", "]")
   end
-  if id and id ~= "" then
-    parts[#parts + 1] = "\\label{" .. id .. "}"
+  if div.identifier ~= "" then
+    open[#open + 1] = pandoc.RawInline("latex", "\\label{" .. div.identifier .. "}")
   end
-  parts[#parts + 1] = "\n" .. div_content .. "\n\\end{" .. theorem.env_name .. "}"
-  return pandoc.RawBlock("latex", table.concat(parts))
+  local close = pandoc.RawInline("latex", "\\end{" .. theorem.env_name .. "}")
+
+  -- Share a line with the first and last paragraphs where there are some,
+  -- as the environment would be written by hand.
+  local content = div.content
+  local first = content[1]
+  if first and (first.t == "Para" or first.t == "Plain") then
+    open[#open + 1] = pandoc.RawInline("latex", "\n")
+    for _, e in ipairs(first.content) do open[#open + 1] = e end
+    first.content = open
+    content[1] = first
+  else
+    content:insert(1, pandoc.Plain(open))
+  end
+  local last = content[#content]
+  if last.t == "Para" or last.t == "Plain" then
+    local inlines = {}
+    for _, e in ipairs(last.content) do inlines[#inlines + 1] = e end
+    inlines[#inlines + 1] = pandoc.RawInline("latex", "\n")
+    inlines[#inlines + 1] = close
+    last.content = inlines
+    content[#content] = last
+  else
+    content:insert(pandoc.Plain({ close }))
+  end
+  -- A bare Div, so the LaTeX writer adds no \label of its own and Quarto
+  -- does not take it for one of its own proof environments.
+  return pandoc.Div(content)
 end
 
 ---------------------------------------------------------------------
