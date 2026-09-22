@@ -113,50 +113,45 @@ end
 M.cancel_repeated_type = cancel_repeated_type
 M.cancel_emph = cancel_repeated_type("Emph")
 
--- Merge consecutive same-type wraps, with an optional Space between.
--- Walks block content in reverse to keep indices valid while mutating.
+-- Merge consecutive same-type wraps, with an optional Space between, in
+-- the inline content of a block. One pass, so linear in the content length.
 local function merge_consecutive_type(elem_type)
   elem_type = elem_type or "Emph"
   local ctor = INLINE_TYPES[elem_type]
   return function(el)
     local content = el.content
-    if content == nil then return nil end
-    -- Only treat block-level (Inlines lists live on Para/Plain/Header/etc).
-    -- We detect by the presence of an Inlines content list.
-    local n = #content
-    if n < 2 then return nil end
+    if content == nil or #content < 2 then return nil end
+    local out = {}
+    -- `run` collects the children of the wrapper being built; it is flushed
+    -- into `out` when something other than a mergeable wrapper follows.
+    local run
     local mutated = false
-    for i = n - 1, 1, -1 do
-      local cur = content[i]
-      local nxt = content[i + 1]
-      local nxt2 = content[i + 2]
-      if cur and cur.t == elem_type then
-        if nxt and nxt.t == elem_type then
-          local merged = {}
-          for _, c in ipairs(cur.content) do merged[#merged + 1] = c end
-          for _, c in ipairs(nxt.content) do merged[#merged + 1] = c end
-          local new_content = {}
-          for j = 1, i - 1 do new_content[#new_content + 1] = content[j] end
-          new_content[#new_content + 1] = ctor(merged)
-          for j = i + 2, #content do new_content[#new_content + 1] = content[j] end
-          content = new_content
-          mutated = true
-        elseif nxt and nxt.t == "Space" and nxt2 and nxt2.t == elem_type then
-          local merged = {}
-          for _, c in ipairs(cur.content) do merged[#merged + 1] = c end
-          merged[#merged + 1] = pandoc.Space()
-          for _, c in ipairs(nxt2.content) do merged[#merged + 1] = c end
-          local new_content = {}
-          for j = 1, i - 1 do new_content[#new_content + 1] = content[j] end
-          new_content[#new_content + 1] = ctor(merged)
-          for j = i + 3, #content do new_content[#new_content + 1] = content[j] end
-          content = new_content
-          mutated = true
-        end
+    local function flush()
+      if run then
+        out[#out + 1] = ctor(run)
+        run = nil
       end
     end
+    local n = #content
+    for i = 1, n do
+      local cur = content[i]
+      if cur.t == elem_type then
+        if run then
+          mutated = true
+        else
+          run = {}
+        end
+        for _, c in ipairs(cur.content) do run[#run + 1] = c end
+      elseif run and cur.t == "Space" and i < n and content[i + 1].t == elem_type then
+        run[#run + 1] = pandoc.Space()
+      else
+        flush()
+        out[#out + 1] = cur
+      end
+    end
+    flush()
     if mutated then
-      el.content = content
+      el.content = out
       return el
     end
     return nil
@@ -358,8 +353,7 @@ function Proof:to_header(_options, _id, info)
   local ast = parse_markdown_as_inline(info)
   -- Wrap into a Para so we can walk + apply emph transforms over a block.
   local para = pandoc.Para(ast)
-  para = para:walk({ Str = M.to_emph })
-  para = para:walk({ Emph = M.cancel_emph })
+  para = para:walk({ Str = M.to_emph, Emph = M.cancel_emph })
   -- merge_consecutive_type operates on the block itself, and `:walk`
   -- visits descendants only, so call it directly.
   M.merge_emph(para)

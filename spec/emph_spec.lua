@@ -76,6 +76,15 @@ for _, case in ipairs(CASES) do
       assert.are.same(plain(want), plain(p))
     end)
 
+    it("merge_consecutive_type merges a run of several wrappers", function()
+      local p = para(C({ S("a") }), C({ S("b") }), SP(), C({ S("c") }), SP(),
+        S("d"), SP(), C({ S("e") }))
+      mrg(p)
+      local want = para(C({ S("a"), S("b"), SP(), S("c") }), SP(),
+        S("d"), SP(), C({ S("e") }))
+      assert.are.same(plain(want), plain(p))
+    end)
+
     it("to + cancel + merge composes correctly", function()
       local p = para(C({ S("a") }), C({ S("b") }), SP(), S("c"), S("d"))
       p = p:walk({ Str = to })
