@@ -84,3 +84,23 @@ describe("metadata", function()
     }, "\n"))
   end)
 end)
+
+describe("classes", function()
+  it("may repeat an environment", function()
+    local out = run("duplicate-class.md", "-t markdown")
+    has(out, "[**Theorem 1.**]{.amsthm-title} *The same class twice is still a theorem.*")
+    out = run("duplicate-class.md", "-t latex")
+    has(out, "\\begin{Theorem}\nThe same class twice is still a theorem.\n\\end{Theorem}")
+  end)
+
+  it("naming two environments are left alone, with one warning", function()
+    for _, fmt in ipairs({ "markdown", "latex" }) do
+      local out, err = run("duplicate-class.md", "-t " .. fmt)
+      assert.are.equal(1, count(err, "multiple environments found: Theorem, Lemma"))
+      has(out, "Two environments: left alone, with a warning.")
+      lacks(out, "\\begin{Theorem}\nTwo")
+      lacks(out, "\\begin{Lemma}")
+      lacks(out, "Lemma 1")
+    end
+  end)
+end)

@@ -538,13 +538,27 @@ M.from_meta = from_meta
 -- Filter passes
 ---------------------------------------------------------------------
 
-local function find_theorem(options, classes)
-  local found
+-- The theorem a div is, from its classes. A div that names two different
+-- environments is left alone, with a warning when `warn` is set.
+local function find_theorem(options, classes, warn)
+  local found, names = nil, {}
   for _, cls in ipairs(classes) do
-    if options.theorems_map[cls] then
-      if found then return nil end  -- multiple matches => skip
-      found = options.theorems_map[cls]
+    local theorem = options.theorems_map[cls]
+    if theorem and theorem ~= found then
+      if found == nil then
+        found = theorem
+      elseif not names[cls] then
+        names[#names + 1] = cls
+        names[cls] = true
+      end
     end
+  end
+  if #names > 0 then
+    if warn then
+      io.stderr:write("[amsthm] warning: multiple environments found: " ..
+        found:class_name() .. ", " .. table.concat(names, ", ") .. "; skipping\n")
+    end
+    return nil
   end
   return found
 end
@@ -552,7 +566,7 @@ end
 -- non-LaTeX transform: prepend the theorem header, do plain-style emph,
 -- track counters and identifiers.
 local function amsthm_block(div, options)
-  local theorem = find_theorem(options, div.classes)
+  local theorem = find_theorem(options, div.classes, true)
   if not theorem then return nil end
 
   local info = div.attributes.info
@@ -641,7 +655,7 @@ M.resolve_inline = resolve_inline
 
 -- LaTeX: collect ids (pass 1) and emit \begin{env}…\end{env} (pass 2).
 local function collect_ref_id(div, options)
-  local theorem = find_theorem(options, div.classes)
+  local theorem = find_theorem(options, div.classes, true)
   if not theorem then return nil end
   if div.identifier and div.identifier ~= "" then
     options.identifiers[div.identifier] = ""
