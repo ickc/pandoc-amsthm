@@ -1,3 +1,5 @@
+from importlib.metadata import version as _version
+
 import sphinx_bootstrap_theme
 
 html_css_files = [
@@ -20,10 +22,10 @@ extensions = [
 source_suffix = ".rst"
 master_doc = "index"
 project = "amsthm"
-year = "2016-2021"
+year = "2016-2026"
 author = "Kolen Cheung"
 copyright = f"{year}, {author}"
-version = release = "2.0.0"
+version = release = _version("amsthm")
 
 pygments_style = "solarized-light"
 html_theme = "bootstrap"

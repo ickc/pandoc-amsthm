@@ -1,7 +1,7 @@
 SHELL = /usr/bin/env bash
 
 _python ?= python
-# for bump2version, valid options are: major, minor, patch
+# for `uv version --bump`, valid options are: major, minor, patch
 PART ?= patch
 
 PANDOC = pandoc
@@ -10,18 +10,18 @@ RSTs = CHANGELOG.rst README.rst docs/example-output.rst
 
 # Main Targets #################################################################
 
-.PHONY: docs api html test clean
+.PHONY: docs api html linkcheck test clean
 
 docs: $(RSTs)
 	$(MAKE) html
 api: docs/api/
 html: dist/docs/
+linkcheck:
+	sphinx-build -b linkcheck docs dist/linkcheck
 
 test:
 	rm -f .coverage*
-	$(_python) \
-		-m coverage run \
-		-m pytest -vv --workers=auto tests
+	$(_python) -m coverage run -m pytest -vv tests
 coverage: test
 	coverage combine; coverage report
 	coverage html
@@ -58,56 +58,24 @@ docs/api/:
 
 dist/docs/:
 	sphinx-build -E -b dirhtml docs dist/docs
-	sphinx-build -b linkcheck docs dist/docs
 
 # maintenance ##################################################################
 
-.PHONY: pypi pypiManual gh-pages pep8 flake8 pylint
-# Deploy to PyPI
-## by CI, properly git tagged
-pypi:
-	git push origin v2.0.0
-## Manually
-pypiManual:
+.PHONY: build bump
+build:
 	rm -rf dist
-	poetry build
-	twine upload dist/*
-
-gh-pages:
-	ghp-import --no-jekyll --push dist/docs
-
-# check python styles
-pep8:
-	pycodestyle . --ignore=E501
-flake8:
-	flake8 . --ignore=E501
-pylint:
-	pylint amsthm
+	uv build
 
 print-%:
 	$(info $* = $($*))
 
-# poetry #######################################################################
-
-setup.py:
-	poetry build
-	cd dist; tar -xf amsthm-2.0.0.tar.gz amsthm-2.0.0/setup.py
-	mv dist/amsthm-2.0.0/setup.py .
-	rm -rf dist/amsthm-2.0.0
-
-.PHONY: editable
-# since poetry doesn't support editable, we can build and extract the setup.py,
-# temporary remove pyproject.toml and ask pip to install from setup.py instead.
-editable: setup.py
-	mv pyproject.toml .pyproject.toml
-	$(_python) -m pip install --no-dependencies -e .
-	mv .pyproject.toml pyproject.toml
-
 # releasing ####################################################################
 
-.PHONY: bump
+# bump version, commit, tag, and push; pushing the tag triggers the release workflow
 bump:
-	bump2version $(PART)
+	uv version --bump $(PART) --frozen
+	git commit -am "Bump version: $$(uv version --short)"
+	git tag "v$$(uv version --short)"
 	git push --follow-tags
 
 # test files ###################################################################

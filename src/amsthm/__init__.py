@@ -4,6 +4,7 @@ import re
 from collections import defaultdict
 from dataclasses import dataclass, field
 from functools import cached_property, partial
+from importlib.metadata import version
 from typing import TYPE_CHECKING
 
 import panflute as pf
@@ -13,13 +14,11 @@ from .helper import cancel_emph, cite_to_id_mode, cite_to_ref, merge_emph, parse
 from .util import setup_logging
 
 if TYPE_CHECKING:
-    from typing import Union
-
     from panflute.elements import Doc, Element
 
-    THM_DEF = list[Union[str, dict[str, str], dict[str, list[str]]]]
+    THM_DEF = list[str | dict[str, str] | dict[str, list[str]]]
 
-__version__: str = "2.0.0"
+__version__: str = version("amsthm")
 
 PARENT_COUNTERS: set[str] = {
     "part",
@@ -244,8 +243,8 @@ class DocOptions:
             dict[str, str | dict[str, str] | THM_DEF],
         ] = doc.get_metadata(METADATA_KEY, {})
 
-        name_to_text: dict[str, str] = options.get("name_to_text", {})  # type: ignore[assignment, arg-type]
-        parent_counter: str = options.get("parent_counter", None)  # type: ignore[assignment, arg-type]
+        name_to_text: dict[str, str] = options.get("name_to_text", {})  # type: ignore[assignment]
+        parent_counter: str = options.get("parent_counter", None)  # type: ignore[assignment]
 
         theorems: dict[str, NewTheorem] = {}
         for style in STYLES:

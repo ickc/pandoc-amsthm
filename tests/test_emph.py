@@ -91,7 +91,7 @@ class TestStrikeout(TestEmph):
     ElementType = pf.Strikeout
 
 
-class TestSubscript(TestEmph):
+class TestSuperscript(TestEmph):
     ElementType = pf.Superscript
 
 
