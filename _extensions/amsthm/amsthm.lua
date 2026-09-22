@@ -383,10 +383,12 @@ local utype = pandoc.utils.type
 local function is_meta_map(v)  return utype(v) == "table" end
 local function is_meta_list(v) return utype(v) == "List" end
 
+-- A metadata value as a list: a single value (`plain: Main Theorem`)
+-- becomes a list of one, rather than being iterated token by token.
 local function meta_list(node)
-  -- Treat List, Inlines (will iterate empty under ipairs), or nil uniformly.
   if node == nil then return {} end
-  return node
+  if is_meta_list(node) then return node end
+  return { node }
 end
 
 local function meta_string(node, default)

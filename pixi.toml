@@ -14,7 +14,7 @@ pandoc = ">=3.1.1,<4"
 # available to unit specs. spec/busted_shim.lua stands in for busted.
 test = { cmd = "pandoc lua spec/run.lua", description = "Run all specs" }
 test-unit = { cmd = "pandoc lua spec/run.lua spec/emph_spec.lua spec/cite_spec.lua spec/options_spec.lua", description = "Run unit specs only" }
-test-golden = { cmd = "pandoc lua spec/run.lua spec/golden_spec.lua", description = "Compare filter output against tests/model-*" }
+test-golden = { cmd = "pandoc lua spec/run.lua spec/golden_spec.lua spec/cases_spec.lua", description = "Compare filter output against tests/model-*" }
 gen-golden = { cmd = """
 pandoc -L _extensions/amsthm/amsthm.lua tests/model-source.md --top-level-division=chapter -N -s --template tests/template.latex -t latex -o tests/model-latex.tex && \
 pandoc -L _extensions/amsthm/amsthm.lua tests/model-source.md -t markdown -o tests/model-target.md
