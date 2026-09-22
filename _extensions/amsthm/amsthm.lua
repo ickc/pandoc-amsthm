@@ -563,6 +563,37 @@ local function find_theorem(options, classes, warn)
   return found
 end
 
+-- Apply the plain style's italic body to a theorem's content. Theorems
+-- nested inside are held out of the walk, as each has a style of its own.
+local function emph_body(div, options)
+  local held = {}
+  local body = pandoc.Div(div.content):walk({
+    traverse = "topdown",
+    Div = function(d)
+      if find_theorem(options, d.classes) then
+        held[#held + 1] = d
+        return pandoc.Div({}, pandoc.Attr("", {}, { ["amsthm-held"] = tostring(#held) })), false
+      end
+      return nil
+    end,
+  })
+  body = body:walk({
+    Str = M.to_emph, Emph = M.cancel_emph,
+    Para = M.merge_emph, Plain = M.merge_emph, Header = M.merge_emph,
+  })
+  if #held > 0 then
+    body = body:walk({
+      Div = function(d)
+        local i = d.attributes["amsthm-held"]
+        if i then return held[tonumber(i)] end
+        return nil
+      end,
+    })
+  end
+  div.content = body.content
+  return div
+end
+
 -- non-LaTeX transform: prepend the theorem header, do plain-style emph,
 -- track counters and identifiers.
 local function amsthm_block(div, options)
@@ -577,13 +608,7 @@ local function amsthm_block(div, options)
   for i = 1, #header - 1 do title[i] = header[i] end
   header = { pandoc.Span(title, pandoc.Attr("", { "amsthm-title" })), header[#header] }
 
-  if theorem.style == "plain" then
-    div = div:walk({ Str = M.to_emph })
-    div = div:walk({ Emph = M.cancel_emph })
-    div = div:walk({
-      Para = M.merge_emph, Plain = M.merge_emph, Header = M.merge_emph,
-    })
-  end
+  if theorem.style == "plain" then div = emph_body(div, options) end
 
   -- Prepend header to the first block's inline list when possible,
   -- otherwise wrap into a fresh Para.
