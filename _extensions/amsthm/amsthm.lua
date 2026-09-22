@@ -496,8 +496,11 @@ local function from_meta(meta)
     end
   end
 
+  -- Start where pandoc starts numbering sections, so --number-offset
+  -- moves the theorem numbers along with the section numbers.
+  local offset = PANDOC_WRITER_OPTIONS and PANDOC_WRITER_OPTIONS.number_offset or {}
   local header_counters = {}
-  for i = 1, counter_depth do header_counters[i] = 0 end
+  for i = 1, counter_depth do header_counters[i] = offset[i] or 0 end
 
   local css = true
   if opt.css ~= nil then css = (stringify(opt.css) ~= "false") end

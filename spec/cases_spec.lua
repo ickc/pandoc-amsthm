@@ -47,6 +47,11 @@ describe("heading counters", function()
     local out = run("unnumbered.md", "-t markdown")
     has(out, "**Theorem 2.1.**")
   end)
+
+  it("start from --number-offset", function()
+    local out = run("number-offset.md", "-t html -N --number-offset=4")
+    has(out, "Theorem 5.1.")
+  end)
 end)
 
 describe("metadata", function()
