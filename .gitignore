@@ -6,7 +6,7 @@ tests/*.pdf
 
 .ipynb_checkpoints/
 runinfo
-setup.py
+
 
 *.py[cod]
 __pycache__
@@ -85,3 +85,6 @@ docs/_build
 dask-worker-space/
 .dmypy.json
 coverage.lcov
+
+# pixi environments
+.pixi/

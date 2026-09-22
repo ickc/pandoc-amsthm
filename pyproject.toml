@@ -1,94 +1,135 @@
 [build-system]
-requires = ["poetry_core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
+requires = ["uv_build>=0.12,<0.13"]
+build-backend = "uv_build"
 
-[tool.poetry]
+[project]
 name = "amsthm"
 version = "2.0.0"
 description = "amsthm—provide a syntax to use amsthm environments in pandoc, with output in LaTeX and HTML"
+readme = "README.rst"
 license = "BSD-3-Clause"
-keywords = [
-    "pandoc",
-    "amsthm",
-]
+license-files = ["LICENSE"]
+authors = [{ name = "Kolen Cheung", email = "christian.kolen@gmail.com" }]
+keywords = ["pandoc", "amsthm"]
 classifiers = [
     "Development Status :: 4 - Beta",
     "Environment :: Console",
     "Intended Audience :: Developers",
     "Topic :: Software Development :: Build Tools",
-    "License :: OSI Approved :: BSD License",
     "Operating System :: Unix",
     "Operating System :: POSIX",
     "Operating System :: Microsoft :: Windows",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.8",
-    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
     "Programming Language :: Python :: Implementation :: CPython",
     "Topic :: Utilities",
 ]
-homepage = "https://github.com/ickc/pandoc-amsthm"
-repository = "https://github.com/ickc/pandoc-amsthm"
-documentation = "https://ickc.github.io/pandoc-amsthm"
-authors = ["Kolen Cheung <christian.kolen@gmail.com>"]
-readme = "README.rst"
-packages = [
-    { include = "amsthm", from = "src" },
-]
-include = [
-    'LICENSE',
-    'README.rst',
-]
+requires-python = ">=3.10"
+# panflute is responsible for pandoc compatibility.
+# Each panflute minor release has tracked a pandoc API bump,
+# so cap at the latest tested minor release.
+dependencies = ["panflute>=2.3.1,<2.4"]
 
-[tool.poetry.dependencies]
-python = ">=3.8"
-panflute = ">=2.1.3"
+[project.optional-dependencies]
+extras = ["coloredlogs>=14,<16"]
 
-# extras
-coloredlogs = { optional = true, version = ">=14,<16" }
+[project.scripts]
+amsthm = "amsthm:main"
 
-# tests
-coverage = { optional = true, version = "^6.3" }
-coveralls = { optional = true, version = "*" }
-pytest = { optional = true, version = "*" }
-pytest-parallel = { optional = true, version = "^0.1.1" }
+[project.urls]
+Homepage = "https://github.com/ickc/pandoc-amsthm"
+Repository = "https://github.com/ickc/pandoc-amsthm"
+Documentation = "https://ickc.github.io/pandoc-amsthm"
+Changelog = "https://github.com/ickc/pandoc-amsthm/blob/master/CHANGELOG.md"
 
-# docs
-sphinx = { optional = true, version = "^3.3" }
-sphinx-bootstrap-theme = { optional = true, version = "*" }
-sphinxcontrib-apidoc = { optional = true, version = "*" }
-
-[tool.poetry.dev-dependencies]
-isort = "*"
-mypy = "*"
-bandit = "*"
-black = "*"
-bump2version = "*"
-ghp-import = "^2"
-nbconvert = "^6"
-pylint = "*"
-rstcheck = "*"
-types-PyYAML = "*"
-twine = "*"
-
-[tool.poetry.extras]
-extras = [
-    "coloredlogs",
-]
-tests = [
-    "coverage",
-    "coveralls",
-    "pytest",
-    "pytest-parallel",
-]
-docs = [
-    "sphinx",
-    "sphinx-bootstrap-theme",
-    "sphinxcontrib-apidoc",
+[dependency-groups]
+test = ["pytest", "coverage>=7.10"]
+docs = ["sphinx", "sphinx-bootstrap-theme", "sphinxcontrib-apidoc"]
+lint = ["ruff", "mypy"]
+dev = [
+    { include-group = "test" },
+    { include-group = "docs" },
+    { include-group = "lint" },
 ]
 
-[tool.poetry.scripts]
-amsthm = 'amsthm:main'
+[tool.uv.build-backend]
+source-include = [
+    "tests/**",
+    "docs/**",
+    "AUTHORS.rst",
+    "CHANGELOG.rst",
+    "CONTRIBUTING.rst",
+]
+
+# pixi: development environments ###############################################
+# pandoc comes from conda-forge; everything Python comes from PyPI.
+
+[tool.pixi.workspace]
+channels = ["conda-forge"]
+platforms = ["linux-64", "osx-arm64", "win-64"]
+
+[tool.pixi.dependencies]
+python = ">=3.10"
+pandoc = "*"
+
+[tool.pixi.pypi-dependencies]
+amsthm = { path = ".", editable = true, extras = ["extras"] }
+
+[tool.pixi.feature.py310.dependencies]
+python = "3.10.*"
+[tool.pixi.feature.py311.dependencies]
+python = "3.11.*"
+[tool.pixi.feature.py312.dependencies]
+python = "3.12.*"
+[tool.pixi.feature.py313.dependencies]
+python = "3.13.*"
+[tool.pixi.feature.py314.dependencies]
+python = "3.14.*"
+
+# pandoc versions, oldest supported to latest
+[tool.pixi.feature.pandoc-2-14.dependencies]
+pandoc = "2.14.0.3.*"
+[tool.pixi.feature.pandoc-2-19.dependencies]
+pandoc = "2.19.2.*"
+[tool.pixi.feature.pandoc-3-1.dependencies]
+pandoc = "3.1.3.*"
+[tool.pixi.feature.pandoc-3-5.dependencies]
+pandoc = "3.5.*"
+
+[tool.pixi.feature.pandoc-2-14]
+platforms = ["linux-64"]
+[tool.pixi.feature.pandoc-2-19]
+platforms = ["linux-64"]
+
+[tool.pixi.environments]
+default = { features = ["dev"], solve-group = "default" }
+docs = { features = ["docs"], solve-group = "default" }
+lint = { features = ["lint"], solve-group = "default" }
+# CI matrix: python and pandoc versions increase together
+test-py310 = ["test", "py310", "pandoc-2-14"]
+test-py311 = ["test", "py311", "pandoc-2-19"]
+test-py312 = ["test", "py312", "pandoc-3-1"]
+test-py313 = ["test", "py313", "pandoc-3-5"]
+test-py314 = ["test", "py314"]
+
+[tool.pixi.tasks]
+test = "coverage run -m pytest -vv"
+coverage = { cmd = "coverage combine && coverage report && coverage xml", depends-on = ["test"] }
+docs = "make docs -B"
+linkcheck = "make linkcheck"
+build = "uv build"
+
+[tool.pixi.feature.lint.tasks]
+format = "ruff format src tests docs/conf.py && ruff check --fix src tests docs/conf.py"
+lint = "ruff format --check src tests docs/conf.py && ruff check src tests docs/conf.py && mypy src"
+
+[tool.pixi.feature.dev.dependencies]
+uv = "*"
 
 [tool.coverage.paths]
 source = [
@@ -121,30 +162,6 @@ addopts = [
 testpaths = [
     'tests',
 ]
-
-[tool.isort]
-line_length = 120
-known_first_party = 'amsthm'
-default_section = 'THIRDPARTY'
-forced_separate = 'tests'
-profile = 'black'
-skip = [
-    '.eggs',
-    'ci/templates',
-    'build',
-    'dist',
-]
-
-[tool.pylint.messages_control]
-disable = "C0330, C0326"
-
-[tool.pylint.format]
-max-line-length = 120
-
-[tool.black]
-line-length = 120
-experimental-string-processing = true
-target-version = ['py38']
 
 [tool.mypy]
 #* Import discovery
@@ -212,3 +229,14 @@ show_absolute_path = false
 # scripts_are_modules
 warn_unused_configs = true
 # verbosity
+
+[tool.ruff]
+line-length = 120
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F", "I", "UP", "B", "S"]
+ignore = ["S101"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["amsthm"]

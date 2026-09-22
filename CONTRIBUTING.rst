@@ -73,6 +73,28 @@ For merging, you should:
 Tips
 ----
 
+Development environments are managed by `pixi <https://pixi.sh>`_, which also provides pandoc.
+
 To run tests::
 
-    pytest
+    pixi run test
+
+To run tests against a specific Python and pandoc version, see ``[tool.pixi.environments]`` in ``pyproject.toml``, e.g.::
+
+    pixi run -e test-py310 test
+
+To format, lint, and build docs::
+
+    pixi run format
+    pixi run lint
+    pixi run docs
+
+Releasing
+---------
+
+Bump the version, commit, tag, and push::
+
+    make bump PART=patch  # or minor, major
+
+Pushing a ``v*`` tag triggers ``.github/workflows/release.yml``,
+which builds with uv and publishes to PyPI via trusted publishing with attestations.
