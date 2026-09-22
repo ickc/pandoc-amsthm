@@ -47,9 +47,11 @@ local HTML_LIKE = {
   epub = true, epub2 = true, epub3 = true, revealjs = true, slidy = true,
   slideous = true, dzslides = true, s5 = true,
 }
+-- :where() keeps the specificity at zero, so a rule of the user's own wins
+-- wherever their stylesheet sits relative to this one.
 local CSS = [[
 <style>
-.amsthm-qed { float: right; }
+:where(.amsthm-qed) { float: right; }
 </style>]]
 
 -- Append a block to header-includes, whatever form the user gave it in.
@@ -498,7 +500,11 @@ local function from_meta(meta)
   local header_counters = {}
   for i = 1, counter_depth do header_counters[i] = 0 end
 
+  local css = true
+  if opt.css ~= nil then css = (stringify(opt.css) ~= "false") end
+
   return {
+    css = css,
     theorems_order = theorems_order,
     theorems_map = theorems_map,
     counter_depth = counter_depth,
@@ -594,11 +600,12 @@ local function amsthm_block(div, options)
   end
 
   -- Quarto renders divs with these classes as its own proof environments,
-  -- which would add a second header. Rename them once handled here.
+  -- which would add a second header on top of this one. Drop them once
+  -- handled; the amsthm-<style> class below says what the div is.
   if quarto then
-    for i, cls in ipairs(div.classes) do
-      if QUARTO_PROOF_CLASSES[cls] then div.classes[i] = "amsthm-" .. cls end
-    end
+    div.classes = div.classes:filter(function(cls)
+      return not QUARTO_PROOF_CLASSES[cls]
+    end)
   end
   div.classes:insert("amsthm")
   if not div.classes:includes("amsthm-" .. theorem.style) then
@@ -692,7 +699,7 @@ local function build_filters()
           pandoc.RawBlock("latex", "\\usepackage{amsthm}"), true)
         add_header_include(doc.meta,
           pandoc.RawBlock("latex", options_to_latex(options)))
-      elseif HTML_LIKE[FORMAT] then
+      elseif HTML_LIKE[FORMAT] and options.css then
         add_header_include(doc.meta, pandoc.RawBlock("html", CSS))
       end
       return doc

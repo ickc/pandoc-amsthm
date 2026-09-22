@@ -18,7 +18,11 @@ Rewritten as a Pandoc Lua filter. The input syntax is unchanged.
   classes `amsthm` and `amsthm-<style>`, the heading is wrapped in an
   `amsthm-title` span, and the end-of-proof symbol is an `amsthm-qed`
   span, styled by CSS that the filter adds to HTML output.
-- Works as a Quarto extension: `quarto add ickc/pandoc-amsthm`.
+- Works as a Quarto extension: `quarto add ickc/pandoc-amsthm`. Under
+  Quarto the filter runs before Quarto's own theorem processing and drops
+  the `proof`, `remark` and `solution` classes it has handled, so Quarto
+  does not add a second heading.
+- New `css` option: `false` leaves out the stylesheet added to HTML.
 - LaTeX output no longer defines each theorem label twice.
 - Documentation moved to <https://ickc.github.io/pandoc-amsthm>.
 
