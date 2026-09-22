@@ -235,6 +235,7 @@ function NewTheorem.new(args)
   if self.parent_counter ~= nil and not PARENT_COUNTERS[self.parent_counter] then
     io.stderr:write("[amsthm] warning: unsupported parent_counter " ..
       tostring(self.parent_counter) .. ", ignoring\n")
+    self.parent_counter = nil
   end
   if self.numbered and self.parent_counter ~= nil and self.shared_counter ~= nil then
     self.shared_counter = nil
