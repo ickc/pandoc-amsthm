@@ -1,6 +1,6 @@
 # Changelog
 
-## v3.0.0 (unreleased)
+## v3.0.0
 
 Rewritten as a Pandoc Lua filter. The input syntax is unchanged.
 
