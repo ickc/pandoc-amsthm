@@ -24,6 +24,16 @@ Rewritten as a Pandoc Lua filter. The input syntax is unchanged.
   does not add a second heading.
 - New `css` option: `false` leaves out the stylesheet added to HTML.
 - LaTeX output no longer defines each theorem label twice.
+- Fixed, compared with v2: in LaTeX output, theorem bodies stay in the
+  document instead of being rendered on their own, so citations
+  (`--natbib`, `--biblatex`, citeproc), writer options and later filters
+  apply inside them. Nested environments are numbered in document order
+  and keep their own style in other output. Headings marked
+  `.unnumbered` no longer step the theorem numbers, which also follow
+  `--number-offset`. A single value such as `plain: Main Theorem` is
+  read as one environment rather than one per character, and an
+  unsupported `parent_counter` is dropped rather than passed to LaTeX.
+  Plain-style theorems with long paragraphs are no longer slow.
 - Documentation moved to <https://ickc.github.io/pandoc-amsthm>.
 
 ## v2.1.0
