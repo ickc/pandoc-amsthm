@@ -656,22 +656,28 @@ local function amsthm_block(div, options)
   return div
 end
 
+-- A reference to the environment `id`, numbered `n`, as a link to it; in
+-- parentheses outside the link, as \eqref does, when `paren` is set.
+local function ref_link(id, n, paren)
+  local link = pandoc.Link({ pandoc.Str(n) }, "#" .. id)
+  if paren then return { pandoc.Str("("), link, pandoc.Str(")") } end
+  return link
+end
+
 -- Resolve [@id] / @id citations and \ref{}/\eqref{} raw tex to numbers.
 local function resolve_inline(elem, options)
   if elem.t == "Cite" then
     local id, mode = cite_to_id_mode(elem)
     if id and options.identifiers[id] then
       local n = options.identifiers[id]
-      if mode == "NormalCitation" then return pandoc.Str("(" .. n .. ")") end
-      if mode == "AuthorInText" then return pandoc.Str(n) end
+      if mode == "NormalCitation" then return ref_link(id, n, true) end
+      if mode == "AuthorInText" then return ref_link(id, n, false) end
     end
   elseif elem.t == "RawInline" and elem.format == "tex" then
     local kind, id = elem.text:match("^\\(%a+)%{(.-)%}$")
     if kind and id and (kind == "ref" or kind == "eqref")
        and options.identifiers[id] then
-      local n = options.identifiers[id]
-      if kind == "eqref" then return pandoc.Str("(" .. n .. ")") end
-      return pandoc.Str(n)
+      return ref_link(id, options.identifiers[id], kind == "eqref")
     end
   end
   return nil

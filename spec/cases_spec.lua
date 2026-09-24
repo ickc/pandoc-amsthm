@@ -60,7 +60,7 @@ describe("nested theorems", function()
     has(out, "[**Theorem 1.**]{.amsthm-title} *Outer statement.*")
     has(out, "[**Theorem 2.**]{.amsthm-title} *Inner statement.*")
     has(out, "[**Theorem 3.**]{.amsthm-title} *A theorem inside a proof.*")
-    has(out, "See (2) and (3).")
+    has(out, "See ([2](#thm-inner)) and ([3](#thm-in-proof)).")
   end)
 
   it("keep their own style inside a plain theorem", function()
