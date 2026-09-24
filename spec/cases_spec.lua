@@ -141,3 +141,13 @@ describe("classes", function()
     end
   end)
 end)
+
+describe("a reference to an unnumbered environment", function()
+  it("is left to citeproc in LaTeX, as in other output", function()
+    local out = run("unnumbered-ref.md", LATEX)
+    has(out, "\\begin{Main Theorem}\\label{main}")
+    has(out, "See \\ref{euler} and @main.")
+    out = run("unnumbered-ref.md", "-t markdown")
+    has(out, "See [1](#euler) and @main.")
+  end)
+end)
