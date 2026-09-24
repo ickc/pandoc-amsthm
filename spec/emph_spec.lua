@@ -58,6 +58,13 @@ for _, case in ipairs(CASES) do
       assert.are.same(plain(want), plain(p))
     end)
 
+    it("cancel_repeated_type leaves spaces bare", function()
+      local p = para(C({ C({ S("a") }), SP(), C({ S("b") }) }))
+      p = p:walk({ [T] = cncl })
+      local want = para(S("a"), SP(), S("b"))
+      assert.are.same(plain(want), plain(p))
+    end)
+
     -- merge_consecutive_type operates on a Block as a whole, so we call
     -- it directly. (`:walk` on a Para visits descendants, not the Para
     -- itself; the filter pipeline embeds the block under a Div, where

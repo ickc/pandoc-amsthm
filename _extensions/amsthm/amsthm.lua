@@ -91,6 +91,9 @@ end
 M.to_type = to_type
 M.to_emph = to_type("Emph")
 
+-- Spaces look the same in any style, so they are never wrapped on their own.
+local BLANK = { Space = true, SoftBreak = true, LineBreak = true }
+
 -- Cancel a double-wrap of the same type (LaTeX: \emph{\emph{x}} == x).
 local function cancel_repeated_type(elem_type)
   elem_type = elem_type or "Emph"
@@ -101,6 +104,8 @@ local function cancel_repeated_type(elem_type)
       for _, child in ipairs(el.content) do
         if child.t == elem_type then
           for _, c in ipairs(child.content) do res[#res + 1] = c end
+        elseif BLANK[child.t] then
+          res[#res + 1] = child
         else
           res[#res + 1] = ctor({ child })
         end
