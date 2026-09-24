@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## v3.1.1
 
 - The filter stops with a clear error on pandoc older than 3.1.1.
 - `_extension.yml` declares, for packagers, the pandoc versions the
