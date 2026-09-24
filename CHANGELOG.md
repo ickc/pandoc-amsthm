@@ -3,7 +3,7 @@
 ## Unreleased
 
 Other output now follows what `amsthm` does in LaTeX more closely.
-[the design notes](https://ickc.github.io/pandoc-amsthm/design.html) describes the approach, and `pixi run bake`
+[The design notes](https://ickc.github.io/pandoc-amsthm/design.html) describe the approach, and `pixi run bake`
 compares the two renderings.
 
 - Cross-references link to the environment in HTML and other non-LaTeX
