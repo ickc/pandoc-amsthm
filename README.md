@@ -189,8 +189,11 @@ filter rebuilds the same result from Pandoc's elements (see
   `lang`, as "Beweis" for `lang: de`. Other output always says
   "Proof". Set `name_to_text: {proof: Beweis}` to name it in both.
 - **The end-of-proof symbol** cannot be pushed to the right margin.
-  The CSS does this in HTML.
-- **Vertical space** around environments is left to the output format.
+  The CSS does this in HTML. With `\qedhere` in a display, it follows
+  the formula, where amsthm puts it at the margin as the equation's tag.
+- **Vertical space** around environments is left to the output format,
+  as are a style's `above`, `below` and `indent`; a length for its
+  `headspace` becomes an ordinary space.
 - **Section numbering under Quarto.** Quarto numbers HTML sections
   itself and does not tell the filter whether `number-sections` is on,
   so HTML output always numbers theorems within the sections, as if it

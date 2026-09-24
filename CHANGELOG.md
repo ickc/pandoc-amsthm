@@ -24,6 +24,16 @@ compares the two renderings.
 - The end-of-proof symbol is `$\quad\Box$`, amsthm's `\quad\openbox`,
   which renders in every format and stays on the line of the text before
   it; the Unicode ◻ was missing from LaTeX's default fonts.
+- More of amsthm, in LaTeX and in other output alike:
+  - `styles`, your own styles, as `\newtheoremstyle`: heading and body
+    fonts, punctuation, and the space after the heading;
+  - `parent_counter` per environment, `{Theorem: section, Remark:
+    chapter}`, as `\newtheorem` takes a parent each;
+  - `swapnumbers`, as `\swapnumbers`;
+  - `qed_symbol`, to set `\qedsymbol`;
+  - `\qedhere`, to put the symbol at the end of a display or list.
+- `[@a; @b]` refers to several environments: `\eqref{a}, \eqref{b}`
+  in LaTeX, "(1), (2)" elsewhere.
 - `name_to_text: {proof: ...}` renames the proof, setting `\proofname`
   in LaTeX.
 - A reference to an unnumbered environment gets a warning.
