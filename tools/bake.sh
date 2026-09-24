@@ -31,8 +31,15 @@ if command -v pdftoppm >/dev/null && command -v magick >/dev/null; then
   for a in "$out/$name-amsthm"-*.png; do
     page=${a##*-amsthm-}
     b="$out/$name-baked-$page"
-    [ -f "$b" ] && magick "$a" "$b" +append "$out/$name-$page"
-    rm -f "$a" "$b"
+    if [ -f "$b" ]; then
+      magick "$a" "$b" +append "$out/$name-$page"
+      rm -f "$a" "$b"
+    fi
   done
   echo "wrote $out/$name-<page>.png (amsthm left, baked right)"
+  if compgen -G "$out/$name-amsthm-*.png" >/dev/null ||
+     compgen -G "$out/$name-baked-*.png" >/dev/null; then
+    echo "warning: the PDFs have different page counts;" \
+      "unpaired pages left as $out/$name-{amsthm,baked}-<page>.png" >&2
+  fi
 fi
