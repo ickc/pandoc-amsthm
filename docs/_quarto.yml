@@ -13,10 +13,27 @@ website:
     left:
       - href: index.qmd
         text: Home
-      - href: example/index.md
-        text: Example
-      - href: source.qmd
-        text: Source
+      - text: Examples
+        menu:
+          - href: examples.qmd
+            text: Overview
+          - href: examples/basics.md
+            text: Basics
+          - href: examples/cross-references.md
+            text: Cross-references
+          - href: examples/numbering.md
+            text: Numbering
+          - href: examples/proofs.md
+            text: Proofs
+          - href: examples/styles.md
+            text: Styles
+          - href: examples/swapnumbers.md
+            text: Swapped numbers
+          - text: "---"
+          - href: example/index.md
+            text: Full example
+          - href: source.qmd
+            text: Full example source
       - href: design.qmd
         text: Design
       - href: changelog.qmd

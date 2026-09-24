@@ -15,8 +15,16 @@ environments once in the document's metadata, and write them as
 - Any other output (HTML, EPUB, Markdown, …) gets the same numbering,
   styles and cross-references, computed by the filter.
 
-See the [rendered example](https://ickc.github.io/pandoc-amsthm/example/)
-and [its source](https://ickc.github.io/pandoc-amsthm/source.html).
+**Learn by example:** the [examples](https://ickc.github.io/pandoc-amsthm/examples.html)
+are short documents, one per topic ([basics](https://ickc.github.io/pandoc-amsthm/examples/basics.html),
+[cross-references](https://ickc.github.io/pandoc-amsthm/examples/cross-references.html),
+[numbering](https://ickc.github.io/pandoc-amsthm/examples/numbering.html),
+[proofs](https://ickc.github.io/pandoc-amsthm/examples/proofs.html),
+[styles](https://ickc.github.io/pandoc-amsthm/examples/styles.html),
+[swapped numbers](https://ickc.github.io/pandoc-amsthm/examples/swapnumbers.html)),
+each shown with its Markdown, the LaTeX the filter writes, and the PDF
+amsthm typesets from it. Their sources are in
+[`docs/examples/`](docs/examples/).
 
 ## Installation
 
