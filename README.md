@@ -147,6 +147,11 @@ environment changes later. The capital letter only selects this form;
 an identifier that itself starts with a capital letter is always an
 ordinary reference, so use lowercase identifiers for this.
 
+`[@a; @b]` refers to several environments at once: `\eqref{a},
+\eqref{b}` in LaTeX, "(1), (2)" elsewhere. It does not take the
+capitalised form, nor mix environments with bibliography keys; those are
+left to citeproc, with a warning.
+
 A reference to an unnumbered environment prints nothing meaningful in
 LaTeX, which gives the last number set before it, usually the
 section's. LaTeX output keeps it as `\ref`, as written; other output

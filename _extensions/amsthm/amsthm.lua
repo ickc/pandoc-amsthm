@@ -194,6 +194,33 @@ local function cite_to_id_mode(elem)
 end
 M.cite_to_id_mode = cite_to_id_mode
 
+-- The ids of [@a; @b], a reference to several environments, when each
+-- of them is a key of `ids`; nil otherwise, leaving it to citeproc.
+local function multi_ref_ids(elem, ids)
+  if elem.t ~= "Cite" or #elem.citations < 2 then return nil end
+  local out = {}
+  for _, c in ipairs(elem.citations) do
+    if c.mode ~= "NormalCitation" or not ids[c.id] then return nil end
+    out[#out + 1] = c.id
+  end
+  return out
+end
+M.multi_ref_ids = multi_ref_ids
+
+-- One reference per id, separated by commas, as one would write
+-- \eqref{a}, \eqref{b} by hand.
+local function ref_list(ids, one)
+  local out = pandoc.Inlines({})
+  for i, id in ipairs(ids) do
+    if i > 1 then
+      out:insert(pandoc.Str(","))
+      out:insert(pandoc.Space())
+    end
+    out:extend(pandoc.Inlines(one(id)))
+  end
+  return out
+end
+
 -- The environment a cited id refers to, among the keys of `ids`, and
 -- whether to name it: `@Euler` is `@euler` with the name of its
 -- environment before the number, as \Cref would write it. An id that is
@@ -220,6 +247,12 @@ end
 --                  `@Id` becomes `Name~\ref{id}` and `[@Id]` `(Name~\ref{id})`.
 local function cite_to_ref(elem, check_id, names)
   if elem.t ~= "Cite" then return nil end
+  local multi = check_id and multi_ref_ids(elem, check_id)
+  if multi then
+    return ref_list(multi, function(id)
+      return pandoc.RawInline("latex", "\\eqref{" .. id .. "}")
+    end)
+  end
   local id, mode = cite_to_id_mode(elem)
   if id == nil then return nil end
   if mode ~= "NormalCitation" and mode ~= "AuthorInText" then return nil end
@@ -253,6 +286,8 @@ local function font_ref(elem_type)
   return function(el)
     if el.t == "Cite" then
       local _, mode = cite_to_id_mode(el)
+      -- [@a; @b] is written as \eqref{a}, \eqref{b}.
+      if #el.citations > 1 then mode = "NormalCitation" end
       if mode ~= "AuthorInText" and (shape or mode ~= "NormalCitation") then
         return nil
       end
@@ -1001,20 +1036,43 @@ end
 -- prints the number of whatever was numbered last before it, usually the
 -- section, which other output cannot follow, so it leaves it unresolved.
 local function warn_unnumbered(elem, options)
-  local id
+  local ids = {}
   if elem.t == "Cite" then
-    id = cite_to_id_mode(elem)
+    for _, c in ipairs(elem.citations) do ids[#ids + 1] = c.id end
   elseif elem.format == "tex" then
-    local kind
-    kind, id = elem.text:match("^\\(%a+)%{(.-)%}$")
-    if kind ~= "ref" and kind ~= "eqref" then id = nil end
+    local kind, id = elem.text:match("^\\(%a+)%{(.-)%}$")
+    if kind == "ref" or kind == "eqref" then ids[1] = id end
   end
-  if id then id = ref_target(id, options.unnumbered) end
-  if id and not options.warned[id] then
-    options.warned[id] = true
-    io.stderr:write("[amsthm] warning: reference to the unnumbered " ..
-      "environment " .. id .. "; LaTeX prints the last number before it, " ..
-      "other output leaves it unresolved\n")
+  for _, id in ipairs(ids) do
+    id = ref_target(id, options.unnumbered)
+    if id and not options.warned[id] then
+      options.warned[id] = true
+      io.stderr:write("[amsthm] warning: reference to the unnumbered " ..
+        "environment " .. id .. "; LaTeX prints the last number before it, " ..
+        "other output leaves it unresolved\n")
+    end
+  end
+  -- [@a; @knuth]: environments and other keys in one citation.
+  if elem.t == "Cite" and #elem.citations > 1 then
+    local ours, others, named = false, false, false
+    for _, c in ipairs(elem.citations) do
+      if options.identifiers[c.id] or options.unnumbered[c.id] then
+        ours = true
+      elseif ref_target(c.id, options.identifiers) then
+        named = true
+      else
+        others = true
+      end
+    end
+    if named then
+      io.stderr:write("[amsthm] warning: a reference to several " ..
+        "environments cannot name them, and is left to citeproc: " ..
+        pandoc.utils.stringify(elem) .. "\n")
+    elseif ours and others then
+      io.stderr:write("[amsthm] warning: a citation mixes environments " ..
+        "with other keys, and is left to citeproc: " ..
+        pandoc.utils.stringify(elem) .. "\n")
+    end
   end
 end
 M.warn_unnumbered = warn_unnumbered
@@ -1036,6 +1094,12 @@ end
 
 -- Resolve [@id] / @id citations and \ref{}/\eqref{} raw tex to numbers.
 local function resolve_inline(elem, options)
+  local multi = multi_ref_ids(elem, options.identifiers)
+  if multi then
+    return ref_list(multi, function(id)
+      return ref_link(id, options.identifiers[id], true)
+    end)
+  end
   if elem.t == "Cite" then
     local id, mode = cite_to_id_mode(elem)
     local is_named
