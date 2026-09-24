@@ -65,7 +65,10 @@ pandoc -L amsthm.lua doc.md -N -s -t native |
 
 With `-t native` the filter takes the path it takes for any non-LaTeX
 format, and the second `pandoc` writes the result without it. Pass the
-same options, such as `--top-level-division`, to both. This comparison
+same options, such as `--top-level-division`, to both.
+`pixi run bake doc.md -N` does all this, into `build/bake/`, and puts
+each page of the two PDFs side by side in a PNG when pdftoppm and
+ImageMagick are installed. This comparison
 is visual and not automated. Expect the known limitations, and one
 difference that comes from the comparison itself: after a run-in
 heading (`\paragraph`), the baked environment runs in to the heading.
