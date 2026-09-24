@@ -101,7 +101,20 @@ underscores: `Main Theorem` is written as `::: Main_Theorem`.
 Give the div an identifier and refer to it with `@id` (the number) or
 `[@id]` (the number in parentheses). Raw `\ref{id}` and `\eqref{id}`
 also work. References may come before the theorem they point to. In
-LaTeX output these become `\ref` and `\eqref`.
+LaTeX output these become `\ref` and `\eqref`; in other output, a link
+to the environment.
+
+Capitalise the first letter of the identifier to put the environment's
+name before the number, as `\Cref` from cleveref does: with the div
+`{#euler .Theorem}`, `@Euler` gives "Theorem 1" and `[@Euler]` gives
+"(Theorem 1)". The name follows `name_to_text`, and stays right if the
+environment changes later. In LaTeX output this is written out as
+`Theorem~\ref{euler}`, so it needs no extra package. An identifier
+that itself starts with a capital letter is always an ordinary
+reference, so use lowercase identifiers for this.
+
+Only numbered environments can be referred to: a reference to an
+unnumbered one is left alone, and citeproc warns about it.
 
 ### Tips
 

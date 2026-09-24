@@ -46,6 +46,51 @@ describe("cite_to_ref", function()
   end)
 end)
 
+describe("ref_target", function()
+  local ids = { euler = "1", Cap = "2" }
+
+  it("returns an id that is a key, unnamed", function()
+    local id, is_named = amsthm.ref_target("euler", ids)
+    assert.are.equal("euler", id)
+    assert.is_false(is_named)
+  end)
+
+  it("names the environment when the first letter is capitalised", function()
+    local id, is_named = amsthm.ref_target("Euler", ids)
+    assert.are.equal("euler", id)
+    assert.is_true(is_named)
+  end)
+
+  it("prefers an id that is itself a key", function()
+    local id, is_named = amsthm.ref_target("Cap", ids)
+    assert.are.equal("Cap", id)
+    assert.is_false(is_named)
+  end)
+
+  it("returns nil for unknown ids", function()
+    assert.is_nil(amsthm.ref_target("Nope", ids))
+    assert.is_nil(amsthm.ref_target("1abc", ids))
+  end)
+end)
+
+describe("cite_to_ref with names", function()
+  local ids, names = { x = "" }, { x = "Main Theorem" }
+
+  it("@Id -> Name~\\ref{id}", function()
+    local c = pandoc.Cite({ pandoc.Str("@X") }, { citation("X", "AuthorInText") })
+    local r = amsthm.cite_to_ref(c, ids, names)
+    assert.are.equal("Main Theorem~\\ref{x}",
+      pandoc.write(pandoc.Pandoc({ pandoc.Plain(r) }), "latex"))
+  end)
+
+  it("[@Id] -> (Name~\\ref{id})", function()
+    local c = pandoc.Cite({ pandoc.Str("[@X]") }, { citation("X", "NormalCitation") })
+    local r = amsthm.cite_to_ref(c, ids, names)
+    assert.are.equal("(Main Theorem~\\ref{x})",
+      pandoc.write(pandoc.Pandoc({ pandoc.Plain(r) }), "latex"))
+  end)
+end)
+
 describe("resolve_inline (non-LaTeX)", function()
   local options = { identifiers = { ["thm1"] = "1.2.3" } }
 
@@ -84,6 +129,16 @@ describe("resolve_inline (non-LaTeX)", function()
   it("\\eqref{id} raw tex -> (linked number)", function()
     assert_paren_link(amsthm.resolve_inline(
       pandoc.RawInline("tex", "\\eqref{thm1}"), options))
+  end)
+
+  it("@Id cite -> linked name and number", function()
+    local c = pandoc.Cite({ pandoc.Str("@Thm1") },
+                          { citation("Thm1", "AuthorInText") })
+    local r = amsthm.resolve_inline(c,
+      { identifiers = options.identifiers, names = { thm1 = "Main Theorem" } })
+    assert.are.equal("Link", r.t)
+    assert.are.equal("#thm1", r.target)
+    assert.are.equal("Main Theorem\u{a0}1.2.3", pandoc.utils.stringify(r))
   end)
 
   it("ignores unknown ids", function()

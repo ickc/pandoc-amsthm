@@ -151,3 +151,18 @@ describe("a reference to an unnumbered environment", function()
     has(out, "See [1](#euler) and @main.")
   end)
 end)
+
+describe("a reference with a capitalised id", function()
+  it("names the environment in LaTeX", function()
+    local out = run("named-ref.md", LATEX)
+    has(out, "By Theorem~\\ref{euler}, (Lemma~\\ref{nz}), Klein's Lemma~\\ref{kl}")
+    -- An id that is capitalised itself is an ordinary reference.
+    has(out, "and \\ref{Cap}, \\ref{euler}, @Unknown.")
+  end)
+
+  it("names the environment in other output", function()
+    local out = run("named-ref.md", "-t html")
+    has(out, 'By <a href="#euler">Theorem\u{a0}1</a>, (<a href="#nz">Lemma\u{a0}2</a>)')
+    has(out, '<a href="#Cap">3</a>, <a href="#euler">1</a>')
+  end)
+end)

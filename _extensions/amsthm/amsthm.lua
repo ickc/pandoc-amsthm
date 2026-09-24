@@ -171,19 +171,52 @@ local function cite_to_id_mode(elem)
 end
 M.cite_to_id_mode = cite_to_id_mode
 
+-- The environment a cited id refers to, among the keys of `ids`, and
+-- whether to name it: `@Euler` is `@euler` with the name of its
+-- environment before the number, as \Cref would write it. An id that is
+-- itself a key always wins.
+local function ref_target(id, ids)
+  if ids[id] then return id, false end
+  local lower = id:gsub("^%u", string.lower)
+  if lower ~= id and ids[lower] then return lower, true end
+  return nil
+end
+M.ref_target = ref_target
+
+-- `name`, a no-break space, then `number`: "Theorem 1".
+local function named(name, number)
+  local out = pandoc.Inlines(name)
+  out:insert(pandoc.Str("\u{a0}"))
+  out:insert(number)
+  return out
+end
+
 -- Convert pf.Cite to a raw LaTeX \ref{} / \eqref{}.
 -- @param check_id  optional table; transform only if the cite id is a key.
-local function cite_to_ref(elem, check_id)
+-- @param names     optional table from id to environment name, so that
+--                  `@Id` becomes `Name~\ref{id}` and `[@Id]` `(Name~\ref{id})`.
+local function cite_to_ref(elem, check_id, names)
   if elem.t ~= "Cite" then return nil end
   local id, mode = cite_to_id_mode(elem)
   if id == nil then return nil end
-  if check_id ~= nil and check_id[id] == nil then return nil end
-  if mode == "NormalCitation" then
-    return pandoc.RawInline("latex", "\\eqref{" .. id .. "}")
-  elseif mode == "AuthorInText" then
-    return pandoc.RawInline("latex", "\\ref{" .. id .. "}")
+  if mode ~= "NormalCitation" and mode ~= "AuthorInText" then return nil end
+  local paren = mode == "NormalCitation"
+  local name
+  if check_id ~= nil then
+    local is_named
+    id, is_named = ref_target(id, check_id)
+    if id == nil then return nil end
+    name = is_named and names and names[id]
   end
-  return nil
+  if not name then
+    return pandoc.RawInline("latex", (paren and "\\eqref{" or "\\ref{") .. id .. "}")
+  end
+  local out = named(name, pandoc.RawInline("latex", "\\ref{" .. id .. "}"))
+  if paren then
+    out:insert(1, pandoc.Str("("))
+    out:insert(pandoc.Str(")"))
+  end
+  return out
 end
 M.cite_to_ref = cite_to_ref
 
@@ -288,7 +321,10 @@ function NewTheorem:to_header(options, id, info)
     for _, n in ipairs(options.header_counters) do parts[#parts + 1] = tostring(n) end
     parts[#parts + 1] = tostring(options.theorem_counters[cname])
     theorem_number = table.concat(parts, ".")
-    if id and id ~= "" then options.identifiers[id] = theorem_number end
+    if id and id ~= "" then
+      options.identifiers[id] = theorem_number
+      options.names[id] = self.text
+    end
   end
 
   local info_list = parse_info(info)
@@ -514,6 +550,7 @@ local function from_meta(meta)
     header_counters = header_counters,
     theorem_counters = {},
     identifiers = {},
+    names = {},
   }
 end
 
@@ -656,10 +693,12 @@ local function amsthm_block(div, options)
   return div
 end
 
--- A reference to the environment `id`, numbered `n`, as a link to it; in
--- parentheses outside the link, as \eqref does, when `paren` is set.
-local function ref_link(id, n, paren)
-  local link = pandoc.Link({ pandoc.Str(n) }, "#" .. id)
+-- A reference to the environment `id`, numbered `n`, as a link to it,
+-- led by the environment's name when `name` is given; in parentheses
+-- outside the link, as \eqref does, when `paren` is set.
+local function ref_link(id, n, paren, name)
+  local content = name and named(name, pandoc.Str(n)) or { pandoc.Str(n) }
+  local link = pandoc.Link(content, "#" .. id)
   if paren then return { pandoc.Str("("), link, pandoc.Str(")") } end
   return link
 end
@@ -668,10 +707,13 @@ end
 local function resolve_inline(elem, options)
   if elem.t == "Cite" then
     local id, mode = cite_to_id_mode(elem)
-    if id and options.identifiers[id] then
+    local is_named
+    if id then id, is_named = ref_target(id, options.identifiers) end
+    if id then
       local n = options.identifiers[id]
-      if mode == "NormalCitation" then return ref_link(id, n, true) end
-      if mode == "AuthorInText" then return ref_link(id, n, false) end
+      local name = is_named and options.names and options.names[id] or nil
+      if mode == "NormalCitation" then return ref_link(id, n, true, name) end
+      if mode == "AuthorInText" then return ref_link(id, n, false, name) end
     end
   elseif elem.t == "RawInline" and elem.format == "tex" then
     local kind, id = elem.text:match("^\\(%a+)%{(.-)%}$")
@@ -692,6 +734,7 @@ local function collect_ref_id(div, options)
   if not theorem then return nil end
   if theorem.numbered and div.identifier and div.identifier ~= "" then
     options.identifiers[div.identifier] = ""
+    options.names[div.identifier] = theorem.text
   end
   return nil
 end
@@ -804,7 +847,7 @@ local function build_filters()
       return nil
     end,
     Cite = function(c)
-      if latex_like then return cite_to_ref(c, options.identifiers) end
+      if latex_like then return cite_to_ref(c, options.identifiers, options.names) end
       return resolve_inline(c, options)
     end,
     RawInline = function(r)
