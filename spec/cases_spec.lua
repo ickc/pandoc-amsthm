@@ -84,6 +84,8 @@ describe("theorem bodies in LaTeX", function()
     has(out, "\\begin{Theorem}[{on \\([0,1]\\)}]")
     -- The writer escapes brackets in text already.
     has(out, "\\begin{Theorem}[see {[}1{]}]")
+    has(out, "\\begin{Theorem}[{with")
+    has(out, "{x.png}}]")
   end)
 end)
 
@@ -229,7 +231,7 @@ describe("theorem numbers follow LaTeX's section numbering", function()
   it("without -N: sections step no counter", function()
     local out, err = run("section-numbering.md", "-t plain")
     assert.are.equal("0.1 0.2 0.3", numbers(out))
-    has(err, "sections are not numbered")
+    has(err, "sections that are not numbered")
   end)
 
   it("with -N", function()

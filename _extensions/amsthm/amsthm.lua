@@ -850,11 +850,12 @@ local function amsthm_latex_block(div, options)
   local info = div.attributes.info
   if info and info ~= "" then
     local note = parse_markdown_as_inline(info)
-    -- The writer escapes brackets in text, but not in math, citations or
-    -- raw TeX, where a ] would end the optional argument early.
+    -- The writer escapes brackets in text, but not in math, citations,
+    -- images (\includegraphics[width=...]) or raw TeX, where a ] would end
+    -- the optional argument early.
     local brace = false
     local function unsafe() brace = true end
-    local scan = { Math = unsafe, Cite = unsafe, RawInline = unsafe }
+    local scan = { Math = unsafe, Cite = unsafe, Image = unsafe, RawInline = unsafe }
     for _, e in ipairs(note) do
       if scan[e.t] then brace = true else e:walk(scan) end
     end
@@ -912,9 +913,9 @@ local function build_filters()
       options = from_meta(doc.meta)
       if options.counter_depth >= options.counter_first
           and options.numbered_depth < options.counter_first then
-        io.stderr:write("[amsthm] warning: parent_counter is set but " ..
-          "sections are not numbered, so theorems are numbered 0.1, 0.2, " ..
-          "... as in LaTeX; pass -N (--number-sections)\n")
+        io.stderr:write("[amsthm] warning: theorems are numbered within " ..
+          "sections that are not numbered, so their numbers start with 0 " ..
+          "as in LaTeX; pass -N (--number-sections)\n")
       end
       if latex_like then
         -- Load amsthm first, so \newtheoremstyle in the user's own

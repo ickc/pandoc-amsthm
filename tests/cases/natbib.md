@@ -24,3 +24,7 @@ Math.
 ::: {.Theorem info="see [1]"}
 Brackets in text.
 :::
+
+::: {.Theorem info="with ![a picture](x.png){width=1cm}"}
+An image.
+:::
