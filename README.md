@@ -122,8 +122,12 @@ leaves it unresolved. The filter warns about it either way.
 
 ### Tips
 
-- Pass `-N` (`--number-sections`); LaTeX output needs it for the
-  numbering to make sense.
+- Pass `-N` (`--number-sections`) with `parent_counter`. Without it,
+  LaTeX steps no section counter and numbers theorems 0.1, 0.2, …;
+  other output does the same, and the filter warns. Theorem numbers
+  also follow `secnumdepth` and parts (`--top-level-division=part`) as
+  LaTeX does: a part is not in a chapter's number and does not restart
+  it.
 - LaTeX output loads `amsthm` and defines the environments through
   `header-includes`, so it needs a standalone document (`-s`, or any
   PDF output).
@@ -150,6 +154,10 @@ filter rebuilds the same result from Pandoc's elements (see
 - **The end-of-proof symbol** cannot be pushed to the right margin.
   The CSS does this in HTML.
 - **Vertical space** around environments is left to the output format.
+- **Section numbering under Quarto.** Quarto numbers HTML sections
+  itself and does not tell the filter whether `number-sections` is on,
+  so HTML output always numbers theorems within the sections, as if it
+  were.
 - **A list or code block that starts an environment** runs in to its
   heading in LaTeX, as `amsthm` sets environments as lists; other
   output starts it on a new line.

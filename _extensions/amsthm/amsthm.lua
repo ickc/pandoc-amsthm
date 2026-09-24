@@ -337,7 +337,15 @@ function NewTheorem:to_header(options, id, info)
     local cname = self:counter_name()
     options.theorem_counters[cname] = (options.theorem_counters[cname] or 0) + 1
     local parts = {}
-    for _, n in ipairs(options.header_counters) do parts[#parts + 1] = tostring(n) end
+    for i = options.counter_first, options.counter_depth do
+      local n = options.header_counters[i]
+      if i == options.part_level then
+        -- \thepart is a Roman numeral, and empty before the first part.
+        parts[#parts + 1] = n > 0 and pandoc.utils.to_roman_numeral(n) or ""
+      else
+        parts[#parts + 1] = tostring(n)
+      end
+    end
     parts[#parts + 1] = tostring(options.theorem_counters[cname])
     theorem_number = table.concat(parts, ".")
     if id and id ~= "" then
@@ -461,6 +469,25 @@ local function top_level_division(meta)
 end
 M.top_level_division = top_level_division
 
+-- How many heading levels step their LaTeX counters. Pandoc's LaTeX
+-- writer numbers sections by setting secnumdepth, and a sectioning
+-- command deeper than secnumdepth, or any at all without -N, steps no
+-- counter.
+local function numbered_depth(meta, top)
+  local wo = PANDOC_WRITER_OPTIONS
+  -- Quarto numbers HTML sections itself, and does not tell a filter
+  -- whether it does; take it that it does.
+  local quarto_html = quarto ~= nil and not is_latex_like()
+  if not (wo and wo.number_sections) and not quarto_html then return 0 end
+  -- From the metadata, or a variable (-V), which is a layout Doc.
+  local s = meta and meta.secnumdepth and stringify(meta.secnumdepth)
+  local var = wo and wo.variables and wo.variables.secnumdepth
+  if s == nil and var ~= nil then s = tostring(var) end
+  local secnumdepth = s and tonumber(s) or 5
+  -- Heading level L is the LaTeX level PARENT_COUNTERS[top] + L - 2.
+  return secnumdepth - PARENT_COUNTERS[top] + 2
+end
+
 local function from_meta(meta)
   local opt_node = meta and meta[METADATA_KEY] or nil
   local opt = {}
@@ -538,15 +565,20 @@ local function from_meta(meta)
   theorems_order[#theorems_order + 1] = proof
   theorems_map[proof:class_name()] = proof
 
+  local top = top_level_division(meta)
+  -- With parts at level 1: a part steps no other counter, and appears in
+  -- a theorem's number only when theorems are numbered within parts.
+  local part_level = (top == "part") and 1 or nil
+  local counter_first = 1
   local counter_depth = COUNTER_DEPTH_DEFAULT
   if opt.counter_depth then
     local s = stringify(opt.counter_depth)
     counter_depth = tonumber(s) or COUNTER_DEPTH_DEFAULT
   elseif parent_counter and PARENT_COUNTERS[parent_counter] then
     -- Number within the heading level that LaTeX would number within.
-    local top = top_level_division(meta)
     counter_depth = math.max(0,
       PARENT_COUNTERS[parent_counter] - PARENT_COUNTERS[top] + 1)
+    if part_level and parent_counter ~= "part" then counter_first = 2 end
   end
 
   local ignore = {}
@@ -567,6 +599,9 @@ local function from_meta(meta)
 
   return {
     css = css,
+    counter_first = counter_first,
+    numbered_depth = numbered_depth(meta, top),
+    part_level = part_level,
     proof_name = name_to_text.proof,
     theorems_order = theorems_order,
     theorems_map = theorems_map,
@@ -873,6 +908,12 @@ local function build_filters()
     traverse = "topdown",
     Pandoc = function(doc)
       options = from_meta(doc.meta)
+      if options.counter_depth >= options.counter_first
+          and options.numbered_depth < options.counter_first then
+        io.stderr:write("[amsthm] warning: parent_counter is set but " ..
+          "sections are not numbered, so theorems are numbered 0.1, 0.2, " ..
+          "... as in LaTeX; pass -N (--number-sections)\n")
+      end
       if latex_like then
         -- Load amsthm first, so \newtheoremstyle in the user's own
         -- header-includes works; define the environments last, so they can
@@ -888,17 +929,23 @@ local function build_filters()
     end,
     Header = function(h)
       if latex_like then return nil end
-      -- \section* and the like do not step LaTeX's counters.
-      if h.level <= options.counter_depth
+      -- \section* and the like do not step LaTeX's counters, and neither
+      -- do headings that LaTeX does not number.
+      local level = h.level
+      if level <= options.counter_depth and level <= options.numbered_depth
           and not h.classes:includes("unnumbered") then
         local s = stringify(h)
         if not options.counter_ignore_headings[s] then
-          options.header_counters[h.level] =
-            (options.header_counters[h.level] or 0) + 1
-          for i = h.level + 1, options.counter_depth do
-            options.header_counters[i] = 0
+          options.header_counters[level] =
+            (options.header_counters[level] or 0) + 1
+          if level ~= options.part_level then
+            for i = level + 1, options.counter_depth do
+              options.header_counters[i] = 0
+            end
           end
-          options.theorem_counters = {}
+          if level >= options.counter_first then
+            options.theorem_counters = {}
+          end
         end
       end
       return nil

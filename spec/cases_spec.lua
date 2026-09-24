@@ -89,7 +89,7 @@ end)
 
 describe("heading counters", function()
   it("skip unnumbered headings", function()
-    local out = run("unnumbered.md", "-t markdown")
+    local out = run("unnumbered.md", "-t markdown -N")
     has(out, "**Theorem 2.1.**")
   end)
 
@@ -104,7 +104,7 @@ describe("metadata", function()
     local out = run("scalar-meta.md", LATEX)
     has(out, "\\newtheorem{Main Theorem}{Main Theorem}\n")
     lacks(out, "\\newtheorem{ }")
-    out = run("scalar-meta.md", "-t markdown")
+    out = run("scalar-meta.md", "-t markdown -N")
     has(out, "**Main Theorem 1.1.**")
   end)
 
@@ -214,5 +214,43 @@ describe("the end-of-proof symbol", function()
   it("is math, so that it renders in every format, LaTeX included", function()
     local out = run("proof-note.md", "-t markdown")
     has(out, "Obvious.[$\\Box$]{.amsthm-qed}")
+  end)
+end)
+
+-- Each expectation below is what amsthm prints for the same document in
+-- LaTeX, with the same options.
+describe("theorem numbers follow LaTeX's section numbering", function()
+  local function numbers(out)
+    local found = {}
+    for n in out:gmatch("Theorem ([%dIVX.]+)%.") do found[#found + 1] = n end
+    return table.concat(found, " ")
+  end
+
+  it("without -N: sections step no counter", function()
+    local out, err = run("section-numbering.md", "-t plain")
+    assert.are.equal("0.1 0.2 0.3", numbers(out))
+    has(err, "sections are not numbered")
+  end)
+
+  it("with -N", function()
+    local out, err = run("section-numbering.md", "-t plain -N")
+    assert.are.equal("1.1 2.1 2.2", numbers(out))
+    lacks(err, "warning")
+  end)
+
+  it("below secnumdepth: those headings step no counter", function()
+    local out = run("section-numbering.md", "-t plain -N -V secnumdepth=0 " ..
+      "-M documentclass=book --top-level-division=chapter")
+    assert.are.equal("1.0.1 2.0.1 2.0.2", numbers(out))
+  end)
+
+  it("with parts: a part is not in a chapter's number, nor resets it", function()
+    local out = run("part-chapter.md", "-t plain -N --top-level-division=part")
+    assert.are.equal("0.1 1.1 1.2", numbers(out))
+  end)
+
+  it("within parts: a part is numbered in Roman numerals", function()
+    local out = run("part-part.md", "-t plain -N --top-level-division=part")
+    assert.are.equal("I.1 II.1 II.2", numbers(out))
   end)
 end)
