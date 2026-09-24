@@ -42,6 +42,13 @@ local BUILTIN_STYLES = {
     headpunct = ".", headspace = " " },
 }
 local FONT_TYPES = { bold = "Strong", italic = "Emph", smallcaps = "SmallCaps" }
+local FONT_LATEX = { bold = "\\bfseries", italic = "\\itshape", smallcaps = "\\scshape" }
+-- Keys of the amsthm metadata that are options, not styles.
+local OPTION_KEYS = {
+  styles = true, name_to_text = true, parent_counter = true,
+  counter_depth = true, counter_ignore_headings = true, css = true,
+  swapnumbers = true, qed_symbol = true,
+}
 local METADATA_KEY = "amsthm"
 local LATEX_LIKE = { latex = true, beamer = true }
 local COUNTER_DEPTH_DEFAULT = 0
@@ -236,19 +243,27 @@ local function cite_to_ref(elem, check_id, names)
 end
 M.cite_to_ref = cite_to_ref
 
--- In LaTeX, italic text such as the body of a plain theorem or the
--- heading of a proof makes what \ref and an in-text citation print
--- italic too, while \eqref is upright. Wrap the former before they are
--- resolved, so other output matches.
-local function italic_ref(el)
-  if el.t == "Cite" then
-    local _, mode = cite_to_id_mode(el)
-    if mode ~= "AuthorInText" then return nil end
-  elseif el.format ~= "tex" or not el.text:match("^\\ref%{.-%}$") then
-    return nil
+-- In LaTeX, the font of the text around a reference, such as the italic
+-- body of a plain theorem or the heading of a proof, applies to what \ref
+-- and an in-text citation print. \eqref is \textup, which undoes a shape
+-- (italic, small caps) but not a series (bold). Wrap the references the
+-- font applies to before they are resolved, so other output matches.
+local function font_ref(elem_type)
+  local shape = elem_type ~= "Strong"
+  return function(el)
+    if el.t == "Cite" then
+      local _, mode = cite_to_id_mode(el)
+      if mode ~= "AuthorInText" and (shape or mode ~= "NormalCitation") then
+        return nil
+      end
+    elseif el.format ~= "tex" or not (el.text:match("^\\ref%{.-%}$")
+        or (not shape and el.text:match("^\\eqref%{.-%}$"))) then
+      return nil
+    end
+    return INLINE_TYPES[elem_type]({ el })
   end
-  return pandoc.Emph({ el })
 end
+local italic_ref = font_ref("Emph")
 
 -- Parse a markdown string to an Inlines list, unwrapping the leading Para.
 local function parse_markdown_as_inline(md)
@@ -339,11 +354,12 @@ local function in_font(inlines, font)
   return out
 end
 
--- A font without italics, as amsthm's \@upn sets the number in a heading.
+-- A font in upright shape, as amsthm's \@upn (\textup) sets the number in
+-- a heading: without italics or small caps, keeping bold.
 local function upright(font)
   local out = {}
   for _, f in ipairs(font) do
-    if f ~= "italic" then out[#out + 1] = f end
+    if f == "bold" then out[#out + 1] = f end
   end
   return out
 end
@@ -512,6 +528,63 @@ local function numbered_depth(meta, top)
   return secnumdepth - PARENT_COUNTERS[top] + 2
 end
 
+-- A font from the metadata: a name or a list of names, of FONT_TYPES or
+-- "normal".
+local function read_font(node, where)
+  local font = {}
+  for _, v in ipairs(meta_list(node)) do
+    local name = stringify(v)
+    if FONT_TYPES[name] then
+      font[#font + 1] = name
+    elseif name ~= "normal" then
+      io.stderr:write("[amsthm] warning: unknown font " .. name .. " in " ..
+        where .. "; use bold, italic, smallcaps or normal\n")
+    end
+  end
+  return font
+end
+
+-- The styles: amsthm's built-in ones, and those under `styles`, which
+-- take the arguments of \newtheoremstyle. What is left out is as amsthm
+-- has it for a theorem: a bold heading, then a period and a space, and
+-- the body in the normal font. Returns the styles and the names of the
+-- user's, sorted.
+local function read_styles(node)
+  local styles, names = {}, {}
+  for k, v in pairs(BUILTIN_STYLES) do styles[k] = v end
+  if not is_meta_map(node) then return styles, names end
+  for name in pairs(node) do names[#names + 1] = name end
+  table.sort(names)
+  local kept = {}
+  for _, name in ipairs(names) do
+    local spec = node[name]
+    if OPTION_KEYS[name] or name == "proof" then
+      io.stderr:write("[amsthm] warning: a style cannot be called " .. name ..
+        ", which is an option of its own; ignoring it\n")
+    elseif not is_meta_map(spec) then
+      io.stderr:write("[amsthm] warning: style " .. name ..
+        " is not a map of its settings; ignoring it\n")
+    else
+      local function get(key, default)
+        return spec[key] ~= nil and stringify(spec[key]) or default
+      end
+      local where = "style " .. name
+      styles[name] = {
+        headfont = spec.headfont ~= nil and read_font(spec.headfont, where)
+          or { "bold" },
+        bodyfont = read_font(spec.bodyfont, where),
+        headpunct = get("headpunct", "."),
+        headspace = get("headspace", " "),
+        -- LaTeX only: space above and below, and the heading's indent.
+        above = get("above", ""), below = get("below", ""),
+        indent = get("indent", ""),
+      }
+      kept[#kept + 1] = name
+    end
+  end
+  return styles, kept
+end
+
 local function from_meta(meta)
   local opt_node = meta and meta[METADATA_KEY] or nil
   local opt = {}
@@ -546,7 +619,14 @@ local function from_meta(meta)
     theorems_map[t:class_name()] = t
   end
 
-  for _, style in ipairs(STYLES) do
+  local styles, user_styles = read_styles(opt.styles)
+  local style_order = {}
+  for _, name in ipairs(STYLES) do style_order[#style_order + 1] = name end
+  for _, name in ipairs(user_styles) do
+    if not BUILTIN_STYLES[name] then style_order[#style_order + 1] = name end
+  end
+
+  for _, style in ipairs(style_order) do
     local entries = meta_list(opt[style])
     for _, entry in ipairs(entries) do
       -- Each entry is either a MetaInlines (string) or a MetaMap (single-key).
@@ -663,7 +743,8 @@ local function from_meta(meta)
 
   return {
     css = css,
-    styles = BUILTIN_STYLES,
+    styles = styles,
+    user_styles = user_styles,
     swapnumbers = swapnumbers,
     qed_symbol = qed_symbol,
     counters = counters,
@@ -689,6 +770,21 @@ local function options_to_latex(options)
   if options.qed_symbol ~= "\\Box" then
     lines[#lines + 1] = "\\renewcommand{\\qedsymbol}{\\ensuremath{" ..
       options.qed_symbol .. "}}"
+  end
+  -- \newtheoremstyle{name}{above}{below}{body font}{indent}{heading font}
+  --   {punctuation}{space after the heading}{heading layout}
+  for _, name in ipairs(options.user_styles) do
+    local st = options.styles[name]
+    local function fonts(font)
+      local out = {}
+      for _, f in ipairs(font) do out[#out + 1] = FONT_LATEX[f] end
+      return table.concat(out)
+    end
+    local space = st.headspace == "newline" and "\\newline" or st.headspace
+    lines[#lines + 1] = "\\newtheoremstyle{" .. name .. "}{" .. st.above ..
+      "}{" .. st.below .. "}{" .. (#st.bodyfont > 0 and fonts(st.bodyfont) or "\\normalfont") ..
+      "}{" .. st.indent .. "}{" .. fonts(st.headfont) .. "}{" .. st.headpunct ..
+      "}{" .. space .. "}{}"
   end
   -- Before \newtheorem, which takes the order from it.
   if options.swapnumbers then lines[#lines + 1] = "\\swapnumbers" end
@@ -741,9 +837,10 @@ local function find_theorem(options, classes, warn)
   return found
 end
 
--- Apply the plain style's italic body to a theorem's content. Theorems
--- nested inside are held out of the walk, as each has a style of its own.
-local function emph_body(div, options)
+-- Set a theorem's content in its style's body font, such as the plain
+-- style's italics. Theorems nested inside are held out of the walk, as
+-- each has a style of its own.
+local function style_body(div, options, bodyfont)
   local held = {}
   local body = pandoc.Div(div.content):walk({
     traverse = "topdown",
@@ -755,11 +852,16 @@ local function emph_body(div, options)
       return nil
     end,
   })
-  body = body:walk({
-    Str = M.to_emph, Emph = M.cancel_emph,
-    Cite = italic_ref, RawInline = italic_ref,
-    Para = M.merge_emph, Plain = M.merge_emph, Header = M.merge_emph,
-  })
+  for _, font in ipairs(bodyfont) do
+    local T = FONT_TYPES[font]
+    local merge = merge_consecutive_type(T)
+    local ref = font_ref(T)
+    body = body:walk({
+      Str = to_type(T), [T] = cancel_repeated_type(T),
+      Cite = ref, RawInline = ref,
+      Para = merge, Plain = merge, Header = merge,
+    })
+  end
   if #held > 0 then
     body = body:walk({
       Div = function(d)
@@ -841,7 +943,10 @@ local function amsthm_block(div, options)
   for i = 1, #header - 1 do title[i] = header[i] end
   header = { pandoc.Span(title, pandoc.Attr("", { "amsthm-title" })), header[#header] }
 
-  if theorem.style == "plain" then div = emph_body(div, options) end
+  local style = options.styles[theorem.style]
+  if style and #style.bodyfont > 0 then
+    div = style_body(div, options, style.bodyfont)
+  end
 
   -- Prepend header to the first block's inline list when possible,
   -- otherwise wrap into a fresh Para.

@@ -330,3 +330,29 @@ describe("parent_counter per environment", function()
       table.concat(found, " "))
   end)
 end)
+
+describe("styles", function()
+  it("are \\newtheoremstyle in LaTeX", function()
+    local out = run("styles.md", LATEX)
+    has(out, "\\newtheoremstyle{claim}{}{}{\\normalfont}{}{\\bfseries\\itshape}{}{ }{}\n" ..
+      "\\newtheoremstyle{note}{6pt}{}{\\itshape}{}{\\scshape}{:}{\\newline}{}\n" ..
+      "\\theoremstyle{plain}")
+    has(out, "\\theoremstyle{note}\n\\newtheorem{Observation}{Observation}")
+  end)
+
+  it("set the heading and body in other output, as amsthm does", function()
+    local out = run("styles.md", "-t markdown")
+    -- The number upright, the note in the note font, then a new line.
+    has(out, "[[Observation]{.smallcaps} 1 (with a note)[:]{.smallcaps}]{.amsthm-title}\\\n")
+    has(out, "*The body in italics, citing [1](#o) and* ([1](#o))*.*")
+    has(out, "[***Claim***]{.amsthm-title} The body upright.")
+    has(out, ".amsthm .amsthm-note")
+  end)
+
+  it("apply a bold body to \\eqref too, which undoes only a shape", function()
+    local out, err = run("styles-bad.md", "-t markdown")
+    has(out, "**Bold, and so are [1](#s) and ([1](#s)).**")
+    has(err, "a style cannot be called css")
+    has(err, "unknown font huge in style loud")
+  end)
+end)

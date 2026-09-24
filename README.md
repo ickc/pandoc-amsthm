@@ -100,7 +100,33 @@ write `\qedhere` where the symbol should go, as in LaTeX:
 | `counter_ignore_headings` | Headings that do not advance the counters, such as `List of Figures` added by pandoc-crossref. |
 | `qed_symbol`              | The end-of-proof symbol, as math: `$\blacksquare$` (or just `\blacksquare`). Sets `\qedsymbol` in LaTeX. The default is `\Box`, the same box as amsthm's `\openbox`. |
 | `swapnumbers`             | `true` puts the number before the name, "1.1 Theorem", as `\swapnumbers` does. |
+| `styles`                  | Styles of your own, as `\newtheoremstyle`; see [Styles](#styles). |
 | `css`                     | `false` leaves out the stylesheet described under [Styling HTML](#styling-html). |
+
+### Styles
+
+Besides amsthm's `plain`, `definition` and `remark`, define styles under
+`styles`, then list environments under each style's name as for the
+built-in ones:
+
+```yaml
+amsthm:
+  styles:
+    note:
+      headfont: smallcaps   # bold, italic, smallcaps, normal, or a list
+      bodyfont: italic
+      headpunct: ":"
+      headspace: newline    # " ", newline, or a length such as 0.5em
+      above: 6pt            # LaTeX only, as are below and indent
+  note: [Observation]
+```
+
+In LaTeX this is `\newtheoremstyle{note}{6pt}{}{\itshape}{}{\scshape}{:}{\newline}{}`.
+Other output sets the heading and body in the same fonts, with the number
+upright as amsthm does; a length for `headspace` becomes a space there.
+Settings left out are as for a theorem in amsthm: a bold heading, a
+period and a space after it, and the body in the normal font. A style
+cannot take the name of an option such as `css`.
 
 ### Cross-references
 
