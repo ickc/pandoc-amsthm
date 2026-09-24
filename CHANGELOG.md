@@ -42,6 +42,9 @@ compares the two renderings.
 - Markdown output: emphasis inside a plain theorem no longer leaves a
   stray `**`.
 - An empty `amsthm:` key no longer stops the filter with an error.
+- Documentation: [examples](https://ickc.github.io/pandoc-amsthm/examples.html),
+  one short document per topic, each with its Markdown, its LaTeX and a
+  PDF typeset by amsthm.
 - README: a list of known limitations.
 
 ## v3.0.0
