@@ -4,7 +4,7 @@
 [**Theorem 1.0.1** (within parenthesis)**.**]{.amsthm-title} *plain
 theoremstyle* here
 
-*We can use pandoc-crossref style* [1.0.2](#simplestEquation) *and*
+*We can use pandoc-crossref style [1.0.2](#simplestEquation) and*
 ([1.0.2](#simplestEquation)) *and cite before definition.*
 :::
 

@@ -609,6 +609,19 @@ local function find_theorem(options, classes, warn)
   return found
 end
 
+-- In LaTeX, the italic body of a plain theorem makes what \ref and an
+-- in-text citation print italic too, while \eqref is upright. Wrap the
+-- former before they are resolved, so other output matches.
+local function italic_ref(el)
+  if el.t == "Cite" then
+    local _, mode = cite_to_id_mode(el)
+    if mode ~= "AuthorInText" then return nil end
+  elseif el.format ~= "tex" or not el.text:match("^\\ref%{.-%}$") then
+    return nil
+  end
+  return pandoc.Emph({ el })
+end
+
 -- Apply the plain style's italic body to a theorem's content. Theorems
 -- nested inside are held out of the walk, as each has a style of its own.
 local function emph_body(div, options)
@@ -625,6 +638,7 @@ local function emph_body(div, options)
   })
   body = body:walk({
     Str = M.to_emph, Emph = M.cancel_emph,
+    Cite = italic_ref, RawInline = italic_ref,
     Para = M.merge_emph, Plain = M.merge_emph, Header = M.merge_emph,
   })
   if #held > 0 then

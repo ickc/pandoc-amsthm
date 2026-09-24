@@ -186,3 +186,12 @@ describe("name_to_text for proof", function()
     has(out, "[*Beweis.*]{.amsthm-title} Klar.")
   end)
 end)
+
+describe("a reference in the italic body of a plain theorem", function()
+  it("is italic like \\ref, or upright like \\eqref", function()
+    local out = run("italic-ref.md", "-t markdown")
+    has(out, "*By [1](#a), [Theorem\u{a0}1](#a),* ([1](#a))*, [1](#a) and* ([1](#a))*;*")
+    -- The body of other styles is upright.
+    has(out, "By [1](#a).")
+  end)
+end)
