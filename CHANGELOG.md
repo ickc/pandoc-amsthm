@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased
+
+- The filter stops with a clear error on pandoc older than 3.1.1.
+- `_extension.yml` declares, for packagers, the pandoc versions the
+  filter supports (`pandoc-required`) and the command that tests it
+  (`pandoc-test`). Quarto ignores both keys.
+
 ## v3.1.0
 
 Other output now follows what `amsthm` does in LaTeX more closely.

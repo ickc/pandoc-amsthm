@@ -1316,6 +1316,7 @@ M._build_filters = build_filters
 -- When loaded as a pandoc Lua filter, return the filter list directly.
 -- When `require`d (e.g. from spec/run.lua) return the module table.
 if pandoc and FORMAT then
+  PANDOC_VERSION:must_be_at_least "3.1.1"
   return build_filters()
 else
   return M

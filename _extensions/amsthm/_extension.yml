@@ -2,6 +2,11 @@ title: amsthm
 author: Kolen Cheung
 version: 3.1.0
 quarto-required: ">=1.4.0"
+# For packagers such as pandoc-forge; Quarto ignores these keys.
+# The pandoc versions the filter supports, and the command, run from the
+# repository root, that tests it.
+pandoc-required: ">=3.1.1"
+pandoc-test: pandoc lua spec/run.lua
 contributes:
   filters:
     # Before Quarto parses the document into its own AST, so that `.proof`
