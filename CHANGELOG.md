@@ -2,30 +2,36 @@
 
 ## Unreleased
 
-Closer to what `amsthm` does in LaTeX, in every output.
+Other output now follows what `amsthm` does in LaTeX more closely.
+[DESIGN.md](DESIGN.md) describes the approach, and `pixi run bake`
+compares the two renderings.
 
 - Cross-references link to the environment in HTML and other non-LaTeX
-  output, as hyperref makes them do in LaTeX
+  output. As hyperref does for `\ref`, only the number is a link
   ([#21](https://github.com/ickc/pandoc-amsthm/issues/21)).
-- `@Euler`, with the first letter of the identifier capitalised, gives
-  the environment's name with the number, "Theorem 1", as `\Cref` does;
-  `[@Euler]` gives "(Theorem 1)". LaTeX output writes it as
-  `Theorem~\ref{euler}`
+- `@Euler`, with the first letter of the identifier capitalised, puts
+  the environment's name before the number: "Theorem 1", written
+  `Theorem~\ref{euler}` in LaTeX. `[@Euler]` gives "(Theorem 1)"
   ([#22](https://github.com/ickc/pandoc-amsthm/issues/22)).
-- `name_to_text: {proof: ...}` renames the proof, in other output as
-  well as in LaTeX, where it sets `\proofname`. LaTeX output already
-  followed the document's `lang`.
-- In the italic body of a plain theorem, a reference from `@id` or
-  `\ref` is italic, and one from `[@id]` or `\eqref` upright, as in
-  LaTeX.
-- LaTeX: a reference to an unnumbered environment is left to citeproc,
-  as in other output, rather than printing the enclosing section's
-  number.
+- Theorem numbers count sections as LaTeX does: without `-N` they are
+  0.1, 0.2, … with a warning; headings deeper than `secnumdepth` do not
+  count; with `--top-level-division=part`, parts neither appear in nor
+  restart a chapter's number, and are Roman numerals when theorems are
+  numbered within them.
+- In italic text, such as the body of a plain theorem or the note of a
+  proof, a reference from `@id` or `\ref` is italic, and one from
+  `[@id]` or `\eqref` upright, as in LaTeX.
+- The end-of-proof symbol is `$\Box$`, which renders in every format;
+  the Unicode ◻ was missing from LaTeX's default fonts.
+- `name_to_text: {proof: ...}` renames the proof, setting `\proofname`
+  in LaTeX.
+- A reference to an unnumbered environment gets a warning.
 - LaTeX: a theorem note holding math, raw TeX or a citation with a
   locator, such as `info="on $[0,1]$"`, no longer ends at its first `]`.
 - Markdown output: emphasis inside a plain theorem no longer leaves a
   stray `**`.
 - An empty `amsthm:` key no longer stops the filter with an error.
+- README: a list of known limitations.
 
 ## v3.0.0
 
