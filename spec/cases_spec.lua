@@ -73,9 +73,17 @@ describe("theorem bodies in LaTeX", function()
   it("go through the writer with the user's options", function()
     local out = run("natbib.md", "-t latex --natbib")
     has(out, "Outside a theorem, see \\citet{knuth}.")
-    has(out, "\\begin{Theorem}[as in \\citet{knuth}]")
+    has(out, "\\begin{Theorem}[{as in \\citet{knuth}}]")
     has(out, "Inside a theorem, see \\citet{knuth}.")
     lacks(out, "@knuth")
+  end)
+
+  it("brace a note that may hold a ], so it does not end the note early", function()
+    local out = run("natbib.md", "-t latex --natbib")
+    has(out, "\\begin{Theorem}[{as in \\citet[p.~3]{knuth}}]")
+    has(out, "\\begin{Theorem}[{on \\([0,1]\\)}]")
+    -- The writer escapes brackets in text already.
+    has(out, "\\begin{Theorem}[see {[}1{]}]")
   end)
 end)
 

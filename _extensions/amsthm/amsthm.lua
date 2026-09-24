@@ -749,9 +749,18 @@ local function amsthm_latex_block(div, options)
   local open = { pandoc.RawInline("latex", "\\begin{" .. theorem.env_name .. "}") }
   local info = div.attributes.info
   if info and info ~= "" then
-    open[#open + 1] = pandoc.RawInline("latex", "[")
-    for _, e in ipairs(parse_markdown_as_inline(info)) do open[#open + 1] = e end
-    open[#open + 1] = pandoc.RawInline("latex", "]")
+    local note = parse_markdown_as_inline(info)
+    -- The writer escapes brackets in text, but not in math, citations or
+    -- raw TeX, where a ] would end the optional argument early.
+    local brace = false
+    local function unsafe() brace = true end
+    local scan = { Math = unsafe, Cite = unsafe, RawInline = unsafe }
+    for _, e in ipairs(note) do
+      if scan[e.t] then brace = true else e:walk(scan) end
+    end
+    open[#open + 1] = pandoc.RawInline("latex", brace and "[{" or "[")
+    for _, e in ipairs(note) do open[#open + 1] = e end
+    open[#open + 1] = pandoc.RawInline("latex", brace and "}]" or "]")
   end
   if div.identifier ~= "" then
     open[#open + 1] = pandoc.RawInline("latex", "\\label{" .. div.identifier .. "}")
