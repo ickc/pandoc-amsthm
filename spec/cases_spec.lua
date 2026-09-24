@@ -374,3 +374,28 @@ describe("a reference to several environments", function()
     has(err, "unnumbered environment m")
   end)
 end)
+
+-- The examples on the documentation site, which people learn from: each
+-- must run without a warning from the filter, in LaTeX and other output.
+describe("the documentation's examples", function()
+  local p = assert(io.popen("ls docs/examples/*.md"))
+  for path in p:lines() do
+    it(path .. " runs cleanly", function()
+      for _, args in ipairs({ LATEX .. " -N", "-t html -N" }) do
+        local err_path = os.tmpname()
+        local out = assert(io.popen("pandoc -L " .. FILTER .. " " .. path ..
+          " --wrap=none " .. args .. " 2>" .. err_path, "r"))
+        out:read("*a")
+        out:close()
+        local f = assert(io.open(err_path, "r"))
+        local err = f:read("*a")
+        f:close()
+        os.remove(err_path)
+        -- The filter's own warnings; pandoc's (such as texmath's, which
+        -- varies by version) are not about the examples.
+        lacks(err, "[amsthm]")
+      end
+    end)
+  end
+  p:close()
+end)
