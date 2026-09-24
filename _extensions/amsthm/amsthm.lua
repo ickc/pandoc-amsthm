@@ -375,9 +375,10 @@ M.NewTheorem = NewTheorem
 local Proof = setmetatable({}, { __index = NewTheorem })
 Proof.__index = Proof
 
-function Proof.new()
+-- `text` is the name shown, \proofname in LaTeX.
+function Proof.new(text)
   local self = NewTheorem.new({
-    style = "proof", env_name = "proof", text = "proof", numbered = false,
+    style = "proof", env_name = "proof", text = text or "Proof", numbered = false,
   })
   return setmetatable(self, Proof)
 end
@@ -385,7 +386,7 @@ end
 -- Proof gets a markdown-parsed info that's emph-normalised.
 function Proof:to_header(_options, _id, info)
   if info == nil or info == "" then
-    return { pandoc.Emph({ pandoc.Str("Proof.") }), pandoc.Space() }
+    return { pandoc.Emph(pandoc.Inlines(self.text .. ".")), pandoc.Space() }
   end
   local ast = parse_markdown_as_inline(info)
   -- Wrap into a Para so we can walk + apply emph transforms over a block.
@@ -510,7 +511,7 @@ local function from_meta(meta)
   end
 
   -- Proof is predefined.
-  local proof = Proof.new()
+  local proof = Proof.new(name_to_text.proof)
   theorems_order[#theorems_order + 1] = proof
   theorems_map[proof:class_name()] = proof
 
@@ -543,6 +544,7 @@ local function from_meta(meta)
 
   return {
     css = css,
+    proof_name = name_to_text.proof,
     theorems_order = theorems_order,
     theorems_map = theorems_map,
     counter_depth = counter_depth,
@@ -557,6 +559,12 @@ end
 local function options_to_latex(options)
   local cur_style = ""
   local lines = {}
+  if options.proof_name then
+    -- At the start of the document, after babel sets the name for the
+    -- document's language.
+    lines[#lines + 1] = "\\AtBeginDocument{\\renewcommand{\\proofname}{" ..
+      options.proof_name .. "}}"
+  end
   for _, theorem in ipairs(options.theorems_order) do
     if getmetatable(theorem) ~= Proof then
       if theorem.style ~= cur_style then

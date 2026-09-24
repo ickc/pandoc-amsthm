@@ -85,12 +85,16 @@ Obvious.
 `proof` is always defined. Names containing spaces become classes with
 underscores: `Main Theorem` is written as `::: Main_Theorem`.
 
+In LaTeX output, babel translates "Proof" into the document's `lang`;
+in other output it stays "Proof" unless you name it yourself, as in
+`name_to_text: {proof: Beweis}`, which then applies to both.
+
 ### Options
 
 | Key                       | Meaning |
 | ------------------------- | ------- |
 | `plain`, `definition`, `remark` | Environments in that style. An entry is a name, or a map from a name to the names that share its counter. |
-| `name_to_text`            | Displayed text for a name, when it differs from the name. Keyed by the name exactly as it appears in the list above, including a trailing `*`. |
+| `name_to_text`            | Displayed text for a name, when it differs from the name. Keyed by the name exactly as it appears in the list above, including a trailing `*`. The key `proof` renames the proof (`\proofname` in LaTeX). |
 | `parent_counter`          | Number theorems within this LaTeX sectioning unit (`part`, `chapter`, `section`, …). |
 | `counter_depth`           | Non-LaTeX only: how many heading levels prefix the theorem number. By default it follows `parent_counter` and `--top-level-division`, so both kinds of output number alike; without `parent_counter` it is `0`, numbering theorems through the document. |
 | `counter_ignore_headings` | Headings that do not advance the counters, such as `List of Figures` added by pandoc-crossref. |
