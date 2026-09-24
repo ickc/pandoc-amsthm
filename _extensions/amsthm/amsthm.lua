@@ -752,6 +752,52 @@ local function qed_math(options)
   return "\\quad" .. (symbol:match("^%a") and " " or "") .. symbol
 end
 
+-- The end-of-proof symbol, as a span that the CSS pushes to the right.
+local function qed_span(options)
+  return pandoc.Span({ pandoc.Math("InlineMath", qed_math(options)) },
+    pandoc.Attr("", { "amsthm-qed" }))
+end
+
+-- amsthm's \qedhere, which puts the symbol where it is instead of at the
+-- end of the proof. In math it is \mathqed, \quad\qedsymbol, in place; in
+-- text it is \qed. Theorems and proofs nested in this one are left to
+-- their own. Returns whether there was a \qedhere.
+local function place_qedhere(div, options)
+  local placed = false
+  local symbol = qed_math(options):gsub("%%", "%%%%")
+  div.content = pandoc.Blocks(div.content):walk({
+    traverse = "topdown",
+    Div = function(d)
+      if find_theorem(options, d.classes) then return nil, false end
+      return nil
+    end,
+    Math = function(m)
+      local text, n = m.text:gsub("\\qedhere%f[^%a]", symbol)
+      if n == 0 then return nil end
+      placed = true
+      m.text = text
+      return m
+    end,
+    Inlines = function(inlines)
+      local out, changed = pandoc.Inlines({}), false
+      for _, e in ipairs(inlines) do
+        if e.t == "RawInline" and (e.format == "tex" or e.format == "latex")
+            and e.text:match("^%s*\\qedhere%s*$") then
+          -- \qed starts with \unskip.
+          while #out > 0 and BLANK[out[#out].t] do out:remove() end
+          out:insert(qed_span(options))
+          placed, changed = true, true
+        else
+          out:insert(e)
+        end
+      end
+      if changed then return out end
+      return nil
+    end,
+  })
+  return placed
+end
+
 -- non-LaTeX transform: prepend the theorem header, do plain-style emph,
 -- track counters and identifiers.
 local function amsthm_block(div, options)
@@ -784,14 +830,12 @@ local function amsthm_block(div, options)
     table.insert(div.content, 1, pandoc.Para(header))
   end
 
-  if theorem.style == "proof" then
+  if theorem.style == "proof" and not place_qedhere(div, options) then
     -- amsthm's \qed is \nobreak\hfill\quad\openbox. As math, \quad\Box
     -- renders in every format: \Box is amssymb's \openbox, and TeX does not
     -- break a line inside a formula, which stands in for \nobreak. Only
     -- \hfill is left out, for the CSS to do in HTML.
-    local qed = pandoc.Span(
-      { pandoc.Math("InlineMath", qed_math(options)) },
-      pandoc.Attr("", { "amsthm-qed" }))
+    local qed = qed_span(options)
     local last = div.content[#div.content]
     if last and last.content
        and (last.t == "Para" or last.t == "Plain" or last.t == "Header") then

@@ -288,3 +288,23 @@ describe("qed_symbol", function()
     has(out, "Obvious.[$\\quad\\blacksquare$]{.amsthm-qed}")
   end)
 end)
+
+describe("\\qedhere", function()
+  it("passes through to amsthm in LaTeX", function()
+    local out = run("qedhere.md", LATEX)
+    has(out, "x = 1. \\qedhere")
+    has(out, "two \\qedhere")
+  end)
+
+  it("puts the symbol there, and not at the end, in other output", function()
+    local out = run("qedhere.md", "-t markdown")
+    -- In math, amsthm's \mathqed: \quad\qedsymbol in place.
+    has(out, "$$x = 1. \\quad\\Box$$\n:::")
+    -- In text, \qed, which takes the space before it away.
+    has(out, "- two[$\\quad\\Box$]{.amsthm-qed}\n:::")
+    -- A nested proof has a \qedhere of its own; the outer one still ends.
+    has(out, "Inner.[$\\quad\\Box$]{.amsthm-qed}")
+    has(out, "Outer.[$\\quad\\Box$]{.amsthm-qed}")
+    assert.are.equal(4, count(out, "\\Box"))
+  end)
+end)

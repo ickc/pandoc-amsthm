@@ -85,6 +85,10 @@ Obvious.
 `proof` is always defined. Names containing spaces become classes with
 underscores: `Main Theorem` is written as `::: Main_Theorem`.
 
+A proof ends with its symbol. When it ends in a display or a list,
+write `\qedhere` where the symbol should go, as in LaTeX:
+`$$x = 1. \qedhere$$`, or `- last item \qedhere`.
+
 ### Options
 
 | Key                       | Meaning |
