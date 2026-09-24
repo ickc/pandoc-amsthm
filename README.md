@@ -183,7 +183,7 @@ stylesheet sits. `css: false` leaves it out altogether.
 
 In LaTeX output `amsthm` does the typesetting; in other output the
 filter rebuilds the same result from Pandoc's elements (see
-[DESIGN.md](DESIGN.md)). Some things cannot be expressed that way:
+[the design notes](https://ickc.github.io/pandoc-amsthm/design.html)). Some things cannot be expressed that way:
 
 - **Language.** In LaTeX, babel translates "Proof" into the document's
   `lang`, as "Beweis" for `lang: de`. Other output always says
@@ -265,7 +265,7 @@ pixi run docs-preview # serve it with live reload
 pixi run bootstrap-tinytex    # once per machine, for the site's PDF
 ```
 
-See [DESIGN.md](DESIGN.md) for how features are designed and checked:
+See [the design notes](https://ickc.github.io/pandoc-amsthm/design.html) for how features are designed and checked:
 LaTeX output first, then the same result built from Pandoc's AST for
 every other format.
 
