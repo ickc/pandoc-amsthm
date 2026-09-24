@@ -442,7 +442,8 @@ M.top_level_division = top_level_division
 local function from_meta(meta)
   local opt_node = meta and meta[METADATA_KEY] or nil
   local opt = {}
-  if opt_node ~= nil then
+  -- An empty `amsthm:` is a string, not a map, and defines nothing.
+  if is_meta_map(opt_node) then
     -- MetaMap behaves as a table with string keys.
     for k, v in pairs(opt_node) do opt[k] = v end
   end
