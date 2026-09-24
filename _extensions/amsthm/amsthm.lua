@@ -755,12 +755,10 @@ end
 M.resolve_inline = resolve_inline
 
 -- LaTeX: collect ids (pass 1) and emit \begin{env}…\end{env} (pass 2).
--- Only numbered environments, as in other output: \ref to an unnumbered
--- one would print the number of the enclosing section.
 local function collect_ref_id(div, options)
   local theorem = find_theorem(options, div.classes, true)
   if not theorem then return nil end
-  if theorem.numbered and div.identifier and div.identifier ~= "" then
+  if div.identifier and div.identifier ~= "" then
     options.identifiers[div.identifier] = ""
     options.names[div.identifier] = theorem.text
   end
