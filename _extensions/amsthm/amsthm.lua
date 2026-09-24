@@ -559,6 +559,8 @@ local function from_meta(meta)
     theorem_counters = {},
     identifiers = {},
     names = {},
+    unnumbered = {},
+    warned = {},
   }
 end
 
@@ -667,6 +669,7 @@ local function amsthm_block(div, options)
 
   local info = div.attributes.info
   local id = div.identifier
+  if not theorem.numbered and id ~= "" then options.unnumbered[id] = true end
   local header = theorem:to_header(options, id, info)
   -- to_header ends with a Space; keep it outside the title span.
   local title = {}
@@ -721,6 +724,28 @@ local function amsthm_block(div, options)
   return div
 end
 
+-- Warn, once per id, about a reference to an unnumbered environment. LaTeX
+-- prints the number of whatever was numbered last before it, usually the
+-- section, which other output cannot follow, so it leaves it unresolved.
+local function warn_unnumbered(elem, options)
+  local id
+  if elem.t == "Cite" then
+    id = cite_to_id_mode(elem)
+  elseif elem.format == "tex" then
+    local kind
+    kind, id = elem.text:match("^\\(%a+)%{(.-)%}$")
+    if kind ~= "ref" and kind ~= "eqref" then id = nil end
+  end
+  if id then id = ref_target(id, options.unnumbered) end
+  if id and not options.warned[id] then
+    options.warned[id] = true
+    io.stderr:write("[amsthm] warning: reference to the unnumbered " ..
+      "environment " .. id .. "; LaTeX prints the last number before it, " ..
+      "other output leaves it unresolved\n")
+  end
+end
+M.warn_unnumbered = warn_unnumbered
+
 -- A reference to the environment `id`, numbered `n`, as a link to it,
 -- led by the environment's name when `name` is given; in parentheses
 -- outside the link, as \eqref does, when `paren` is set.
@@ -761,6 +786,7 @@ local function collect_ref_id(div, options)
   if div.identifier and div.identifier ~= "" then
     options.identifiers[div.identifier] = ""
     options.names[div.identifier] = theorem.text
+    if not theorem.numbered then options.unnumbered[div.identifier] = true end
   end
   return nil
 end
@@ -882,10 +908,12 @@ local function build_filters()
       return nil
     end,
     Cite = function(c)
+      warn_unnumbered(c, options)
       if latex_like then return cite_to_ref(c, options.identifiers, options.names) end
       return resolve_inline(c, options)
     end,
     RawInline = function(r)
+      warn_unnumbered(r, options)
       if latex_like then return nil end
       return resolve_inline(r, options)
     end,

@@ -117,8 +117,10 @@ environment changes later. In LaTeX output this is written out as
 that itself starts with a capital letter is always an ordinary
 reference, so use lowercase identifiers for this.
 
-Only numbered environments can be referred to: a reference to an
-unnumbered one is left alone, and citeproc warns about it.
+A reference to an unnumbered environment prints nothing meaningful in
+LaTeX, which gives the last number set before it, usually the
+section's. LaTeX output keeps it as `\ref`, as written; other output
+leaves it unresolved. The filter warns about it either way.
 
 ### Tips
 
