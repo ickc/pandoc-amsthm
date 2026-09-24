@@ -46,34 +46,101 @@ describe("cite_to_ref", function()
   end)
 end)
 
+describe("ref_target", function()
+  local ids = { euler = "1", Cap = "2" }
+
+  it("returns an id that is a key, unnamed", function()
+    local id, is_named = amsthm.ref_target("euler", ids)
+    assert.are.equal("euler", id)
+    assert.is_false(is_named)
+  end)
+
+  it("names the environment when the first letter is capitalised", function()
+    local id, is_named = amsthm.ref_target("Euler", ids)
+    assert.are.equal("euler", id)
+    assert.is_true(is_named)
+  end)
+
+  it("prefers an id that is itself a key", function()
+    local id, is_named = amsthm.ref_target("Cap", ids)
+    assert.are.equal("Cap", id)
+    assert.is_false(is_named)
+  end)
+
+  it("returns nil for unknown ids", function()
+    assert.is_nil(amsthm.ref_target("Nope", ids))
+    assert.is_nil(amsthm.ref_target("1abc", ids))
+  end)
+end)
+
+describe("cite_to_ref with names", function()
+  local ids, names = { x = "" }, { x = "Main Theorem" }
+
+  it("@Id -> Name~\\ref{id}", function()
+    local c = pandoc.Cite({ pandoc.Str("@X") }, { citation("X", "AuthorInText") })
+    local r = amsthm.cite_to_ref(c, ids, names)
+    assert.are.equal("Main Theorem~\\ref{x}",
+      pandoc.write(pandoc.Pandoc({ pandoc.Plain(r) }), "latex"))
+  end)
+
+  it("[@Id] -> (Name~\\ref{id})", function()
+    local c = pandoc.Cite({ pandoc.Str("[@X]") }, { citation("X", "NormalCitation") })
+    local r = amsthm.cite_to_ref(c, ids, names)
+    assert.are.equal("(Main Theorem~\\ref{x})",
+      pandoc.write(pandoc.Pandoc({ pandoc.Plain(r) }), "latex"))
+  end)
+end)
+
 describe("resolve_inline (non-LaTeX)", function()
   local options = { identifiers = { ["thm1"] = "1.2.3" } }
 
-  it("[@id] cite -> (number)", function()
+  -- A link to #thm1 reading 1.2.3.
+  local function assert_link(r)
+    assert.are.equal("Link", r.t)
+    assert.are.equal("#thm1", r.target)
+    assert.are.equal("1.2.3", pandoc.utils.stringify(r))
+  end
+
+  -- "(", a link to #thm1, ")".
+  local function assert_paren_link(r)
+    assert.are.equal(3, #r)
+    assert.are.equal("(", r[1].text)
+    assert_link(r[2])
+    assert.are.equal(")", r[3].text)
+  end
+
+  it("[@id] cite -> (linked number)", function()
     local c = pandoc.Cite({ pandoc.Str("[@thm1]") },
                           { citation("thm1", "NormalCitation") })
-    local r = amsthm.resolve_inline(c, options)
-    assert.are.equal("Str", r.t)
-    assert.are.equal("(1.2.3)", r.text)
+    assert_paren_link(amsthm.resolve_inline(c, options))
   end)
 
-  it("@id cite -> number", function()
+  it("@id cite -> linked number", function()
     local c = pandoc.Cite({ pandoc.Str("@thm1") },
                           { citation("thm1", "AuthorInText") })
-    local r = amsthm.resolve_inline(c, options)
-    assert.are.equal("1.2.3", r.text)
+    assert_link(amsthm.resolve_inline(c, options))
   end)
 
-  it("\\ref{id} raw tex -> number", function()
-    local r = amsthm.resolve_inline(
-      pandoc.RawInline("tex", "\\ref{thm1}"), options)
-    assert.are.equal("1.2.3", r.text)
+  it("\\ref{id} raw tex -> linked number", function()
+    assert_link(amsthm.resolve_inline(
+      pandoc.RawInline("tex", "\\ref{thm1}"), options))
   end)
 
-  it("\\eqref{id} raw tex -> (number)", function()
-    local r = amsthm.resolve_inline(
-      pandoc.RawInline("tex", "\\eqref{thm1}"), options)
-    assert.are.equal("(1.2.3)", r.text)
+  it("\\eqref{id} raw tex -> (linked number)", function()
+    assert_paren_link(amsthm.resolve_inline(
+      pandoc.RawInline("tex", "\\eqref{thm1}"), options))
+  end)
+
+  it("@Id cite -> name and linked number", function()
+    local c = pandoc.Cite({ pandoc.Str("@Thm1") },
+                          { citation("Thm1", "AuthorInText") })
+    local r = amsthm.resolve_inline(c,
+      { identifiers = options.identifiers, names = { thm1 = "Main Theorem" } })
+    -- Only the number is linked, as hyperref links what \\ref prints.
+    assert.are.equal("Main Theorem\u{a0}1.2.3", pandoc.utils.stringify(r))
+    assert.are.equal("Link", r[#r].t)
+    assert.are.equal("#thm1", r[#r].target)
+    assert.are.equal("1.2.3", pandoc.utils.stringify(r[#r]))
   end)
 
   it("ignores unknown ids", function()

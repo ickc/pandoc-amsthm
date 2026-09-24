@@ -17,8 +17,11 @@ test-unit = { cmd = "pandoc lua spec/run.lua spec/emph_spec.lua spec/cite_spec.l
 test-golden = { cmd = "pandoc lua spec/run.lua spec/golden_spec.lua spec/cases_spec.lua", description = "Compare filter output against tests/model-*" }
 gen-golden = { cmd = """
 pandoc -L _extensions/amsthm/amsthm.lua tests/model-source.md --top-level-division=chapter -N -s --template tests/template.latex -t latex -o tests/model-latex.tex && \
-pandoc -L _extensions/amsthm/amsthm.lua tests/model-source.md -t markdown -o tests/model-target.md
+pandoc -L _extensions/amsthm/amsthm.lua tests/model-source.md -N -t markdown -o tests/model-target.md
 """, description = "Regenerate the golden files in tests/" }
+# Needs a LaTeX install, and pdftoppm and ImageMagick for the side-by-side
+# PNGs; see DESIGN.md.
+bake = { cmd = "tools/bake.sh", description = "Compare amsthm's PDF with the filter's own rendering: pixi run bake doc.md -N" }
 
 # Oldest pandoc 3.x on conda-forge. It has no osx-arm64 build, and this
 # environment exists for CI, so it is linux only.

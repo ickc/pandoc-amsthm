@@ -1,0 +1,14 @@
+# Each page here is a standalone document, rendered with the filter.
+# example-source.lua appends the page's Markdown and its LaTeX output.
+filters:
+  - amsthm
+  # Before Quarto's own processing, which turns the appended
+  # .panel-tabset into tabs.
+  - path: ../example-source.lua
+    at: pre-ast
+number-sections: true
+format:
+  html: default
+  # Quarto links the PDF from the page's "Other Formats"
+  pdf:
+    pdf-engine: lualatex

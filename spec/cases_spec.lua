@@ -60,7 +60,7 @@ describe("nested theorems", function()
     has(out, "[**Theorem 1.**]{.amsthm-title} *Outer statement.*")
     has(out, "[**Theorem 2.**]{.amsthm-title} *Inner statement.*")
     has(out, "[**Theorem 3.**]{.amsthm-title} *A theorem inside a proof.*")
-    has(out, "See (2) and (3).")
+    has(out, "See ([2](#thm-inner)) and ([3](#thm-in-proof)).")
   end)
 
   it("keep their own style inside a plain theorem", function()
@@ -73,15 +73,25 @@ describe("theorem bodies in LaTeX", function()
   it("go through the writer with the user's options", function()
     local out = run("natbib.md", "-t latex --natbib")
     has(out, "Outside a theorem, see \\citet{knuth}.")
-    has(out, "\\begin{Theorem}[as in \\citet{knuth}]")
+    has(out, "\\begin{Theorem}[{as in \\citet{knuth}}]")
     has(out, "Inside a theorem, see \\citet{knuth}.")
     lacks(out, "@knuth")
+  end)
+
+  it("brace a note that may hold a ], so it does not end the note early", function()
+    local out = run("natbib.md", "-t latex --natbib")
+    has(out, "\\begin{Theorem}[{as in \\citet[p.~3]{knuth}}]")
+    has(out, "\\begin{Theorem}[{on \\([0,1]\\)}]")
+    -- The writer escapes brackets in text already.
+    has(out, "\\begin{Theorem}[see {[}1{]}]")
+    has(out, "\\begin{Theorem}[{with")
+    has(out, "{x.png}}]")
   end)
 end)
 
 describe("heading counters", function()
   it("skip unnumbered headings", function()
-    local out = run("unnumbered.md", "-t markdown")
+    local out = run("unnumbered.md", "-t markdown -N")
     has(out, "**Theorem 2.1.**")
   end)
 
@@ -96,7 +106,7 @@ describe("metadata", function()
     local out = run("scalar-meta.md", LATEX)
     has(out, "\\newtheorem{Main Theorem}{Main Theorem}\n")
     lacks(out, "\\newtheorem{ }")
-    out = run("scalar-meta.md", "-t markdown")
+    out = run("scalar-meta.md", "-t markdown -N")
     has(out, "**Main Theorem 1.1.**")
   end)
 
@@ -140,4 +150,263 @@ describe("classes", function()
       lacks(out, "Lemma 1")
     end
   end)
+end)
+
+describe("a reference with a capitalised id", function()
+  it("names the environment in LaTeX", function()
+    local out = run("named-ref.md", LATEX)
+    has(out, "By Theorem~\\ref{euler}, (Lemma~\\ref{nz}), Klein's Lemma~\\ref{kl}")
+    -- An id that is capitalised itself is an ordinary reference.
+    has(out, "and \\ref{Cap}, \\ref{euler}, @Unknown.")
+  end)
+
+  it("names the environment in other output", function()
+    local out = run("named-ref.md", "-t html")
+    has(out, 'By Theorem\u{a0}<a href="#euler">1</a>, (Lemma\u{a0}<a href="#nz">2</a>)')
+    has(out, '<a href="#Cap">3</a>, <a href="#euler">1</a>')
+  end)
+end)
+
+describe("name_to_text for proof", function()
+  it("sets \\proofname in LaTeX, after babel", function()
+    local out = run("proof-name.md", LATEX)
+    has(out, "\\AtBeginDocument{\\renewcommand{\\proofname}{Beweis}}")
+  end)
+
+  it("names the proof in other output", function()
+    local out = run("proof-name.md", "-t markdown")
+    has(out, "[*Beweis.*]{.amsthm-title} Klar.")
+  end)
+end)
+
+describe("a reference in the italic body of a plain theorem", function()
+  it("is italic like \\ref, or upright like \\eqref", function()
+    local out = run("italic-ref.md", "-t markdown")
+    has(out, "*By [1](#a), Theorem\u{a0}[1](#a),* ([1](#a))*, [1](#a) and* ([1](#a))*;*")
+    -- Upright inside emphasis, as \\emph makes it in LaTeX.
+    has(out, "by [1](#a)*.*")
+    -- The body of other styles is upright.
+    has(out, "By [1](#a).")
+  end)
+end)
+
+describe("a reference to an unnumbered environment", function()
+  it("is written as \\ref in LaTeX, as a LaTeX author would, with a warning", function()
+    local out, err = run("unnumbered-ref.md", LATEX)
+    has(out, "See \\ref{euler}, \\ref{main}, \\eqref{main} and \\ref{main}.")
+    has(err, "unnumbered environment main")
+    assert.are.equal(1, count(err, "[amsthm] warning"))
+  end)
+
+  it("is left unresolved in other output, with a warning", function()
+    local out, err = run("unnumbered-ref.md", "-t markdown")
+    has(out, "See [1](#euler), @main, [@main] and `\\ref{main}`{=tex}.")
+    has(err, "unnumbered environment main")
+  end)
+end)
+
+describe("a reference in the note of a proof", function()
+  it("is italic like the note, or upright like \\eqref", function()
+    local out = run("proof-note.md", "-t markdown")
+    has(out, "[*Proof of Theorem\u{a0}[1](#euler), see* ([1](#euler))*.*]{.amsthm-title}")
+  end)
+end)
+
+describe("the end-of-proof symbol", function()
+  it("is math, so that it renders in every format, LaTeX included", function()
+    local out = run("proof-note.md", "-t markdown")
+    has(out, "Obvious.[$\\quad\\Box$]{.amsthm-qed}")
+  end)
+end)
+
+-- Each expectation below is what amsthm prints for the same document in
+-- LaTeX, with the same options.
+describe("theorem numbers follow LaTeX's section numbering", function()
+  local function numbers(out)
+    local found = {}
+    for n in out:gmatch("Theorem ([%dIVX.]+)%.") do found[#found + 1] = n end
+    return table.concat(found, " ")
+  end
+
+  it("without -N: sections step no counter", function()
+    local out, err = run("section-numbering.md", "-t plain")
+    assert.are.equal("0.1 0.2 0.3", numbers(out))
+    has(err, "sections that are not numbered")
+  end)
+
+  it("with -N", function()
+    local out, err = run("section-numbering.md", "-t plain -N")
+    assert.are.equal("1.1 2.1 2.2", numbers(out))
+    lacks(err, "warning")
+  end)
+
+  it("below secnumdepth: those headings step no counter", function()
+    local out = run("section-numbering.md", "-t plain -N -V secnumdepth=0 " ..
+      "-M documentclass=book --top-level-division=chapter")
+    assert.are.equal("1.0.1 2.0.1 2.0.2", numbers(out))
+  end)
+
+  it("with parts: a part is not in a chapter's number, nor resets it", function()
+    local out = run("part-chapter.md", "-t plain -N --top-level-division=part")
+    assert.are.equal("0.1 1.1 1.2", numbers(out))
+  end)
+
+  it("within parts: a part is numbered in Roman numerals", function()
+    local out = run("part-part.md", "-t plain -N --top-level-division=part")
+    assert.are.equal("I.1 II.1 II.2", numbers(out))
+  end)
+end)
+
+describe("swapnumbers", function()
+  it("is \\swapnumbers before the environments in LaTeX", function()
+    local out = run("swapnumbers.md", LATEX)
+    has(out, "\\swapnumbers\n\\theoremstyle{plain}")
+  end)
+
+  it("puts the number first, in the heading font, in other output", function()
+    local out = run("swapnumbers.md", "-t markdown")
+    has(out, "[**1\u{a0}Theorem** (Euler)**.**]{.amsthm-title} *First.*")
+    -- Unlike after the name, the number is not upright in an italic heading.
+    has(out, "[*1\u{a0}Case.*]{.amsthm-title} Second.")
+    has(out, "[*Note.*]{.amsthm-title} Third.")
+  end)
+end)
+
+describe("qed_symbol", function()
+  it("sets \\qedsymbol in LaTeX", function()
+    local out = run("qed-symbol.md", LATEX)
+    has(out, "\\renewcommand{\\qedsymbol}{\\ensuremath{\\blacksquare}}")
+  end)
+
+  it("ends a proof in other output", function()
+    local out = run("qed-symbol.md", "-t markdown")
+    has(out, "Obvious.[$\\quad\\blacksquare$]{.amsthm-qed}")
+  end)
+
+  it("may be given as raw TeX", function()
+    local out = run("qed-symbol-raw.md", "-t markdown")
+    has(out, "Obvious.[$\\quad\\blacksquare$]{.amsthm-qed}")
+  end)
+end)
+
+describe("\\qedhere", function()
+  it("passes through to amsthm in LaTeX", function()
+    local out = run("qedhere.md", LATEX)
+    has(out, "x = 1. \\qedhere")
+    has(out, "two \\qedhere")
+  end)
+
+  it("puts the symbol there, and not at the end, in other output", function()
+    local out = run("qedhere.md", "-t markdown")
+    -- In math, amsthm's \mathqed: \quad\qedsymbol in place.
+    has(out, "$$x = 1. \\quad\\Box$$\n:::")
+    -- In text, \qed, which takes the space before it away.
+    has(out, " two[$\\quad\\Box$]{.amsthm-qed}\n:::")
+    -- A nested proof has a \qedhere of its own; the outer one still ends.
+    has(out, "Inner.[$\\quad\\Box$]{.amsthm-qed}")
+    has(out, "Outer.[$\\quad\\Box$]{.amsthm-qed}")
+    assert.are.equal(4, count(out, "\\Box"))
+  end)
+end)
+
+describe("parent_counter per environment", function()
+  local ARGS = " -N --top-level-division=chapter"
+
+  it("gives each \\newtheorem its own parent in LaTeX", function()
+    local out, err = run("parent-counter-map.md", LATEX .. ARGS)
+    has(out, "\\newtheorem{Theorem}{Theorem}[section]")
+    has(out, "\\newtheorem{Lemma}[Theorem]{Lemma}")
+    has(out, "\\newtheorem{Conjecture}{Conjecture}\n")
+    has(out, "\\newtheorem{Remark}{Remark}[chapter]")
+    has(err, "Lemma shares the counter of Theorem")
+  end)
+
+  it("numbers each within its own parent in other output, as amsthm does", function()
+    local out = run("parent-counter-map.md", "-t plain" .. ARGS)
+    local found = {}
+    for n in out:gmatch("%u%l+ ([%d.]+)%.") do found[#found + 1] = n end
+    -- The numbers amsthm prints for this document.
+    assert.are.equal("1.1.1 1.1.2 1 1.1 1.2.1 2 1.2 2.0.1 3 2.1",
+      table.concat(found, " "))
+  end)
+end)
+
+describe("styles", function()
+  it("are \\newtheoremstyle in LaTeX", function()
+    local out = run("styles.md", LATEX)
+    -- \normalfont for an upright heading, not {}, which is the body font.
+    has(out, "\\newtheoremstyle{aside}{}{}{\\itshape}{}{\\normalfont}{.}{ }{}\n" ..
+      "\\newtheoremstyle{claim}{}{}{\\normalfont}{}{\\bfseries\\itshape}{}{ }{}\n" ..
+      "\\newtheoremstyle{note}{6pt}{}{\\itshape}{}{\\scshape}{:}{\\newline}{}\n" ..
+      "\\theoremstyle{plain}")
+    has(out, "\\theoremstyle{note}\n\\newtheorem{Observation}{Observation}")
+  end)
+
+  it("set the heading and body in other output, as amsthm does", function()
+    local out = run("styles.md", "-t markdown")
+    -- The number upright, the note in the note font, then a new line.
+    has(out, "[[Observation]{.smallcaps} 1 (with a note)[:]{.smallcaps}]{.amsthm-title}\\\n")
+    has(out, "*The body in italics, citing [1](#o) and* ([1](#o))*.*")
+    has(out, "[***Claim***]{.amsthm-title} The body upright.")
+    has(out, ".amsthm .amsthm-note")
+  end)
+
+  it("apply a bold body to \\eqref too, which undoes only a shape", function()
+    local out, err = run("styles-bad.md", "-t markdown")
+    has(out, "**Bold, and so are [1](#s) and ([1](#s)).**")
+    -- Bold in a bold body stays bold, as \textbf in \bfseries does.
+    has(out, "**Still bold.**")
+    has(err, "a style cannot be called css")
+    has(err, "unknown font huge in style loud")
+  end)
+end)
+
+describe("a reference to several environments", function()
+  it("is \\eqref for each in LaTeX", function()
+    local out = run("multi-ref.md", LATEX)
+    has(out, "Second, by \\eqref{a}, \\eqref{b}.")
+    has(out, "See \\eqref{a}, \\eqref{b}, and")
+  end)
+
+  it("is a linked number in parentheses for each in other output", function()
+    local out, err = run("multi-ref.md", "-t markdown")
+    -- Upright in the italic body, as \eqref is.
+    has(out, "*Second, by* ([1](#a)), ([2](#b))*.*")
+    has(out, "See ([1](#a)), ([2](#b)), and [@a; @knuth], [@A; @b] and [@a; @m].")
+    has(err, "mixes environments with other keys, and is left to citeproc: [@a; @knuth]")
+    has(err, "cannot name them, and is left to citeproc: [@A; @b]")
+    has(err, "unnumbered environment m")
+  end)
+
+  it("is left to citeproc with a prefix or suffix, which it would drop", function()
+    local out, err = run("multi-ref.md", "-t markdown")
+    has(out, "Affixed: [see @a; @b, p.")
+    has(err, "cannot carry a prefix or suffix, and is left to citeproc")
+  end)
+end)
+
+-- The examples on the documentation site, which people learn from: each
+-- must run without a warning from the filter, in LaTeX and other output.
+describe("the documentation's examples", function()
+  local p = assert(io.popen("ls docs/examples/*.md"))
+  for path in p:lines() do
+    it(path .. " runs cleanly", function()
+      for _, args in ipairs({ LATEX .. " -N", "-t html -N" }) do
+        local err_path = os.tmpname()
+        local out = assert(io.popen("pandoc -L " .. FILTER .. " " .. path ..
+          " --wrap=none " .. args .. " 2>" .. err_path, "r"))
+        out:read("*a")
+        local ok = out:close()
+        local f = assert(io.open(err_path, "r"))
+        local err = f:read("*a")
+        f:close()
+        os.remove(err_path)
+        assert(ok, path .. " failed to render with " .. args .. ":\n" .. err)
+        -- The filter's own warnings; pandoc's (such as texmath's, which
+        -- varies by version) are not about the examples.
+        lacks(err, "[amsthm]")
+      end
+    end)
+  end
+  p:close()
 end)

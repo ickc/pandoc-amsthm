@@ -4,8 +4,8 @@
 [**Theorem 1.0.1** (within parenthesis)**.**]{.amsthm-title} *plain
 theoremstyle* here
 
-*We can use pandoc-crossref style* 1.0.2 *and* (1.0.2) *and cite before
-definition.*
+*We can use pandoc-crossref style [1.0.2](#simplestEquation) and*
+([1.0.2](#simplestEquation)) *and cite before definition.*
 :::
 
 ::: {#simplestEquation .Theorem .amsthm .amsthm-plain}
@@ -14,7 +14,9 @@ definition.*
 $$E=mc^2$$
 :::
 
-From the 1.0.2, we see that... Or (1.0.2), ...
+From the [1.0.2](#simplestEquation), we see that... Or
+([1.0.2](#simplestEquation)), ... Or with its name,
+Theorem [1.0.2](#simplestEquation).
 
 ::: {.With_Space .amsthm .amsthm-plain info="**This** is *markdown*."}
 [**With Space** (**This** is *markdown*.)**.**]{.amsthm-title}
@@ -22,13 +24,15 @@ From the 1.0.2, we see that... Or (1.0.2), ...
 :::
 
 ::: {.Lemma .amsthm .amsthm-plain info="can cite \\ref{simplestEquation}"}
-[**Lemma 1.0.3** (can cite 1.0.2)**.**]{.amsthm-title} *This one share
-counter with Theorem.*
+[**Lemma 1.0.3** (can cite
+[1.0.2](#simplestEquation))**.**]{.amsthm-title} *This one share counter
+with Theorem.*
 :::
 
 ::: {.Definition .amsthm .amsthm-definition info="pandoc-crossref style cite @simplestEquation"}
 [**Definition 1.0.1** (pandoc-crossref style cite
-1.0.2)**.**]{.amsthm-title} definition theoremstyle here
+[1.0.2](#simplestEquation))**.**]{.amsthm-title} definition theoremstyle
+here
 :::
 
 ::: {.Case .amsthm .amsthm-remark info="within parenthesis"}
@@ -38,16 +42,16 @@ theoremstyle here
 
 ::: {.proof .amsthm .amsthm-proof info="Proof of the Main Theorem"}
 [*Proof of the Main Theorem**.*]{.amsthm-title} Predefined proof
-theoremstyle here[◻]{.amsthm-qed}
+theoremstyle here[$\quad\Box$]{.amsthm-qed}
 :::
 
 ::: {.proof .amsthm .amsthm-proof info="Proof of the *little* theorem"}
 [*Proof of the* little *theorem**.*]{.amsthm-title} Predefined proof
-theoremstyle here with markdown info.[◻]{.amsthm-qed}
+theoremstyle here with markdown info.[$\quad\Box$]{.amsthm-qed}
 :::
 
 ::: {.proof .amsthm .amsthm-proof}
-[*Proof.*]{.amsthm-title} Bare proof here.[◻]{.amsthm-qed}
+[*Proof.*]{.amsthm-title} Bare proof here.[$\quad\Box$]{.amsthm-qed}
 :::
 
 ::: {.KL .amsthm .amsthm-plain}

@@ -15,8 +15,16 @@ environments once in the document's metadata, and write them as
 - Any other output (HTML, EPUB, Markdown, …) gets the same numbering,
   styles and cross-references, computed by the filter.
 
-See the [rendered example](https://ickc.github.io/pandoc-amsthm/example/)
-and [its source](https://ickc.github.io/pandoc-amsthm/source.html).
+**Learn by example:** the [examples](https://ickc.github.io/pandoc-amsthm/examples.html)
+are short documents, one per topic ([basics](https://ickc.github.io/pandoc-amsthm/examples/basics.html),
+[cross-references](https://ickc.github.io/pandoc-amsthm/examples/cross-references.html),
+[numbering](https://ickc.github.io/pandoc-amsthm/examples/numbering.html),
+[proofs](https://ickc.github.io/pandoc-amsthm/examples/proofs.html),
+[styles](https://ickc.github.io/pandoc-amsthm/examples/styles.html),
+[swapped numbers](https://ickc.github.io/pandoc-amsthm/examples/swapnumbers.html)),
+each shown with its Markdown, the LaTeX the filter writes, and the PDF
+amsthm typesets from it. Their sources are in
+[`docs/examples/`](docs/examples/).
 
 ## Installation
 
@@ -85,28 +93,87 @@ Obvious.
 `proof` is always defined. Names containing spaces become classes with
 underscores: `Main Theorem` is written as `::: Main_Theorem`.
 
+A proof ends with its symbol. When it ends in a display or a list,
+write `\qedhere` where the symbol should go, as in LaTeX:
+`$$x = 1. \qedhere$$`, or `- last item \qedhere`.
+
 ### Options
 
 | Key                       | Meaning |
 | ------------------------- | ------- |
 | `plain`, `definition`, `remark` | Environments in that style. An entry is a name, or a map from a name to the names that share its counter. |
-| `name_to_text`            | Displayed text for a name, when it differs from the name. Keyed by the name exactly as it appears in the list above, including a trailing `*`. |
-| `parent_counter`          | Number theorems within this LaTeX sectioning unit (`part`, `chapter`, `section`, …). |
-| `counter_depth`           | Non-LaTeX only: how many heading levels prefix the theorem number. By default it follows `parent_counter` and `--top-level-division`, so both kinds of output number alike; without `parent_counter` it is `0`, numbering theorems through the document. |
+| `name_to_text`            | Displayed text for a name, when it differs from the name. Keyed by the name exactly as it appears in the list above, including a trailing `*`. The key `proof` renames the proof (`\proofname` in LaTeX). |
+| `parent_counter`          | Number theorems within this LaTeX sectioning unit (`part`, `chapter`, `section`, …). Either one unit for every environment, or a map from an environment's name to its unit, such as `{Theorem: section, Remark: chapter}`, leaving the others numbered through the document. An environment that shares a counter is numbered within that counter's unit. |
+| `counter_depth`           | Non-LaTeX only: how many heading levels prefix the theorem number, for every environment. By default it follows each environment's `parent_counter` and `--top-level-division`, so both kinds of output number alike; without `parent_counter` it is `0`, numbering theorems through the document. |
 | `counter_ignore_headings` | Headings that do not advance the counters, such as `List of Figures` added by pandoc-crossref. |
+| `qed_symbol`              | The end-of-proof symbol, as math: `$\blacksquare$` (or just `\blacksquare`). Sets `\qedsymbol` in LaTeX. The default is `\Box`, the same box as amsthm's `\openbox`. |
+| `swapnumbers`             | `true` puts the number before the name, "1.1 Theorem", as `\swapnumbers` does. |
+| `styles`                  | Styles of your own, as `\newtheoremstyle`; see [Styles](#styles). |
 | `css`                     | `false` leaves out the stylesheet described under [Styling HTML](#styling-html). |
+
+### Styles
+
+Besides amsthm's `plain`, `definition` and `remark`, define styles under
+`styles`, then list environments under each style's name as for the
+built-in ones:
+
+```yaml
+amsthm:
+  styles:
+    note:
+      headfont: smallcaps   # bold, italic, smallcaps, normal, or a list
+      bodyfont: italic
+      headpunct: ":"
+      headspace: newline    # " ", newline, or a length such as 0.5em
+      above: 6pt            # LaTeX only, as are below and indent
+  note: [Observation]
+```
+
+In LaTeX this is `\newtheoremstyle{note}{6pt}{}{\itshape}{}{\scshape}{:}{\newline}{}`.
+Other output sets the heading and body in the same fonts, with the number
+upright as amsthm does; a length for `headspace` becomes a space there.
+Settings left out are as for a theorem in amsthm: a bold heading, a
+period and a space after it, and the body in the normal font. A style
+cannot take the name of an option such as `css`.
 
 ### Cross-references
 
 Give the div an identifier and refer to it with `@id` (the number) or
 `[@id]` (the number in parentheses). Raw `\ref{id}` and `\eqref{id}`
 also work. References may come before the theorem they point to. In
-LaTeX output these become `\ref` and `\eqref`.
+LaTeX output these become `\ref` and `\eqref`; in other output, a link
+to the environment.
+
+Capitalise the first letter of the identifier to put the environment's
+name before the number: with the div `{#euler .Theorem}`, `@Euler`
+gives "Theorem 1" and `[@Euler]` gives "(Theorem 1)". In LaTeX output
+this is `Theorem~\ref{euler}`, as you would type it by hand, so the
+name is the one you declared (`name_to_text`), whatever the position
+in the sentence, only the number is a link, and no extra package is
+needed. Unlike typing the name yourself, it stays right if the
+environment changes later. The capital letter only selects this form;
+an identifier that itself starts with a capital letter is always an
+ordinary reference, so use lowercase identifiers for this.
+
+`[@a; @b]` refers to several environments at once: `\eqref{a},
+\eqref{b}` in LaTeX, "(1), (2)" elsewhere. It does not take the
+capitalised form, a prefix or locator (`[see @a; @b, p. 2]`), nor mix
+environments with bibliography keys; those are left to citeproc, with a
+warning.
+
+A reference to an unnumbered environment prints nothing meaningful in
+LaTeX, which gives the last number set before it, usually the
+section's. LaTeX output keeps it as `\ref`, as written; other output
+leaves it unresolved. The filter warns about it either way.
 
 ### Tips
 
-- Pass `-N` (`--number-sections`); LaTeX output needs it for the
-  numbering to make sense.
+- Pass `-N` (`--number-sections`) with `parent_counter`. Without it,
+  LaTeX steps no section counter and numbers theorems 0.1, 0.2, …;
+  other output does the same, and the filter warns. Theorem numbers
+  also follow `secnumdepth` and parts (`--top-level-division=part`) as
+  LaTeX does: a part is not in a chapter's number and does not restart
+  it.
 - LaTeX output loads `amsthm` and defines the environments through
   `header-includes`, so it needs a standalone document (`-s`, or any
   PDF output).
@@ -120,6 +187,29 @@ symbol is a span with class `amsthm-qed`. The filter adds the little
 CSS it needs to HTML output itself, as a `:where()` rule of zero
 specificity, so a rule of your own always wins no matter where your
 stylesheet sits. `css: false` leaves it out altogether.
+
+### Known limitations
+
+In LaTeX output `amsthm` does the typesetting; in other output the
+filter rebuilds the same result from Pandoc's elements (see
+[the design notes](https://ickc.github.io/pandoc-amsthm/design.html)). Some things cannot be expressed that way:
+
+- **Language.** In LaTeX, babel translates "Proof" into the document's
+  `lang`, as "Beweis" for `lang: de`. Other output always says
+  "Proof". Set `name_to_text: {proof: Beweis}` to name it in both.
+- **The end-of-proof symbol** cannot be pushed to the right margin.
+  The CSS does this in HTML. With `\qedhere` in a display, it follows
+  the formula, where amsthm puts it at the margin as the equation's tag.
+- **Vertical space** around environments is left to the output format,
+  as are a style's `above`, `below` and `indent`; a length for its
+  `headspace` becomes an ordinary space.
+- **Section numbering under Quarto.** Quarto numbers HTML sections
+  itself and does not tell the filter whether `number-sections` is on,
+  so HTML output always numbers theorems within the sections, as if it
+  were.
+- **A list or code block that starts an environment** runs in to its
+  heading in LaTeX, as `amsthm` sets environments as lists; other
+  output starts it on a new line.
 
 ## Paper cuts when composing with Quarto
 
@@ -183,6 +273,10 @@ pixi run docs         # render the site into docs/_site
 pixi run docs-preview # serve it with live reload
 pixi run bootstrap-tinytex    # once per machine, for the site's PDF
 ```
+
+See [the design notes](https://ickc.github.io/pandoc-amsthm/design.html) for how features are designed and checked:
+LaTeX output first, then the same result built from Pandoc's AST for
+every other format.
 
 The filter is `_extensions/amsthm/amsthm.lua`. Specs under `spec/` use
 [busted](https://lunarmodules.github.io/busted/) syntax and run through

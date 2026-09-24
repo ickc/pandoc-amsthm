@@ -43,7 +43,7 @@ describe("golden", function()
   end)
 
   it("markdown output matches model-target.md", function()
-    local ok, out = run("pandoc -L _extensions/amsthm/amsthm.lua " .. SRC .. " -t markdown")
+    local ok, out = run("pandoc -L _extensions/amsthm/amsthm.lua " .. SRC .. " -N -t markdown")
     assert.is_true(ok ~= nil and ok ~= false)
     local want = read(TARGET)
     if out ~= want then

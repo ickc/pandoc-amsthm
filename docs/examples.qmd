@@ -1,0 +1,20 @@
+---
+title: Examples
+---
+
+Each example is a short document on one topic. Read it from top to
+bottom: the text explains what each environment shows. Every page ends
+with its own Markdown source and the LaTeX the filter writes for it, and
+links a PDF of that LaTeX, typeset by amsthm, under "Other Formats".
+
+| Example                                    | Shows |
+| ------------------------------------------ | ----- |
+| [Basics](examples/basics.md)                        | The three styles, shared counters, unnumbered environments, notes, proofs |
+| [Cross-references](examples/cross-references.md)    | `@id`, `[@id]`, `@Id` with the name, `[@a; @b]`, `\ref` and `\eqref` |
+| [Numbering](examples/numbering.md)                  | `parent_counter`, for all environments or for each |
+| [Proofs](examples/proofs.md)                        | `qed_symbol`, `\qedhere` in a display and a list, nested proofs |
+| [Styles](examples/styles.md)                        | Styles of your own, as `\newtheoremstyle` |
+| [Swapped numbers](examples/swapnumbers.md)          | `swapnumbers`, the number before the name |
+
+The [full example](example/index.md) puts many features in one
+document; it is also the input of the test suite.
