@@ -733,9 +733,11 @@ local function amsthm_block(div, options)
   end
 
   if theorem.style == "proof" then
-    -- amsthm's \qedsymbol is an open box. As math it renders in every
-    -- format, where a Unicode box is missing from LaTeX's default fonts.
-    local qed = pandoc.Span({ pandoc.Math("InlineMath", "\\Box") },
+    -- amsthm's \qed is \nobreak\hfill\quad\openbox. As math, \quad\Box
+    -- renders in every format: \Box is amssymb's \openbox, and TeX does not
+    -- break a line inside a formula, which stands in for \nobreak. Only
+    -- \hfill is left out, for the CSS to do in HTML.
+    local qed = pandoc.Span({ pandoc.Math("InlineMath", "\\quad\\Box") },
       pandoc.Attr("", { "amsthm-qed" }))
     local last = div.content[#div.content]
     if last and last.content

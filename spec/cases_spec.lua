@@ -213,7 +213,7 @@ end)
 describe("the end-of-proof symbol", function()
   it("is math, so that it renders in every format, LaTeX included", function()
     local out = run("proof-note.md", "-t markdown")
-    has(out, "Obvious.[$\\Box$]{.amsthm-qed}")
+    has(out, "Obvious.[$\\quad\\Box$]{.amsthm-qed}")
   end)
 end)
 

@@ -21,8 +21,9 @@ compares the two renderings.
 - In italic text, such as the body of a plain theorem or the note of a
   proof, a reference from `@id` or `\ref` is italic, and one from
   `[@id]` or `\eqref` upright, as in LaTeX.
-- The end-of-proof symbol is `$\Box$`, which renders in every format;
-  the Unicode ◻ was missing from LaTeX's default fonts.
+- The end-of-proof symbol is `$\quad\Box$`, amsthm's `\quad\openbox`,
+  which renders in every format and stays on the line of the text before
+  it; the Unicode ◻ was missing from LaTeX's default fonts.
 - `name_to_text: {proof: ...}` renames the proof, setting `\proofname`
   in LaTeX.
 - A reference to an unnumbered environment gets a warning.
