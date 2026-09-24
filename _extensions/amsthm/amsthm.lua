@@ -746,14 +746,19 @@ local function warn_unnumbered(elem, options)
 end
 M.warn_unnumbered = warn_unnumbered
 
--- A reference to the environment `id`, numbered `n`, as a link to it,
--- led by the environment's name when `name` is given; in parentheses
--- outside the link, as \eqref does, when `paren` is set.
+-- A reference to the environment `id`, numbered `n`: the number as a link
+-- to it, led by the environment's name when `name` is given, and in
+-- parentheses when `paren` is set. Only the number is linked, as hyperref
+-- links what \ref and \eqref print.
 local function ref_link(id, n, paren, name)
-  local content = name and named(name, pandoc.Str(n)) or { pandoc.Str(n) }
-  local link = pandoc.Link(content, "#" .. id)
-  if paren then return { pandoc.Str("("), link, pandoc.Str(")") } end
-  return link
+  local link = pandoc.Link({ pandoc.Str(n) }, "#" .. id)
+  if not name and not paren then return link end
+  local out = name and named(name, link) or pandoc.Inlines({ link })
+  if paren then
+    out:insert(1, pandoc.Str("("))
+    out:insert(pandoc.Str(")"))
+  end
+  return out
 end
 
 -- Resolve [@id] / @id citations and \ref{}/\eqref{} raw tex to numbers.

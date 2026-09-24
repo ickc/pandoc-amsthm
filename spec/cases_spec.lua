@@ -160,7 +160,7 @@ describe("a reference with a capitalised id", function()
 
   it("names the environment in other output", function()
     local out = run("named-ref.md", "-t html")
-    has(out, 'By <a href="#euler">Theorem\u{a0}1</a>, (<a href="#nz">Lemma\u{a0}2</a>)')
+    has(out, 'By Theorem\u{a0}<a href="#euler">1</a>, (Lemma\u{a0}<a href="#nz">2</a>)')
     has(out, '<a href="#Cap">3</a>, <a href="#euler">1</a>')
   end)
 end)
@@ -180,7 +180,7 @@ end)
 describe("a reference in the italic body of a plain theorem", function()
   it("is italic like \\ref, or upright like \\eqref", function()
     local out = run("italic-ref.md", "-t markdown")
-    has(out, "*By [1](#a), [Theorem\u{a0}1](#a),* ([1](#a))*, [1](#a) and* ([1](#a))*;*")
+    has(out, "*By [1](#a), Theorem\u{a0}[1](#a),* ([1](#a))*, [1](#a) and* ([1](#a))*;*")
     -- Upright inside emphasis, as \\emph makes it in LaTeX.
     has(out, "by [1](#a)*.*")
     -- The body of other styles is upright.

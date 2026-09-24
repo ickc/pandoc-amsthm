@@ -109,13 +109,15 @@ LaTeX output these become `\ref` and `\eqref`; in other output, a link
 to the environment.
 
 Capitalise the first letter of the identifier to put the environment's
-name before the number, as `\Cref` from cleveref does: with the div
-`{#euler .Theorem}`, `@Euler` gives "Theorem 1" and `[@Euler]` gives
-"(Theorem 1)". The name follows `name_to_text`, and stays right if the
-environment changes later. In LaTeX output this is written out as
-`Theorem~\ref{euler}`, so it needs no extra package. An identifier
-that itself starts with a capital letter is always an ordinary
-reference, so use lowercase identifiers for this.
+name before the number: with the div `{#euler .Theorem}`, `@Euler`
+gives "Theorem 1" and `[@Euler]` gives "(Theorem 1)". In LaTeX output
+this is `Theorem~\ref{euler}`, as you would type it by hand, so the
+name is the one you declared (`name_to_text`), whatever the position
+in the sentence, only the number is a link, and no extra package is
+needed. Unlike typing the name yourself, it stays right if the
+environment changes later. The capital letter only selects this form;
+an identifier that itself starts with a capital letter is always an
+ordinary reference, so use lowercase identifiers for this.
 
 A reference to an unnumbered environment prints nothing meaningful in
 LaTeX, which gives the last number set before it, usually the

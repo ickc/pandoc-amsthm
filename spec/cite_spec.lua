@@ -131,14 +131,16 @@ describe("resolve_inline (non-LaTeX)", function()
       pandoc.RawInline("tex", "\\eqref{thm1}"), options))
   end)
 
-  it("@Id cite -> linked name and number", function()
+  it("@Id cite -> name and linked number", function()
     local c = pandoc.Cite({ pandoc.Str("@Thm1") },
                           { citation("Thm1", "AuthorInText") })
     local r = amsthm.resolve_inline(c,
       { identifiers = options.identifiers, names = { thm1 = "Main Theorem" } })
-    assert.are.equal("Link", r.t)
-    assert.are.equal("#thm1", r.target)
+    -- Only the number is linked, as hyperref links what \\ref prints.
     assert.are.equal("Main Theorem\u{a0}1.2.3", pandoc.utils.stringify(r))
+    assert.are.equal("Link", r[#r].t)
+    assert.are.equal("#thm1", r[#r].target)
+    assert.are.equal("1.2.3", pandoc.utils.stringify(r[#r]))
   end)
 
   it("ignores unknown ids", function()

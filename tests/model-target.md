@@ -16,7 +16,7 @@ $$E=mc^2$$
 
 From the [1.0.2](#simplestEquation), we see that... Or
 ([1.0.2](#simplestEquation)), ... Or with its name,
-[Theorem 1.0.2](#simplestEquation), as `\Cref` would write it.
+Theorem [1.0.2](#simplestEquation).
 
 ::: {.With_Space .amsthm .amsthm-plain info="**This** is *markdown*."}
 [**With Space** (**This** is *markdown*.)**.**]{.amsthm-title}
