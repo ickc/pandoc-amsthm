@@ -30,9 +30,20 @@ local CHAPTER_CLASSES = {
   ["tufte-book"] = true,
 }
 local STYLES = { "plain", "definition", "remark" }
+-- amsthm's built-in styles, in the terms of \newtheoremstyle: the fonts of
+-- the heading and the body (lists of FONT_TYPES keys), the punctuation
+-- after the heading, and the space after that (" " or "newline").
+local BUILTIN_STYLES = {
+  plain = { headfont = { "bold" }, bodyfont = { "italic" },
+    headpunct = ".", headspace = " " },
+  definition = { headfont = { "bold" }, bodyfont = {},
+    headpunct = ".", headspace = " " },
+  remark = { headfont = { "italic" }, bodyfont = {},
+    headpunct = ".", headspace = " " },
+}
+local FONT_TYPES = { bold = "Strong", italic = "Emph", smallcaps = "SmallCaps" }
 local METADATA_KEY = "amsthm"
 local LATEX_LIKE = { latex = true, beamer = true }
-local PLAIN_OR_DEF = { plain = true, definition = true }
 local COUNTER_DEPTH_DEFAULT = 0
 local QUARTO_PROOF_CLASSES = { proof = true, remark = true, solution = true }
 
@@ -321,16 +332,50 @@ function NewTheorem:counter_name()
   return self.shared_counter or self.env_name
 end
 
--- Build the theorem header inline list, keeping Strong/Emph boundaries clean.
-function NewTheorem:to_header(options, id, info)
-  local TextType, NumberType
-  if PLAIN_OR_DEF[self.style] then
-    TextType, NumberType = "Strong", "Strong"
-  else
-    TextType, NumberType = "Emph", "Str"
+-- Wrap inlines in the elements of a font, such as { "bold", "italic" }.
+local function in_font(inlines, font)
+  local out = inlines
+  for i = #font, 1, -1 do out = { INLINE_TYPES[FONT_TYPES[font[i]]](out) } end
+  return out
+end
+
+-- A font without italics, as amsthm's \@upn sets the number in a heading.
+local function upright(font)
+  local out = {}
+  for _, f in ipairs(font) do
+    if f ~= "italic" then out[#out + 1] = f end
   end
-  local TextCtor = INLINE_TYPES[TextType] or pandoc.Str
-  local NumberCtor = (NumberType == "Str") and pandoc.Str or INLINE_TYPES[NumberType]
+  return out
+end
+
+-- Join runs of inlines, each { inlines, font }, wrapping each stretch of
+-- one font once, so that "Theorem 1." is one Strong rather than three.
+local function join_runs(runs)
+  local out, content, key, font = {}, nil, nil, nil
+  local function flush()
+    if content then
+      for _, e in ipairs(in_font(content, font)) do out[#out + 1] = e end
+    end
+  end
+  for _, run in ipairs(runs) do
+    local k = table.concat(run[2], ",")
+    if k ~= key then
+      flush()
+      content, key, font = {}, k, run[2]
+    end
+    for _, e in ipairs(run[1]) do content[#content + 1] = e end
+  end
+  flush()
+  return out
+end
+
+-- The heading of the environment, as amsthm's \thmhead writes it: the
+-- name and the number in the style's heading font, the number upright,
+-- the note in parentheses in the note font (medium, upright), and the
+-- punctuation, followed by the space after the heading.
+function NewTheorem:to_header(options, id, info)
+  local style = options.styles[self.style]
+  local head = style.headfont
 
   local theorem_number
   if self.numbered then
@@ -354,47 +399,21 @@ function NewTheorem:to_header(options, id, info)
     end
   end
 
-  local info_list = parse_info(info)
-  local has_info = (#info_list > 0)
-
-  local function S(s) return pandoc.Str(s) end
-  local function wrapText(s) return TextCtor({ S(s) }) end
-
-  if theorem_number == nil then
-    if has_info then
-      local res = { wrapText(self.text), pandoc.Space() }
-      for _, e in ipairs(info_list) do res[#res + 1] = e end
-      res[#res + 1] = wrapText(".")
-      res[#res + 1] = pandoc.Space()
-      return res
-    else
-      return { wrapText(self.text .. "."), pandoc.Space() }
-    end
-  else
-    if TextType == NumberType then
-      if has_info then
-        local res = { wrapText(self.text .. " " .. theorem_number), pandoc.Space() }
-        for _, e in ipairs(info_list) do res[#res + 1] = e end
-        res[#res + 1] = wrapText(".")
-        res[#res + 1] = pandoc.Space()
-        return res
-      else
-        return { wrapText(self.text .. " " .. theorem_number .. "."), pandoc.Space() }
-      end
-    else
-      if has_info then
-        local res = { wrapText(self.text), pandoc.Space(),
-          NumberCtor(theorem_number), pandoc.Space() }
-        for _, e in ipairs(info_list) do res[#res + 1] = e end
-        res[#res + 1] = wrapText(".")
-        res[#res + 1] = pandoc.Space()
-        return res
-      else
-        return { wrapText(self.text), pandoc.Space(),
-          NumberCtor(theorem_number), wrapText("."), pandoc.Space() }
-      end
-    end
+  local runs = { { pandoc.Inlines(self.text), head } }
+  if theorem_number then
+    local number = upright(head)
+    runs[#runs + 1] = { { pandoc.Space(), pandoc.Str(theorem_number) }, number }
   end
+  local note = parse_info(info)
+  if #note > 0 then
+    table.insert(note, 1, pandoc.Space())
+    runs[#runs + 1] = { note, {} }
+  end
+  runs[#runs + 1] = { { pandoc.Str(style.headpunct) }, head }
+
+  local out = join_runs(runs)
+  out[#out + 1] = style.headspace == "newline" and pandoc.LineBreak() or pandoc.Space()
+  return out
 end
 
 M.NewTheorem = NewTheorem
@@ -599,6 +618,7 @@ local function from_meta(meta)
 
   return {
     css = css,
+    styles = BUILTIN_STYLES,
     counter_first = counter_first,
     numbered_depth = numbered_depth(meta, top),
     part_level = part_level,
