@@ -1,6 +1,6 @@
 [workspace]
 name = "pandoc-amsthm"
-version = "3.0.0"
+version = "3.1.0"
 description = "amsthm theorem environments for Pandoc and Quarto, as a Lua filter"
 authors = ["Kolen Cheung <christian.kolen@gmail.com>"]
 channels = ["conda-forge"]

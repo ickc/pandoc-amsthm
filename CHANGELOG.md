@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## v3.1.0
 
 Other output now follows what `amsthm` does in LaTeX more closely.
 [The design notes](https://ickc.github.io/pandoc-amsthm/design.html) describe the approach, and `pixi run bake`
@@ -33,12 +33,13 @@ compares the two renderings.
   - `qed_symbol`, to set `\qedsymbol`;
   - `\qedhere`, to put the symbol at the end of a display or list.
 - `[@a; @b]` refers to several environments: `\eqref{a}, \eqref{b}`
-  in LaTeX, "(1), (2)" elsewhere.
+  in LaTeX, "(1), (2)" elsewhere. With a prefix or locator it is left
+  to citeproc.
 - `name_to_text: {proof: ...}` renames the proof, setting `\proofname`
   in LaTeX.
 - A reference to an unnumbered environment gets a warning.
-- LaTeX: a theorem note holding math, raw TeX or a citation with a
-  locator, such as `info="on $[0,1]$"`, no longer ends at its first `]`.
+- LaTeX: a theorem note holding math, raw TeX, an image or a citation
+  with a locator, such as `info="on $[0,1]$"`, no longer ends at its first `]`.
 - Markdown output: emphasis inside a plain theorem no longer leaves a
   stray `**`.
 - An empty `amsthm:` key no longer stops the filter with an error.
