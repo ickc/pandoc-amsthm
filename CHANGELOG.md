@@ -1,5 +1,32 @@
 # Changelog
 
+## Unreleased
+
+Closer to what `amsthm` does in LaTeX, in every output.
+
+- Cross-references link to the environment in HTML and other non-LaTeX
+  output, as hyperref makes them do in LaTeX
+  ([#21](https://github.com/ickc/pandoc-amsthm/issues/21)).
+- `@Euler`, with the first letter of the identifier capitalised, gives
+  the environment's name with the number, "Theorem 1", as `\Cref` does;
+  `[@Euler]` gives "(Theorem 1)". LaTeX output writes it as
+  `Theorem~\ref{euler}`
+  ([#22](https://github.com/ickc/pandoc-amsthm/issues/22)).
+- `name_to_text: {proof: ...}` renames the proof, in other output as
+  well as in LaTeX, where it sets `\proofname`. LaTeX output already
+  followed the document's `lang`.
+- In the italic body of a plain theorem, a reference from `@id` or
+  `\ref` is italic, and one from `[@id]` or `\eqref` upright, as in
+  LaTeX.
+- LaTeX: a reference to an unnumbered environment is left to citeproc,
+  as in other output, rather than printing the enclosing section's
+  number.
+- LaTeX: a theorem note holding math, raw TeX or a citation with a
+  locator, such as `info="on $[0,1]$"`, no longer ends at its first `]`.
+- Markdown output: emphasis inside a plain theorem no longer leaves a
+  stray `**`.
+- An empty `amsthm:` key no longer stops the filter with an error.
+
 ## v3.0.0
 
 Rewritten as a Pandoc Lua filter. The input syntax is unchanged.
