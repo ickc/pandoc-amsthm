@@ -17,6 +17,8 @@ website:
         text: Example
       - href: source.qmd
         text: Source
+      - href: design.qmd
+        text: Design
       - href: changelog.qmd
         text: Changelog
     right:

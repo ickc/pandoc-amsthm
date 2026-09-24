@@ -201,6 +201,10 @@ pixi run docs-preview # serve it with live reload
 pixi run bootstrap-tinytex    # once per machine, for the site's PDF
 ```
 
+See [DESIGN.md](DESIGN.md) for how features are designed and checked:
+LaTeX output first, then the same result built from Pandoc's AST for
+every other format.
+
 The filter is `_extensions/amsthm/amsthm.lua`. Specs under `spec/` use
 [busted](https://lunarmodules.github.io/busted/) syntax and run through
 a small built-in shim, so no Lua packages are needed.
