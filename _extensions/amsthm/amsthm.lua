@@ -619,12 +619,25 @@ local function from_meta(meta)
 
   local css = true
   if opt.css ~= nil then css = (stringify(opt.css) ~= "false") end
+  -- The end-of-proof symbol, as TeX math: `$\blacksquare$` in the metadata
+  -- is math, and a bare `\blacksquare` raw TeX.
+  local qed_symbol = "\\Box"
+  if opt.qed_symbol ~= nil then
+    local parts = {}
+    pandoc.Inlines(opt.qed_symbol):walk({
+      Math = function(m) parts[#parts + 1] = m.text end,
+      RawInline = function(r) parts[#parts + 1] = r.text end,
+      Str = function(t) parts[#parts + 1] = t.text end,
+    })
+    if #parts > 0 then qed_symbol = table.concat(parts, " ") end
+  end
   local swapnumbers = opt.swapnumbers ~= nil and stringify(opt.swapnumbers) == "true"
 
   return {
     css = css,
     styles = BUILTIN_STYLES,
     swapnumbers = swapnumbers,
+    qed_symbol = qed_symbol,
     counter_first = counter_first,
     numbered_depth = numbered_depth(meta, top),
     part_level = part_level,
@@ -645,6 +658,10 @@ end
 local function options_to_latex(options)
   local cur_style = ""
   local lines = {}
+  if options.qed_symbol ~= "\\Box" then
+    lines[#lines + 1] = "\\renewcommand{\\qedsymbol}{\\ensuremath{" ..
+      options.qed_symbol .. "}}"
+  end
   -- Before \newtheorem, which takes the order from it.
   if options.swapnumbers then lines[#lines + 1] = "\\swapnumbers" end
   if options.proof_name then
@@ -728,6 +745,13 @@ local function emph_body(div, options)
   return div
 end
 
+-- amsthm's \mathqed, \quad\qedsymbol, as TeX math.
+local function qed_math(options)
+  local symbol = options.qed_symbol
+  -- A space keeps \quad apart from a symbol that starts with a letter.
+  return "\\quad" .. (symbol:match("^%a") and " " or "") .. symbol
+end
+
 -- non-LaTeX transform: prepend the theorem header, do plain-style emph,
 -- track counters and identifiers.
 local function amsthm_block(div, options)
@@ -765,7 +789,8 @@ local function amsthm_block(div, options)
     -- renders in every format: \Box is amssymb's \openbox, and TeX does not
     -- break a line inside a formula, which stands in for \nobreak. Only
     -- \hfill is left out, for the CSS to do in HTML.
-    local qed = pandoc.Span({ pandoc.Math("InlineMath", "\\quad\\Box") },
+    local qed = pandoc.Span(
+      { pandoc.Math("InlineMath", qed_math(options)) },
       pandoc.Attr("", { "amsthm-qed" }))
     local last = div.content[#div.content]
     if last and last.content
