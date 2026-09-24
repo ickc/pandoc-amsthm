@@ -44,20 +44,11 @@ italic text inside it upright. This affects the numbers printed by
 
 ## 3. Known limitations
 
-What Pandoc's AST cannot express is a known limitation, listed in the
-README, not something to work around with format-specific tricks. Some
+What Pandoc's AST cannot express is a known limitation, not something
+to work around with format-specific tricks. Some
 limitations can still be met halfway in a single format, such as the
-CSS for HTML. Current ones:
-
-- The end-of-proof symbol cannot be pushed to the right margin; the
-  CSS does this in HTML.
-- Vertical space around environments is left to the output format.
-- `amsthm` sets an environment as a list, so a list or code block that
-  starts one runs in to its heading in LaTeX. The AST starts it on a
-  new line.
-- Anything LaTeX computes from the document's language, such as the
-  word "Proof" translated by babel, stays in English. Name it yourself
-  with `name_to_text`.
+CSS for HTML. The current ones are listed under "Known limitations" in
+the README.
 
 ## Checking a change
 
@@ -75,6 +66,6 @@ pandoc -L amsthm.lua doc.md -N -s -t native |
 With `-t native` the filter takes the path it takes for any non-LaTeX
 format, and the second `pandoc` writes the result without it. Pass the
 same options, such as `--top-level-division`, to both. This comparison
-is visual and not automated. Expect the limitations above, and one
+is visual and not automated. Expect the known limitations, and one
 difference that comes from the comparison itself: after a run-in
 heading (`\paragraph`), the baked environment runs in to the heading.

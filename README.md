@@ -85,10 +85,6 @@ Obvious.
 `proof` is always defined. Names containing spaces become classes with
 underscores: `Main Theorem` is written as `::: Main_Theorem`.
 
-In LaTeX output, babel translates "Proof" into the document's `lang`;
-in other output it stays "Proof" unless you name it yourself, as in
-`name_to_text: {proof: Beweis}`, which then applies to both.
-
 ### Options
 
 | Key                       | Meaning |
@@ -141,6 +137,22 @@ symbol is a span with class `amsthm-qed`. The filter adds the little
 CSS it needs to HTML output itself, as a `:where()` rule of zero
 specificity, so a rule of your own always wins no matter where your
 stylesheet sits. `css: false` leaves it out altogether.
+
+### Known limitations
+
+In LaTeX output `amsthm` does the typesetting; in other output the
+filter rebuilds the same result from Pandoc's elements (see
+[DESIGN.md](DESIGN.md)). Some things cannot be expressed that way:
+
+- **Language.** In LaTeX, babel translates "Proof" into the document's
+  `lang`, as "Beweis" for `lang: de`. Other output always says
+  "Proof". Set `name_to_text: {proof: Beweis}` to name it in both.
+- **The end-of-proof symbol** cannot be pushed to the right margin.
+  The CSS does this in HTML.
+- **Vertical space** around environments is left to the output format.
+- **A list or code block that starts an environment** runs in to its
+  heading in LaTeX, as `amsthm` sets environments as lists; other
+  output starts it on a new line.
 
 ## Paper cuts when composing with Quarto
 
