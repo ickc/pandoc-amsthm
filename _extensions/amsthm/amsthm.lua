@@ -225,6 +225,20 @@ local function cite_to_ref(elem, check_id, names)
 end
 M.cite_to_ref = cite_to_ref
 
+-- In LaTeX, italic text such as the body of a plain theorem or the
+-- heading of a proof makes what \ref and an in-text citation print
+-- italic too, while \eqref is upright. Wrap the former before they are
+-- resolved, so other output matches.
+local function italic_ref(el)
+  if el.t == "Cite" then
+    local _, mode = cite_to_id_mode(el)
+    if mode ~= "AuthorInText" then return nil end
+  elseif el.format ~= "tex" or not el.text:match("^\\ref%{.-%}$") then
+    return nil
+  end
+  return pandoc.Emph({ el })
+end
+
 -- Parse a markdown string to an Inlines list, unwrapping the leading Para.
 local function parse_markdown_as_inline(md)
   local doc = pandoc.read(md, "markdown")
@@ -396,7 +410,10 @@ function Proof:to_header(_options, _id, info)
   local ast = parse_markdown_as_inline(info)
   -- Wrap into a Para so we can walk + apply emph transforms over a block.
   local para = pandoc.Para(ast)
-  para = para:walk({ Str = M.to_emph, Emph = M.cancel_emph })
+  para = para:walk({
+    Str = M.to_emph, Emph = M.cancel_emph,
+    Cite = italic_ref, RawInline = italic_ref,
+  })
   -- merge_consecutive_type operates on the block itself, and `:walk`
   -- visits descendants only, so call it directly.
   M.merge_emph(para)
@@ -614,19 +631,6 @@ local function find_theorem(options, classes, warn)
     return nil
   end
   return found
-end
-
--- In LaTeX, the italic body of a plain theorem makes what \ref and an
--- in-text citation print italic too, while \eqref is upright. Wrap the
--- former before they are resolved, so other output matches.
-local function italic_ref(el)
-  if el.t == "Cite" then
-    local _, mode = cite_to_id_mode(el)
-    if mode ~= "AuthorInText" then return nil end
-  elseif el.format ~= "tex" or not el.text:match("^\\ref%{.-%}$") then
-    return nil
-  end
-  return pandoc.Emph({ el })
 end
 
 -- Apply the plain style's italic body to a theorem's content. Theorems
