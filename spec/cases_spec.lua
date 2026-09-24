@@ -334,7 +334,9 @@ end)
 describe("styles", function()
   it("are \\newtheoremstyle in LaTeX", function()
     local out = run("styles.md", LATEX)
-    has(out, "\\newtheoremstyle{claim}{}{}{\\normalfont}{}{\\bfseries\\itshape}{}{ }{}\n" ..
+    -- \normalfont for an upright heading, not {}, which is the body font.
+    has(out, "\\newtheoremstyle{aside}{}{}{\\itshape}{}{\\normalfont}{.}{ }{}\n" ..
+      "\\newtheoremstyle{claim}{}{}{\\normalfont}{}{\\bfseries\\itshape}{}{ }{}\n" ..
       "\\newtheoremstyle{note}{6pt}{}{\\itshape}{}{\\scshape}{:}{\\newline}{}\n" ..
       "\\theoremstyle{plain}")
     has(out, "\\theoremstyle{note}\n\\newtheorem{Observation}{Observation}")
@@ -352,6 +354,8 @@ describe("styles", function()
   it("apply a bold body to \\eqref too, which undoes only a shape", function()
     local out, err = run("styles-bad.md", "-t markdown")
     has(out, "**Bold, and so are [1](#s) and ([1](#s)).**")
+    -- Bold in a bold body stays bold, as \textbf in \bfseries does.
+    has(out, "**Still bold.**")
     has(err, "a style cannot be called css")
     has(err, "unknown font huge in style loud")
   end)
@@ -373,6 +377,12 @@ describe("a reference to several environments", function()
     has(err, "cannot name them, and is left to citeproc: [@A; @b]")
     has(err, "unnumbered environment m")
   end)
+
+  it("is left to citeproc with a prefix or suffix, which it would drop", function()
+    local out, err = run("multi-ref.md", "-t markdown")
+    has(out, "Affixed: [see @a; @b, p.")
+    has(err, "cannot carry a prefix or suffix, and is left to citeproc")
+  end)
 end)
 
 -- The examples on the documentation site, which people learn from: each
@@ -386,11 +396,12 @@ describe("the documentation's examples", function()
         local out = assert(io.popen("pandoc -L " .. FILTER .. " " .. path ..
           " --wrap=none " .. args .. " 2>" .. err_path, "r"))
         out:read("*a")
-        out:close()
+        local ok = out:close()
         local f = assert(io.open(err_path, "r"))
         local err = f:read("*a")
         f:close()
         os.remove(err_path)
+        assert(ok, path .. " failed to render with " .. args .. ":\n" .. err)
         -- The filter's own warnings; pandoc's (such as texmath's, which
         -- varies by version) are not about the examples.
         lacks(err, "[amsthm]")

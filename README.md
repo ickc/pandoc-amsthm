@@ -157,8 +157,9 @@ ordinary reference, so use lowercase identifiers for this.
 
 `[@a; @b]` refers to several environments at once: `\eqref{a},
 \eqref{b}` in LaTeX, "(1), (2)" elsewhere. It does not take the
-capitalised form, nor mix environments with bibliography keys; those are
-left to citeproc, with a warning.
+capitalised form, a prefix or locator (`[see @a; @b, p. 2]`), nor mix
+environments with bibliography keys; those are left to citeproc, with a
+warning.
 
 A reference to an unnumbered environment prints nothing meaningful in
 LaTeX, which gives the last number set before it, usually the

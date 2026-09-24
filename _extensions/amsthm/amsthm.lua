@@ -136,6 +136,17 @@ end
 M.cancel_repeated_type = cancel_repeated_type
 M.cancel_emph = cancel_repeated_type("Emph")
 
+-- Flatten a double-wrap of the same type that does not toggle
+-- (LaTeX: \textbf{\textbf{x}} == \textbf{x}).
+local function flatten_repeated(el)
+  local out = pandoc.Inlines({})
+  for _, child in ipairs(el.content) do
+    if child.t == el.t then out:extend(child.content) else out:insert(child) end
+  end
+  el.content = out
+  return el
+end
+
 -- Merge consecutive same-type wraps, with an optional Space between, in
 -- the inline content of a block. One pass, so linear in the content length.
 local function merge_consecutive_type(elem_type)
@@ -195,12 +206,14 @@ end
 M.cite_to_id_mode = cite_to_id_mode
 
 -- The ids of [@a; @b], a reference to several environments, when each
--- of them is a key of `ids`; nil otherwise, leaving it to citeproc.
+-- of them is a key of `ids` and none has a prefix or suffix, which the
+-- list would drop; nil otherwise, leaving it to citeproc.
 local function multi_ref_ids(elem, ids)
   if elem.t ~= "Cite" or #elem.citations < 2 then return nil end
   local out = {}
   for _, c in ipairs(elem.citations) do
-    if c.mode ~= "NormalCitation" or not ids[c.id] then return nil end
+    if c.mode ~= "NormalCitation" or not ids[c.id]
+        or #c.prefix > 0 or #c.suffix > 0 then return nil end
     out[#out + 1] = c.id
   end
   return out
@@ -593,9 +606,12 @@ local function read_styles(node)
   local kept = {}
   for _, name in ipairs(names) do
     local spec = node[name]
-    if OPTION_KEYS[name] or name == "proof" then
+    if OPTION_KEYS[name] then
       io.stderr:write("[amsthm] warning: a style cannot be called " .. name ..
         ", which is an option of its own; ignoring it\n")
+    elseif name == "proof" then
+      io.stderr:write("[amsthm] warning: a style cannot be called proof, " ..
+        "which lists the proof environments; ignoring it\n")
     elseif not is_meta_map(spec) then
       io.stderr:write("[amsthm] warning: style " .. name ..
         " is not a map of its settings; ignoring it\n")
@@ -810,14 +826,17 @@ local function options_to_latex(options)
   --   {punctuation}{space after the heading}{heading layout}
   for _, name in ipairs(options.user_styles) do
     local st = options.styles[name]
+    -- \normalfont for none: an empty argument keeps the font around it,
+    -- which for the heading is the body font.
     local function fonts(font)
+      if #font == 0 then return "\\normalfont" end
       local out = {}
       for _, f in ipairs(font) do out[#out + 1] = FONT_LATEX[f] end
       return table.concat(out)
     end
     local space = st.headspace == "newline" and "\\newline" or st.headspace
     lines[#lines + 1] = "\\newtheoremstyle{" .. name .. "}{" .. st.above ..
-      "}{" .. st.below .. "}{" .. (#st.bodyfont > 0 and fonts(st.bodyfont) or "\\normalfont") ..
+      "}{" .. st.below .. "}{" .. fonts(st.bodyfont) ..
       "}{" .. st.indent .. "}{" .. fonts(st.headfont) .. "}{" .. st.headpunct ..
       "}{" .. space .. "}{}"
   end
@@ -892,7 +911,9 @@ local function style_body(div, options, bodyfont)
     local merge = merge_consecutive_type(T)
     local ref = font_ref(T)
     body = body:walk({
-      Str = to_type(T), [T] = cancel_repeated_type(T),
+      -- Only \emph toggles: bold in bold, as \textbf in \bfseries, stays bold.
+      Str = to_type(T),
+      [T] = T == "Emph" and cancel_repeated_type(T) or flatten_repeated,
       Cite = ref, RawInline = ref,
       Para = merge, Plain = merge, Header = merge,
     })
@@ -1054,8 +1075,9 @@ local function warn_unnumbered(elem, options)
   end
   -- [@a; @knuth]: environments and other keys in one citation.
   if elem.t == "Cite" and #elem.citations > 1 then
-    local ours, others, named = false, false, false
+    local ours, others, named, affixed = false, false, false, false
     for _, c in ipairs(elem.citations) do
+      if #c.prefix > 0 or #c.suffix > 0 then affixed = true end
       if options.identifiers[c.id] or options.unnumbered[c.id] then
         ours = true
       elseif ref_target(c.id, options.identifiers) then
@@ -1072,6 +1094,10 @@ local function warn_unnumbered(elem, options)
       io.stderr:write("[amsthm] warning: a citation mixes environments " ..
         "with other keys, and is left to citeproc: " ..
         pandoc.utils.stringify(elem) .. "\n")
+    elseif ours and affixed then
+      io.stderr:write("[amsthm] warning: a reference to several " ..
+        "environments cannot carry a prefix or suffix, and is left to " ..
+        "citeproc: " .. pandoc.utils.stringify(elem) .. "\n")
     end
   end
 end

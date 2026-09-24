@@ -8,4 +8,6 @@ amsthm:
 
 ::: {#s .Shout}
 Bold, and so are @s and [@s].
+
+**Still bold.**
 :::
