@@ -256,3 +256,18 @@ describe("theorem numbers follow LaTeX's section numbering", function()
     assert.are.equal("I.1 II.1 II.2", numbers(out))
   end)
 end)
+
+describe("swapnumbers", function()
+  it("is \\swapnumbers before the environments in LaTeX", function()
+    local out = run("swapnumbers.md", LATEX)
+    has(out, "\\swapnumbers\n\\theoremstyle{plain}")
+  end)
+
+  it("puts the number first, in the heading font, in other output", function()
+    local out = run("swapnumbers.md", "-t markdown")
+    has(out, "[**1\u{a0}Theorem** (Euler)**.**]{.amsthm-title} *First.*")
+    -- Unlike after the name, the number is not upright in an italic heading.
+    has(out, "[*1\u{a0}Case.*]{.amsthm-title} Second.")
+    has(out, "[*Note.*]{.amsthm-title} Third.")
+  end)
+end)

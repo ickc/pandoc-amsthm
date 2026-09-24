@@ -400,7 +400,11 @@ function NewTheorem:to_header(options, id, info)
   end
 
   local runs = { { pandoc.Inlines(self.text), head } }
-  if theorem_number then
+  if theorem_number and options.swapnumbers then
+    -- \swappedhead: the number first, in the heading font, then a tie.
+    table.insert(runs, 1,
+      { { pandoc.Str(theorem_number), pandoc.Str("\u{a0}") }, head })
+  elseif theorem_number then
     local number = upright(head)
     runs[#runs + 1] = { { pandoc.Space(), pandoc.Str(theorem_number) }, number }
   end
@@ -615,10 +619,12 @@ local function from_meta(meta)
 
   local css = true
   if opt.css ~= nil then css = (stringify(opt.css) ~= "false") end
+  local swapnumbers = opt.swapnumbers ~= nil and stringify(opt.swapnumbers) == "true"
 
   return {
     css = css,
     styles = BUILTIN_STYLES,
+    swapnumbers = swapnumbers,
     counter_first = counter_first,
     numbered_depth = numbered_depth(meta, top),
     part_level = part_level,
@@ -639,6 +645,8 @@ end
 local function options_to_latex(options)
   local cur_style = ""
   local lines = {}
+  -- Before \newtheorem, which takes the order from it.
+  if options.swapnumbers then lines[#lines + 1] = "\\swapnumbers" end
   if options.proof_name then
     -- At the start of the document, after babel sets the name for the
     -- document's language.

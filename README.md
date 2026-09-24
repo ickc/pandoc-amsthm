@@ -94,6 +94,7 @@ underscores: `Main Theorem` is written as `::: Main_Theorem`.
 | `parent_counter`          | Number theorems within this LaTeX sectioning unit (`part`, `chapter`, `section`, …). |
 | `counter_depth`           | Non-LaTeX only: how many heading levels prefix the theorem number. By default it follows `parent_counter` and `--top-level-division`, so both kinds of output number alike; without `parent_counter` it is `0`, numbering theorems through the document. |
 | `counter_ignore_headings` | Headings that do not advance the counters, such as `List of Figures` added by pandoc-crossref. |
+| `swapnumbers`             | `true` puts the number before the name, "1.1 Theorem", as `\swapnumbers` does. |
 | `css`                     | `false` leaves out the stylesheet described under [Styling HTML](#styling-html). |
 
 ### Cross-references
