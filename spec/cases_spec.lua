@@ -308,3 +308,25 @@ describe("\\qedhere", function()
     assert.are.equal(4, count(out, "\\Box"))
   end)
 end)
+
+describe("parent_counter per environment", function()
+  local ARGS = " -N --top-level-division=chapter"
+
+  it("gives each \\newtheorem its own parent in LaTeX", function()
+    local out, err = run("parent-counter-map.md", LATEX .. ARGS)
+    has(out, "\\newtheorem{Theorem}{Theorem}[section]")
+    has(out, "\\newtheorem{Lemma}[Theorem]{Lemma}")
+    has(out, "\\newtheorem{Conjecture}{Conjecture}\n")
+    has(out, "\\newtheorem{Remark}{Remark}[chapter]")
+    has(err, "Lemma shares the counter of Theorem")
+  end)
+
+  it("numbers each within its own parent in other output, as amsthm does", function()
+    local out = run("parent-counter-map.md", "-t plain" .. ARGS)
+    local found = {}
+    for n in out:gmatch("%u%l+ ([%d.]+)%.") do found[#found + 1] = n end
+    -- The numbers amsthm prints for this document.
+    assert.are.equal("1.1.1 1.1.2 1 1.1 1.2.1 2 1.2 2.0.1 3 2.1",
+      table.concat(found, " "))
+  end)
+end)

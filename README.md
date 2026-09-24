@@ -95,8 +95,8 @@ write `\qedhere` where the symbol should go, as in LaTeX:
 | ------------------------- | ------- |
 | `plain`, `definition`, `remark` | Environments in that style. An entry is a name, or a map from a name to the names that share its counter. |
 | `name_to_text`            | Displayed text for a name, when it differs from the name. Keyed by the name exactly as it appears in the list above, including a trailing `*`. The key `proof` renames the proof (`\proofname` in LaTeX). |
-| `parent_counter`          | Number theorems within this LaTeX sectioning unit (`part`, `chapter`, `section`, …). |
-| `counter_depth`           | Non-LaTeX only: how many heading levels prefix the theorem number. By default it follows `parent_counter` and `--top-level-division`, so both kinds of output number alike; without `parent_counter` it is `0`, numbering theorems through the document. |
+| `parent_counter`          | Number theorems within this LaTeX sectioning unit (`part`, `chapter`, `section`, …). Either one unit for every environment, or a map from an environment's name to its unit, such as `{Theorem: section, Remark: chapter}`, leaving the others numbered through the document. An environment that shares a counter is numbered within that counter's unit. |
+| `counter_depth`           | Non-LaTeX only: how many heading levels prefix the theorem number, for every environment. By default it follows each environment's `parent_counter` and `--top-level-division`, so both kinds of output number alike; without `parent_counter` it is `0`, numbering theorems through the document. |
 | `counter_ignore_headings` | Headings that do not advance the counters, such as `List of Figures` added by pandoc-crossref. |
 | `qed_symbol`              | The end-of-proof symbol, as math: `$\blacksquare$` (or just `\blacksquare`). Sets `\qedsymbol` in LaTeX. The default is `\Box`, the same box as amsthm's `\openbox`. |
 | `swapnumbers`             | `true` puts the number before the name, "1.1 Theorem", as `\swapnumbers` does. |

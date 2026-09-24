@@ -382,7 +382,8 @@ function NewTheorem:to_header(options, id, info)
     local cname = self:counter_name()
     options.theorem_counters[cname] = (options.theorem_counters[cname] or 0) + 1
     local parts = {}
-    for i = options.counter_first, options.counter_depth do
+    local c = options.counters[cname] or { first = 1, depth = 0 }
+    for i = c.first, c.depth do
       local n = options.header_counters[i]
       if i == options.part_level then
         -- \thepart is a Roman numeral, and empty before the first part.
@@ -524,7 +525,18 @@ local function from_meta(meta)
   if opt.name_to_text ~= nil then
     for k, v in pairs(opt.name_to_text) do name_to_text[k] = stringify(v) end
   end
-  local parent_counter = opt.parent_counter and stringify(opt.parent_counter) or nil
+  -- parent_counter is one unit for every environment, or a map from an
+  -- environment's name to its unit, as \newtheorem takes one each.
+  local parent_counters = {}
+  local parent_counter
+  if is_meta_map(opt.parent_counter) then
+    for k, v in pairs(opt.parent_counter) do parent_counters[k] = stringify(v) end
+  elseif opt.parent_counter ~= nil then
+    parent_counter = stringify(opt.parent_counter)
+  end
+  local function parent_of(name)
+    return parent_counters[name] or parent_counter
+  end
 
   local theorems_order = {}
   local theorems_map = {}
@@ -551,7 +563,7 @@ local function from_meta(meta)
           add(NewTheorem.new({
             style = style, env_name = key_s,
             text = name_to_text[key_s] or "",
-            parent_counter = parent_counter,
+            parent_counter = parent_of(key_s),
           }))
           -- value: MetaList of names OR single name
           if is_meta_list(value) then
@@ -577,7 +589,7 @@ local function from_meta(meta)
         add(NewTheorem.new({
           style = style, env_name = key_s,
           text = name_to_text[key_s] or "",
-          parent_counter = parent_counter,
+          parent_counter = parent_of(key_s),
         }))
       end
     end
@@ -592,16 +604,32 @@ local function from_meta(meta)
   -- With parts at level 1: a part steps no other counter, and appears in
   -- a theorem's number only when theorems are numbered within parts.
   local part_level = (top == "part") and 1 or nil
-  local counter_first = 1
-  local counter_depth = COUNTER_DEPTH_DEFAULT
-  if opt.counter_depth then
-    local s = stringify(opt.counter_depth)
-    counter_depth = tonumber(s) or COUNTER_DEPTH_DEFAULT
-  elseif parent_counter and PARENT_COUNTERS[parent_counter] then
-    -- Number within the heading level that LaTeX would number within.
-    counter_depth = math.max(0,
-      PARENT_COUNTERS[parent_counter] - PARENT_COUNTERS[top] + 1)
-    if part_level and parent_counter ~= "part" then counter_first = 2 end
+  -- For each counter, the heading levels in its number, first to depth;
+  -- a heading at one of them restarts it. counter_depth is the deepest.
+  local explicit_depth = opt.counter_depth
+    and tonumber(stringify(opt.counter_depth)) or nil
+  local counters = {}
+  local counter_depth = explicit_depth or COUNTER_DEPTH_DEFAULT
+  for _, t in ipairs(theorems_order) do
+    if t.numbered and t.shared_counter == nil then
+      local c = { first = 1, depth = explicit_depth or COUNTER_DEPTH_DEFAULT }
+      local p = t.parent_counter
+      if explicit_depth == nil and p then
+        -- Number within the heading level that LaTeX would number within.
+        c.depth = math.max(0, PARENT_COUNTERS[p] - PARENT_COUNTERS[top] + 1)
+        if part_level and p ~= "part" then c.first = 2 end
+      end
+      counters[t:counter_name()] = c
+      counter_depth = math.max(counter_depth, c.depth)
+    end
+  end
+  for name in pairs(parent_counters) do
+    local t = theorems_map[(name:gsub(" ", "_"))]
+    if t and t.shared_counter then
+      io.stderr:write("[amsthm] warning: " .. name .. " shares the counter of " ..
+        t.shared_counter .. ", so its parent_counter is " .. t.shared_counter ..
+        "'s; ignoring the one given\n")
+    end
   end
 
   local ignore = {}
@@ -638,7 +666,7 @@ local function from_meta(meta)
     styles = BUILTIN_STYLES,
     swapnumbers = swapnumbers,
     qed_symbol = qed_symbol,
-    counter_first = counter_first,
+    counters = counters,
     numbered_depth = numbered_depth(meta, top),
     part_level = part_level,
     proof_name = name_to_text.proof,
@@ -1008,8 +1036,13 @@ local function build_filters()
     traverse = "topdown",
     Pandoc = function(doc)
       options = from_meta(doc.meta)
-      if options.counter_depth >= options.counter_first
-          and options.numbered_depth < options.counter_first then
+      local unnumbered_sections = false
+      for _, c in pairs(options.counters) do
+        if c.depth >= c.first and options.numbered_depth < c.first then
+          unnumbered_sections = true
+        end
+      end
+      if unnumbered_sections then
         io.stderr:write("[amsthm] warning: theorems are numbered within " ..
           "sections that are not numbered, so their numbers start with 0 " ..
           "as in LaTeX; pass -N (--number-sections)\n")
@@ -1043,8 +1076,11 @@ local function build_filters()
               options.header_counters[i] = 0
             end
           end
-          if level >= options.counter_first then
-            options.theorem_counters = {}
+          -- Restart each counter numbered within this level or above it.
+          for name, c in pairs(options.counters) do
+            if level >= c.first and level <= c.depth then
+              options.theorem_counters[name] = nil
+            end
           end
         end
       end
