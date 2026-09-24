@@ -42,16 +42,16 @@ theoremstyle here
 
 ::: {.proof .amsthm .amsthm-proof info="Proof of the Main Theorem"}
 [*Proof of the Main Theorem**.*]{.amsthm-title} Predefined proof
-theoremstyle here[◻]{.amsthm-qed}
+theoremstyle here[$\Box$]{.amsthm-qed}
 :::
 
 ::: {.proof .amsthm .amsthm-proof info="Proof of the *little* theorem"}
 [*Proof of the* little *theorem**.*]{.amsthm-title} Predefined proof
-theoremstyle here with markdown info.[◻]{.amsthm-qed}
+theoremstyle here with markdown info.[$\Box$]{.amsthm-qed}
 :::
 
 ::: {.proof .amsthm .amsthm-proof}
-[*Proof.*]{.amsthm-title} Bare proof here.[◻]{.amsthm-qed}
+[*Proof.*]{.amsthm-title} Bare proof here.[$\Box$]{.amsthm-qed}
 :::
 
 ::: {.KL .amsthm .amsthm-plain}

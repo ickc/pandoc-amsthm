@@ -698,7 +698,9 @@ local function amsthm_block(div, options)
   end
 
   if theorem.style == "proof" then
-    local qed = pandoc.Span({ pandoc.Str("\xe2\x97\xbb") },
+    -- amsthm's \qedsymbol is an open box. As math it renders in every
+    -- format, where a Unicode box is missing from LaTeX's default fonts.
+    local qed = pandoc.Span({ pandoc.Math("InlineMath", "\\Box") },
       pandoc.Attr("", { "amsthm-qed" }))
     local last = div.content[#div.content]
     if last and last.content
