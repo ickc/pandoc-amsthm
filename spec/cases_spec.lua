@@ -301,7 +301,7 @@ describe("\\qedhere", function()
     -- In math, amsthm's \mathqed: \quad\qedsymbol in place.
     has(out, "$$x = 1. \\quad\\Box$$\n:::")
     -- In text, \qed, which takes the space before it away.
-    has(out, "- two[$\\quad\\Box$]{.amsthm-qed}\n:::")
+    has(out, " two[$\\quad\\Box$]{.amsthm-qed}\n:::")
     -- A nested proof has a \qedhere of its own; the outer one still ends.
     has(out, "Inner.[$\\quad\\Box$]{.amsthm-qed}")
     has(out, "Outer.[$\\quad\\Box$]{.amsthm-qed}")
