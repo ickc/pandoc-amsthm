@@ -32,7 +32,7 @@ platforms = ["linux-64"]
 pandoc = "==3.1.1"
 
 [feature.docs.dependencies]
-quarto = ">=1.4"
+quarto = ">=1.11.9,<2"
 
 [feature.docs.tasks]
 docs = { cmd = "quarto render docs", description = "Render the documentation site to docs/_site" }
