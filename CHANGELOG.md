@@ -6,6 +6,9 @@
   `[see @a]` or `[@a, p. 3]`, is left to citeproc with a warning, as a
   reference to several environments already was, instead of becoming
   the number alone. Write `see [@a]`.
+- Other output: a heading that starts an environment is no longer
+  taken into the environment's heading, nor one that ends a proof given
+  the end-of-proof symbol; each keeps a line of its own, as in LaTeX.
 
 ## v3.1.1
 
