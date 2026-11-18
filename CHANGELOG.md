@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## v4.0.0
 
 - **Breaking:** the note of a theorem or proof is a span with class
   `info` at the start of the environment, `[Lagrange]{.info} The order
