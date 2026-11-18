@@ -904,12 +904,16 @@ end
 -- each has a style of its own.
 local function style_body(div, options, bodyfont)
   local held = {}
+  -- Each placeholder's attribute starts with the address of `held`,
+  -- which no document can know, so a div of the user's that happens to
+  -- have the attribute is not taken for one.
+  local mark = tostring(held) .. " "
   local body = pandoc.Div(div.content):walk({
     traverse = "topdown",
     Div = function(d)
       if find_theorem(options, d.classes) then
         held[#held + 1] = d
-        return pandoc.Div({}, pandoc.Attr("", {}, { ["amsthm-held"] = tostring(#held) })), false
+        return pandoc.Div({}, pandoc.Attr("", {}, { ["amsthm-held"] = mark .. #held })), false
       end
       return nil
     end,
@@ -930,7 +934,9 @@ local function style_body(div, options, bodyfont)
     body = body:walk({
       Div = function(d)
         local i = d.attributes["amsthm-held"]
-        if i then return held[tonumber(i)] end
+        if i and i:sub(1, #mark) == mark then
+          return held[tonumber(i:sub(#mark + 1))]
+        end
         return nil
       end,
     })

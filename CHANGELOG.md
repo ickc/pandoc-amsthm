@@ -9,6 +9,10 @@
 - Other output: a heading that starts an environment is no longer
   taken into the environment's heading, nor one that ends a proof given
   the end-of-proof symbol; each keeps a line of its own, as in LaTeX.
+- Other output: a div of your own with an `amsthm-held` attribute,
+  inside an environment whose style sets the body's font, is left alone;
+  it used to be replaced with a copy of an environment nested there,
+  which was then numbered twice.
 
 ## v3.1.1
 
