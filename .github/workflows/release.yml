@@ -24,6 +24,6 @@ jobs:
           echo "tag: ${GITHUB_REF_NAME}, pixi.toml: ${pixi_version}, _extension.yml: ${ext_version}"
           test "${GITHUB_REF_NAME}" = "v${pixi_version}"
           test "${GITHUB_REF_NAME}" = "v${ext_version}"
-      - run: gh release create "$GITHUB_REF_NAME" _extensions/amsthm/amsthm.lua --repo "$GITHUB_REPOSITORY" --generate-notes
+      - run: gh release create "$GITHUB_REF_NAME" _extensions/amsthm/amsthm.lua tools/amsthm-port-v4.lua --repo "$GITHUB_REPOSITORY" --generate-notes
         env:
           GH_TOKEN: ${{ github.token }}
