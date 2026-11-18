@@ -708,28 +708,34 @@ local function from_meta(meta)
         for _, key in ipairs(keys) do
           local value = entry[key]
           local key_s = meta_key(key)
-          add(NewTheorem.new({
+          local owner = NewTheorem.new({
             style = style, env_name = key_s,
             text = name_to_text[key_s] or "",
             parent_counter = parent_of(key_s),
-          }))
-          -- value: MetaList of names OR single name
-          if is_meta_list(value) then
-            for _, v in ipairs(value) do
-              local v_s = stringify(v)
-              add(NewTheorem.new({
-                style = style, env_name = v_s,
-                text = name_to_text[v_s] or "",
-                shared_counter = key_s,
-              }))
-            end
-          else
-            local v_s = stringify(value)
-            add(NewTheorem.new({
+          })
+          add(owner)
+          -- A name listed under it shares its counter; an unnumbered
+          -- environment has none, so then each is numbered on its own.
+          local function add_sharer(v)
+            local v_s = stringify(v)
+            local t = NewTheorem.new({
               style = style, env_name = v_s,
               text = name_to_text[v_s] or "",
-              shared_counter = key_s,
-            }))
+              shared_counter = owner.numbered and key_s or nil,
+              parent_counter = not owner.numbered and parent_of(v_s) or nil,
+            })
+            if t.numbered and not owner.numbered then
+              io.stderr:write("[amsthm] warning: " .. owner.env_name ..
+                " is unnumbered, so it has no counter for " .. t.env_name ..
+                " to share; numbering " .. t.env_name .. " on its own\n")
+            end
+            add(t)
+          end
+          -- value: MetaList of names OR single name
+          if is_meta_list(value) then
+            for _, v in ipairs(value) do add_sharer(v) end
+          else
+            add_sharer(value)
           end
         end
       else
