@@ -9,8 +9,8 @@ amsthm:
 Give an environment an identifier, and cite it. A reference can come
 before what it refers to, as @nz does here.
 
-::: {#euler .Theorem info="Euler"}
-$e^{i\pi} + 1 = 0$.
+::: {#euler .Theorem}
+[Euler]{.info} $e^{i\pi} + 1 = 0$.
 :::
 
 ::: {#nz .Lemma}

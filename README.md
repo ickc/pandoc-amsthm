@@ -75,12 +75,13 @@ amsthm:
 ---
 ```
 
-Then use each name as the class of a div. The optional `info`
-attribute is the note in parentheses, and may contain Markdown:
+Then use each name as the class of a div. A note, the text in
+parentheses after the number (`\begin{Theorem}[Euler]` in LaTeX), is a
+span with class `info` at the very start of the div:
 
 ```markdown
-::: {#thm:euler .Theorem info="Euler"}
-$e^{i\pi} + 1 = 0$.
+::: {#thm:euler .Theorem}
+[Euler]{.info} $e^{i\pi} + 1 = 0$.
 :::
 
 As @thm:euler shows, … and see also [@thm:euler].
@@ -92,6 +93,20 @@ Obvious.
 
 `proof` is always defined. Names containing spaces become classes with
 underscores: `Main Theorem` is written as `::: Main_Theorem`.
+
+The note is Markdown like the rest of the document, read by pandoc with
+it: emphasis, math and references work in it. It is the first thing in
+the div's first paragraph, or a paragraph of its own before a list or a
+display; the space or line break after it is not part of the body. A
+span with class `info` anywhere else is an ordinary span, and the note
+span's own identifier, other classes and attributes are ignored. An
+empty or blank span, `[]{.info}`, gives no note. A
+proof's note replaces its heading: `[Proof of @Euler]{.info}`. Without
+the filter, a note reads as the start of the paragraph.
+
+The `info` attribute of v3, `::: {.Theorem info="Euler"}`, still gives a
+note, as plain text: markup in it is shown as typed, with a warning (see
+[Migrating from v3](#migrating-from-v3)).
 
 A proof ends with its symbol. When it ends in a display or a list,
 write `\qedhere` where the symbol should go, as in LaTeX:
@@ -223,7 +238,7 @@ own theorems before any user filter runs, and that pass cannot be
 switched off:
 
 - divs whose class is `proof`, `remark` or `solution`, labelled with a
-  `name` attribute rather than `info`;
+  `name` attribute rather than a note span;
 - divs whose identifier starts with `thm-`, `lem-`, `cor-`, `prp-`,
   `cnj-`, `def-`, `exm-` or `exr-`.
 
@@ -241,6 +256,20 @@ The second is yours to avoid:
   other identifier, such as `#euler` or `#thm:euler`.
 - **Do not mix Quarto's theorems with this filter's in one document.**
   The two keep separate counters, so the numbering would be wrong.
+
+## Migrating from v3
+
+Version 4 takes a note from a leading span, `[Euler]{.info}`, which
+pandoc reads with the rest of the document, instead of the `info`
+attribute, whose Markdown the filter read itself. So the filter no
+longer calls pandoc's reader, and runs where filters are sandboxed.
+
+A note of plain text in the attribute still works. One with markup in
+it, such as emphasis, math, a citation or an apostrophe, is shown as
+typed, with a warning. The
+[porting guide](https://ickc.github.io/pandoc-amsthm/porting.html)
+rewrites a document's notes as spans with `amsthm-port-v4.lua`, a filter
+attached to each release, so that its output stays as it was.
 
 ## Migrating from v2
 
@@ -282,6 +311,7 @@ See [the design notes](https://ickc.github.io/pandoc-amsthm/design.html) for how
 LaTeX output first, then the same result built from Pandoc's AST for
 every other format.
 
-The filter is `_extensions/amsthm/amsthm.lua`. Specs under `spec/` use
+The filter is `_extensions/amsthm/amsthm.lua`, and the porting filter
+`tools/amsthm-port-v4.lua`. Specs under `spec/` use
 [busted](https://lunarmodules.github.io/busted/) syntax and run through
 a small built-in shim, so no Lua packages are needed.

@@ -5,8 +5,8 @@ amsthm:
   remark: [Case, Note\*]
 ---
 
-::: {.Theorem info="Euler"}
-First.
+::: Theorem
+[Euler]{.info} First.
 :::
 
 ::: Case

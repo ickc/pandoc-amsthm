@@ -21,8 +21,8 @@ even, and then so is $q$: a contradiction.
 When a proof ends in a display or a list, the symbol would sit on a
 line of its own. Put `\qedhere` where it should go, as in LaTeX:
 
-::: {.proof info="Another proof of @Sqrt2"}
-Write $p = 2r$. Then $4r^2 = 2q^2$, so
+::: proof
+[Another proof of @Sqrt2]{.info} Write $p = 2r$. Then $4r^2 = 2q^2$, so
 $$q^2 = 2r^2. \qedhere$$
 :::
 

@@ -26,8 +26,8 @@ amsthm:
 
 # Demo
 
-::: {.Theorem info="within parenthesis"}
-plain theoremstyle *here*
+::: Theorem
+[within parenthesis]{.info} plain theoremstyle *here*
 
 We can use pandoc-crossref style @simplestEquation and [@simplestEquation]
 and cite before definition.
@@ -43,28 +43,28 @@ From the \ref{simplestEquation}, we see that...
 Or \eqref{simplestEquation}, ...
 Or with its name, @SimplestEquation.
 
-::: {.With_Space info="**This** is *markdown*."}
-Environment name has a space, and is unnumbered.
+::: With_Space
+[**This** is *markdown*.]{.info} Environment name has a space, and is unnumbered.
 :::
 
-::: {.Lemma info="can cite \ref{simplestEquation}"}
-This one share counter with Theorem.
+::: Lemma
+[can cite \ref{simplestEquation}]{.info} This one share counter with Theorem.
 :::
 
-::: {.Definition info="pandoc-crossref style cite @simplestEquation"}
-definition theoremstyle here
+::: Definition
+[pandoc-crossref style cite @simplestEquation]{.info} definition theoremstyle here
 :::
 
-::: {.Case info="within parenthesis"}
-remark theoremstyle here
+::: Case
+[within parenthesis]{.info} remark theoremstyle here
 :::
 
-::: {.proof info="Proof of the Main Theorem"}
-Predefined proof theoremstyle here
+::: proof
+[Proof of the Main Theorem]{.info} Predefined proof theoremstyle here
 :::
 
-::: {.proof info="Proof of the *little* theorem"}
-Predefined proof theoremstyle here with markdown info.
+::: proof
+[Proof of the *little* theorem]{.info} Predefined proof theoremstyle here with markdown info.
 :::
 
 ::: {.proof}

@@ -78,6 +78,78 @@ describe("a div of the user's with the attribute amsthm-held", function()
   end)
 end)
 
+describe("a note, a span with class info that starts the first paragraph", function()
+  it("is the note in parentheses in other output", function()
+    local out = run("note-span.md", "-t markdown")
+    has(out, "[**Theorem 1** (Lagrange)**.**]{.amsthm-title} *The order of a subgroup")
+    -- On a line of its own: the line break after it goes with it.
+    has(out, "[**Theorem 2** (A note on a line of its own)**.**]{.amsthm-title} *The body.*")
+    -- In a paragraph of its own: the paragraph goes, and the heading takes
+    -- a paragraph of its own before the list, as without a note.
+    -- (pandoc 3.1.1 indents a list item further.)
+    has(out, "[**Theorem 3** (A note before a list)**.**]{.amsthm-title}\n\n-")
+    -- pandoc has read it with the document: math and references in it.
+    has(out, "(A note before a display, with $x$ and [1](#lagrange))**.**]{.amsthm-title} $$x = 1$$")
+    -- The span's other attributes are ignored.
+    has(out, "[**Theorem 5** (Other attributes)**.**]{.amsthm-title} *are ignored.*")
+    -- A span with class info elsewhere is an ordinary span.
+    has(out, "[**Theorem 6.**]{.amsthm-title} *A* [*later* *span*]{.info}")
+    has(out, "[**Theorem 7.**]{.amsthm-title} *An empty note is no note.*")
+    has(out, "[**Theorem 10.**]{.amsthm-title} *A blank note is no note.*")
+    -- A proof's note is its heading.
+    has(out, "[*Proof of Theorem\u{a0}[1](#lagrange)**.*]{.amsthm-title} Obvious.")
+    has(out, "[**Theorem 8** (Outer)**.**]{.amsthm-title} *Outer.*")
+    has(out, "[**Theorem 9** (Inner)**.**]{.amsthm-title} *Inner.*")
+    lacks(out, "{.info}]")
+    lacks(out, "#n")
+  end)
+
+  it("is the optional argument in LaTeX", function()
+    local out = run("note-span.md", "-t latex")
+    has(out, "\\begin{Theorem}[Lagrange]\\label{lagrange}\nThe order")
+    has(out, "\\begin{Theorem}[A note on a line of its own]\nThe body.")
+    has(out, "\\begin{Theorem}[A note before a list]\n\n\\begin{itemize}")
+    has(out, "\\begin{Theorem}[{A note before a display, with \\(x\\) and \\ref{lagrange}}]")
+    has(out, "\\begin{Theorem}[Other attributes]\nare ignored.")
+    has(out, "\\begin{Theorem}\nA {later span} is an ordinary span.")
+    has(out, "\\begin{Theorem}\nAn empty note is no note.")
+    has(out, "\\begin{Theorem}\nA blank note is no note.")
+    has(out, "\\begin{proof}[{Proof of Theorem~\\ref{lagrange}}]\nObvious.")
+    has(out, "\\begin{Theorem}[Inner]\nInner.")
+  end)
+end)
+
+describe("the info attribute", function()
+  it("is the note as plain text, with one warning for markup in any", function()
+    for _, fmt in ipairs({ "markdown", "latex" }) do
+      local out, err = run("note-attribute.md", "-t " .. fmt)
+      has(out, "Fermat, little theorem (1640)")
+      assert.are.equal(1, count(err, "the info attribute is plain text since amsthm v4"))
+      has(err, 'so info="*Euler*" is shown as typed')
+      has(err, "https://ickc.github.io/pandoc-amsthm/porting.html")
+    end
+    local out = run("note-attribute.md", "-t markdown")
+    has(out, "[**Theorem 1** (Fermat, little theorem (1640))**.**]{.amsthm-title}")
+    has(out, "[**Theorem 2** (\\*Euler\\*)**.**]{.amsthm-title}")
+    out = run("note-attribute.md", "-t latex")
+    has(out, "\\begin{Theorem}[*Euler*]")
+  end)
+
+  it("gives way to a span, with a warning", function()
+    local out, err = run("note-attribute.md", "-t markdown")
+    has(out, "[**Theorem 4** (the span)**.**]{.amsthm-title}")
+    has(err, 'a note in both a leading [...]{.info} span and info="the attribute"; using the span')
+    -- An empty span is no note: the attribute is, and nothing is warned.
+    has(out, "[**Theorem 5** (the attribute)**.**]{.amsthm-title} *An empty span")
+    assert.are.equal(1, count(err, "a note in both"))
+  end)
+
+  it("drops the spaces at its ends", function()
+    local out = run("note-attribute.md", "-t markdown")
+    has(out, "[**Theorem 6** (spaces at its end)**.**]{.amsthm-title}")
+  end)
+end)
+
 describe("theorem bodies in LaTeX", function()
   it("go through the writer with the user's options", function()
     local out = run("natbib.md", "-t latex --natbib")

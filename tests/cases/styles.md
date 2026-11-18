@@ -19,8 +19,8 @@ amsthm:
   plain: [Theorem]
 ---
 
-::: {#o .Observation info="with a note"}
-The body in italics, citing @o and [@o].
+::: {#o .Observation}
+[with a note]{.info} The body in italics, citing @o and [@o].
 :::
 
 ::: Claim
