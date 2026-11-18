@@ -1,6 +1,6 @@
 # Demo
 
-::: {.Theorem .amsthm .amsthm-plain info="within parenthesis"}
+::: {.Theorem .amsthm .amsthm-plain}
 [**Theorem 1.0.1** (within parenthesis)**.**]{.amsthm-title} *plain
 theoremstyle* here
 
@@ -18,34 +18,34 @@ From the [1.0.2](#simplestEquation), we see that... Or
 ([1.0.2](#simplestEquation)), ... Or with its name,
 Theorem [1.0.2](#simplestEquation).
 
-::: {.With_Space .amsthm .amsthm-plain info="**This** is *markdown*."}
+::: {.With_Space .amsthm .amsthm-plain}
 [**With Space** (**This** is *markdown*.)**.**]{.amsthm-title}
 *Environment name has a space, and is unnumbered.*
 :::
 
-::: {.Lemma .amsthm .amsthm-plain info="can cite \\ref{simplestEquation}"}
+::: {.Lemma .amsthm .amsthm-plain}
 [**Lemma 1.0.3** (can cite
 [1.0.2](#simplestEquation))**.**]{.amsthm-title} *This one share counter
 with Theorem.*
 :::
 
-::: {.Definition .amsthm .amsthm-definition info="pandoc-crossref style cite @simplestEquation"}
+::: {.Definition .amsthm .amsthm-definition}
 [**Definition 1.0.1** (pandoc-crossref style cite
 [1.0.2](#simplestEquation))**.**]{.amsthm-title} definition theoremstyle
 here
 :::
 
-::: {.Case .amsthm .amsthm-remark info="within parenthesis"}
+::: {.Case .amsthm .amsthm-remark}
 [*Case* 1.0.1 (within parenthesis)*.*]{.amsthm-title} remark
 theoremstyle here
 :::
 
-::: {.proof .amsthm .amsthm-proof info="Proof of the Main Theorem"}
+::: {.proof .amsthm .amsthm-proof}
 [*Proof of the Main Theorem**.*]{.amsthm-title} Predefined proof
 theoremstyle here[$\quad\Box$]{.amsthm-qed}
 :::
 
-::: {.proof .amsthm .amsthm-proof info="Proof of the *little* theorem"}
+::: {.proof .amsthm .amsthm-proof}
 [*Proof of the* little *theorem**.*]{.amsthm-title} Predefined proof
 theoremstyle here with markdown info.[$\quad\Box$]{.amsthm-qed}
 :::

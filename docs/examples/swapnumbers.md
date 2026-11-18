@@ -12,8 +12,8 @@ amsthm:
 `swapnumbers: true` puts the number before the name, as amsthm's
 `\swapnumbers` does.
 
-::: {.Theorem info="Fermat"}
-If $p$ is prime, then $a^p \equiv a \pmod p$.
+::: Theorem
+[Fermat]{.info} If $p$ is prime, then $a^p \equiv a \pmod p$.
 :::
 
 ::: Lemma

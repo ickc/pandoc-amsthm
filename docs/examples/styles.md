@@ -34,8 +34,8 @@ Each style takes the settings of `\newtheoremstyle`:
 Settings left out are as for a theorem in amsthm: a bold heading, a
 period and a space, and the body in the normal font.
 
-::: {.Note info="on style"}
-A heading in small caps, ending with a colon. The number stays upright,
+::: Note
+[on style]{.info} A heading in small caps, ending with a colon. The number stays upright,
 as amsthm sets it.
 :::
 

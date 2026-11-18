@@ -321,29 +321,69 @@ local function font_ref(elem_type)
 end
 local italic_ref = font_ref("Emph")
 
--- Parse a markdown string to an Inlines list, unwrapping the leading Para.
-local function parse_markdown_as_inline(md)
-  local doc = pandoc.read(md, "markdown")
-  local out = {}
-  for _, blk in ipairs(doc.blocks) do
-    if blk.t == "Para" or blk.t == "Plain" then
-      for _, inl in ipairs(blk.content) do out[#out + 1] = inl end
+---------------------------------------------------------------------
+-- The note
+---------------------------------------------------------------------
+
+local PORTING_GUIDE = "https://ickc.github.io/pandoc-amsthm/porting.html"
+
+local function is_note_span(el)
+  return el ~= nil and el.t == "Span" and el.classes:includes("info")
+end
+
+-- Whether an info attribute reads the same as plain text as it did as
+-- markdown in v3: letters, digits, spaces and , . ; : ! ? ( ) / -. Not
+-- an apostrophe, which markdown made a typographic one.
+local function is_plain_text(text)
+  return text:find("[^%w%s\128-\255,.;:!?()/%-]") == nil
+end
+M.is_plain_text = is_plain_text
+
+-- Take a div's note out of it, and return it as inlines, or nil. The
+-- note is a span with class info that starts the div's first block, a
+-- paragraph, as pandoc has read it with the document: the span goes,
+-- with the space after it, and so does the paragraph if nothing is left
+-- in it. The span's other attributes are ignored. Without the span, the
+-- note is the div's info attribute, as plain text.
+local function take_note(div, options)
+  local note
+  local content = div.content
+  local first = content[1]
+  if first and (first.t == "Para" or first.t == "Plain")
+      and is_note_span(first.content[1]) then
+    local inlines = first.content
+    note = inlines:remove(1).content
+    if inlines[1] and (inlines[1].t == "Space" or inlines[1].t == "SoftBreak") then
+      inlines:remove(1)
+    end
+    if #inlines == 0 then
+      content:remove(1)
     else
-      out[#out + 1] = blk
+      first.content = inlines
+      content[1] = first
+    end
+    div.content = content
+  end
+  local info = div.attributes.info
+  if info and info:match("%S") then
+    if note then
+      io.stderr:write("[amsthm] warning: a note in both a leading " ..
+        "[...]{.info} span and info=\"" .. info .. "\"; using the span\n")
+    else
+      if not is_plain_text(info) and not options.warned_info then
+        options.warned_info = true
+        io.stderr:write("[amsthm] warning: the info attribute is plain text since amsthm " ..
+          "v4, so info=\"" .. info .. "\" is shown as typed; " ..
+          "write the note as a leading [...]{.info} span to keep its " ..
+          "markup (once per document; see " .. PORTING_GUIDE .. ")\n")
+      end
+      note = pandoc.Inlines(info)
     end
   end
-  return out
+  if note and #note > 0 then return note end
+  return nil
 end
-M.parse_markdown_as_inline = parse_markdown_as_inline
-
-local function parse_info(info)
-  if info == nil or info == "" then return {} end
-  local res = { pandoc.Str("(") }
-  for _, e in ipairs(parse_markdown_as_inline(info)) do res[#res + 1] = e end
-  res[#res + 1] = pandoc.Str(")")
-  return res
-end
-M.parse_info = parse_info
+M.take_note = take_note
 
 ---------------------------------------------------------------------
 -- NewTheorem / Proof
@@ -445,7 +485,7 @@ end
 -- name and the number in the style's heading font, the number upright,
 -- the note in parentheses in the note font (medium, upright), and the
 -- punctuation, followed by the space after the heading.
-function NewTheorem:to_header(options, id, info)
+function NewTheorem:to_header(options, id, note)
   local style = options.styles[self.style]
   local head = style.headfont
 
@@ -481,10 +521,11 @@ function NewTheorem:to_header(options, id, info)
     local number = upright(head)
     runs[#runs + 1] = { { pandoc.Space(), pandoc.Str(theorem_number) }, number }
   end
-  local note = parse_info(info)
-  if #note > 0 then
-    table.insert(note, 1, pandoc.Space())
-    runs[#runs + 1] = { note, {} }
+  if note then
+    local inlines = pandoc.Inlines({ pandoc.Space(), pandoc.Str("(") })
+    inlines:extend(note)
+    inlines:insert(pandoc.Str(")"))
+    runs[#runs + 1] = { inlines, {} }
   end
   runs[#runs + 1] = { { pandoc.Str(style.headpunct) }, head }
 
@@ -506,14 +547,13 @@ function Proof.new(text)
   return setmetatable(self, Proof)
 end
 
--- Proof gets a markdown-parsed info that's emph-normalised.
-function Proof:to_header(_options, _id, info)
-  if info == nil or info == "" then
+-- A proof's note is its whole heading, emph-normalised.
+function Proof:to_header(_options, _id, note)
+  if note == nil then
     return { pandoc.Emph(pandoc.Inlines(self.text .. ".")), pandoc.Space() }
   end
-  local ast = parse_markdown_as_inline(info)
   -- Wrap into a Para so we can walk + apply emph transforms over a block.
-  local para = pandoc.Para(ast)
+  local para = pandoc.Para(note)
   para = para:walk({
     Str = M.to_emph, Emph = M.cancel_emph,
     Cite = italic_ref, RawInline = italic_ref,
@@ -1030,10 +1070,11 @@ local function amsthm_block(div, options)
   local theorem = find_theorem(options, div.classes, true)
   if not theorem then return nil end
 
-  local info = div.attributes.info
+  -- Before the body is set in its font, which the note is not.
+  local note = take_note(div, options)
   local id = div.identifier
   if not theorem.numbered and id ~= "" then options.unnumbered[id] = true end
-  local header = theorem:to_header(options, id, info)
+  local header = theorem:to_header(options, id, note)
   -- to_header ends with a Space; keep it outside the title span.
   local title = {}
   for i = 1, #header - 1 do title[i] = header[i] end
@@ -1216,9 +1257,8 @@ local function amsthm_latex_block(div, options)
   local theorem = find_theorem(options, div.classes)
   if not theorem then return nil end
   local open = { pandoc.RawInline("latex", "\\begin{" .. theorem.env_name .. "}") }
-  local info = div.attributes.info
-  if info and info ~= "" then
-    local note = parse_markdown_as_inline(info)
+  local note = take_note(div, options)
+  if note then
     -- The writer escapes brackets in text, but not in math, citations,
     -- images (\includegraphics[width=...]) or raw TeX, where a ] would end
     -- the optional argument early.

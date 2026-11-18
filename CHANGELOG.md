@@ -2,6 +2,17 @@
 
 ## Unreleased
 
+- **Breaking:** the note of a theorem or proof is a span with class
+  `info` at the start of the environment, `[Lagrange]{.info} The order
+  of …`, which pandoc reads with the rest of the document, rather than
+  the `info` attribute, whose Markdown the filter read itself. The
+  attribute still gives a note, as plain text: one with markup, such as
+  emphasis, math, a citation or an apostrophe, is shown as typed, with a
+  warning once per document. `amsthm-port-v4.lua`, attached to the
+  release, ports a document; see
+  [Porting to v4](https://ickc.github.io/pandoc-amsthm/porting.html).
+- The filter no longer calls pandoc's Markdown reader, nor any reader,
+  writer or program, so it runs where filters are sandboxed.
 - A reference to one environment with a prefix or locator, such as
   `[see @a]` or `[@a, p. 3]`, is left to citeproc with a warning, as a
   reference to several environments already was, instead of becoming
