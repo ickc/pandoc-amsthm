@@ -10,9 +10,10 @@ Start from how someone would use `amsthm` in a hand-written LaTeX
 document: `\newtheorem`, `\theoremstyle`, `\begin{Theorem}[note]`,
 `\label` and `\ref`, `\proofname`, and so on. Map that usage to Pandoc
 conventions: environments are declared in YAML metadata, used as
-fenced divs, and referred to with citation syntax. When the output is
-LaTeX, the filter writes what that person would have written, and
-lets `amsthm` do the typesetting.
+fenced divs, given a note by a span that starts them
+(`[Euler]{.info}`), and referred to with citation syntax. When the
+output is LaTeX, the filter writes what that person would have written,
+and lets `amsthm` do the typesetting.
 
 So a feature starts from something that can be done with `amsthm`, and
 its LaTeX output is what a LaTeX author would write by hand. The filter
@@ -26,6 +27,14 @@ A feature that needs another package is weighed against the cost: the
 package has to be installed, and it has to fit in Pandoc's and Quarto's
 templates. For example, cleveref must be loaded after hyperref, which
 Pandoc's template loads after `header-includes`.
+
+What the filter reads is in the document as pandoc's reader made it,
+with the document's own reader extensions: the filter does not read
+Markdown itself, call pandoc's readers or writers, or run a program, so
+it can run where filters are sandboxed. The syntax should also make
+sense without the filter: a note span is then the start of a paragraph,
+where a heading, as Quarto's theorems use, would be an entry in the
+table of contents.
 
 ## 2. Other output: the same result, built from the AST
 

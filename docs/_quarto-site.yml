@@ -42,6 +42,8 @@ website:
             text: Full example source
       - href: design.qmd
         text: Design
+      - href: porting.md
+        text: Porting to v4
       - href: changelog.qmd
         text: Changelog
     right:
