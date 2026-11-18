@@ -26,6 +26,10 @@
   "Proof" (and babel's in LaTeX), as an empty text does for any other
   environment. It named the proof "proof" in other output and nothing
   in LaTeX.
+- `name_to_text` that is not a map, and `qed_symbol` that is neither
+  math nor text, are ignored with a warning naming the key; they stopped
+  the filter with Lua's own error (`bad argument #1 to 'for
+  iterator'`), or pandoc's.
 
 ## v3.1.1
 

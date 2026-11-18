@@ -663,8 +663,12 @@ local function from_meta(meta)
   end
 
   local name_to_text = {}
-  if opt.name_to_text ~= nil then
+  if is_meta_map(opt.name_to_text) then
     for k, v in pairs(opt.name_to_text) do name_to_text[meta_key(k)] = stringify(v) end
+  elseif opt.name_to_text ~= nil and opt.name_to_text ~= "" then
+    -- An empty `name_to_text:`, its entries commented out, names nothing.
+    io.stderr:write("[amsthm] warning: name_to_text is not a map from " ..
+      "names to their text; ignoring it\n")
   end
   -- parent_counter is one unit for every environment, or a map from an
   -- environment's name to its unit, as \newtheorem takes one each.
@@ -807,7 +811,11 @@ local function from_meta(meta)
   -- The end-of-proof symbol, as TeX math: `$\blacksquare$` in the metadata
   -- is math, and a bare `\blacksquare` raw TeX.
   local qed_symbol = "\\Box"
-  if opt.qed_symbol ~= nil then
+  local qed_kind = opt.qed_symbol ~= nil and utype(opt.qed_symbol) or nil
+  if qed_kind and qed_kind ~= "Inlines" and qed_kind ~= "string" then
+    io.stderr:write("[amsthm] warning: qed_symbol is not math or text; " ..
+      "ignoring it\n")
+  elseif qed_kind then
     local parts = {}
     pandoc.Inlines(opt.qed_symbol):walk({
       Math = function(m) parts[#parts + 1] = m.text end,

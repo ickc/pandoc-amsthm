@@ -134,6 +134,15 @@ describe("metadata", function()
     lacks(out, "[foo]")
   end)
 
+  it("of the wrong shape is ignored with a warning naming it, not an error", function()
+    for _, fmt in ipairs({ "markdown", "latex" }) do
+      local out, err = run("meta-shapes.md", "-t " .. fmt)
+      has(err, "[amsthm] warning: name_to_text is not a map from names to their text; ignoring it")
+      has(err, "[amsthm] warning: qed_symbol is not math or text; ignoring it")
+      has(out, "Obvious.")
+    end
+  end)
+
   it("defines the environments of a map in a fixed order", function()
     local out = run("map-order.md", LATEX)
     has(out, table.concat({
