@@ -49,3 +49,7 @@ A [later span]{.info} is an ordinary span.
 [Inner]{.info} Inner.
 :::
 :::
+
+::: Theorem
+[ ]{.info} A blank note is no note.
+:::

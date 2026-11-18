@@ -99,7 +99,8 @@ it: emphasis, math and references work in it. It is the first thing in
 the div's first paragraph, or a paragraph of its own before a list or a
 display; the space or line break after it is not part of the body. A
 span with class `info` anywhere else is an ordinary span, and the note
-span's own identifier, other classes and attributes are ignored. A
+span's own identifier, other classes and attributes are ignored. An
+empty or blank span, `[]{.info}`, gives no note. A
 proof's note replaces its heading: `[Proof of @Euler]{.info}`. Without
 the filter, a note reads as the start of the paragraph.
 

@@ -339,12 +339,24 @@ local function is_plain_text(text)
 end
 M.is_plain_text = is_plain_text
 
+-- Whether a note has nothing to show: no inlines, or only spaces and
+-- line breaks, as `[ ]{.info}` is read.
+local function is_blank(inlines)
+  for _, e in ipairs(inlines) do
+    if e.t ~= "Space" and e.t ~= "SoftBreak" and e.t ~= "LineBreak" then
+      return false
+    end
+  end
+  return true
+end
+
 -- Take a div's note out of it, and return it as inlines, or nil. The
 -- note is a span with class info that starts the div's first block, a
 -- paragraph, as pandoc has read it with the document: the span goes,
 -- with the space after it, and so does the paragraph if nothing is left
--- in it. The span's other attributes are ignored. Without the span, the
--- note is the div's info attribute, as plain text.
+-- in it. The span's other attributes are ignored. Without the span, or
+-- with a blank one, the note is the div's info attribute, as plain text,
+-- the spaces at its ends dropped.
 local function take_note(div, options)
   local note
   local content = div.content
@@ -353,6 +365,7 @@ local function take_note(div, options)
       and is_note_span(first.content[1]) then
     local inlines = first.content
     note = inlines:remove(1).content
+    if is_blank(note) then note = nil end
     if inlines[1] and (inlines[1].t == "Space" or inlines[1].t == "SoftBreak") then
       inlines:remove(1)
     end
@@ -365,7 +378,8 @@ local function take_note(div, options)
     div.content = content
   end
   local info = div.attributes.info
-  if info and info:match("%S") then
+  if info then info = info:match("^%s*(.-)%s*$") end
+  if info and info ~= "" then
     if note then
       io.stderr:write("[amsthm] warning: a note in both a leading " ..
         "[...]{.info} span and info=\"" .. info .. "\"; using the span\n")
@@ -705,8 +719,9 @@ local function from_meta(meta)
   local name_to_text = {}
   if is_meta_map(opt.name_to_text) then
     for k, v in pairs(opt.name_to_text) do name_to_text[meta_key(k)] = stringify(v) end
-  elseif opt.name_to_text ~= nil and opt.name_to_text ~= "" then
-    -- An empty `name_to_text:`, its entries commented out, names nothing.
+  elseif opt.name_to_text ~= nil and stringify(opt.name_to_text) ~= "" then
+    -- An empty `name_to_text:`, its entries commented out, names nothing;
+    -- nor does `name_to_text: ""`.
     io.stderr:write("[amsthm] warning: name_to_text is not a map from " ..
       "names to their text; ignoring it\n")
   end

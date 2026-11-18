@@ -95,6 +95,7 @@ describe("a note, a span with class info that starts the first paragraph", funct
     -- A span with class info elsewhere is an ordinary span.
     has(out, "[**Theorem 6.**]{.amsthm-title} *A* [*later* *span*]{.info}")
     has(out, "[**Theorem 7.**]{.amsthm-title} *An empty note is no note.*")
+    has(out, "[**Theorem 10.**]{.amsthm-title} *A blank note is no note.*")
     -- A proof's note is its heading.
     has(out, "[*Proof of Theorem\u{a0}[1](#lagrange)**.*]{.amsthm-title} Obvious.")
     has(out, "[**Theorem 8** (Outer)**.**]{.amsthm-title} *Outer.*")
@@ -112,6 +113,7 @@ describe("a note, a span with class info that starts the first paragraph", funct
     has(out, "\\begin{Theorem}[Other attributes]\nare ignored.")
     has(out, "\\begin{Theorem}\nA {later span} is an ordinary span.")
     has(out, "\\begin{Theorem}\nAn empty note is no note.")
+    has(out, "\\begin{Theorem}\nA blank note is no note.")
     has(out, "\\begin{proof}[{Proof of Theorem~\\ref{lagrange}}]\nObvious.")
     has(out, "\\begin{Theorem}[Inner]\nInner.")
   end)
@@ -137,6 +139,14 @@ describe("the info attribute", function()
     local out, err = run("note-attribute.md", "-t markdown")
     has(out, "[**Theorem 4** (the span)**.**]{.amsthm-title}")
     has(err, 'a note in both a leading [...]{.info} span and info="the attribute"; using the span')
+    -- An empty span is no note: the attribute is, and nothing is warned.
+    has(out, "[**Theorem 5** (the attribute)**.**]{.amsthm-title} *An empty span")
+    assert.are.equal(1, count(err, "a note in both"))
+  end)
+
+  it("drops the spaces at its ends", function()
+    local out = run("note-attribute.md", "-t markdown")
+    has(out, "[**Theorem 6** (spaces at its end)**.**]{.amsthm-title}")
   end)
 end)
 
