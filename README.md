@@ -161,6 +161,10 @@ capitalised form, a prefix or locator (`[see @a; @b, p. 2]`), nor mix
 environments with bibliography keys; those are left to citeproc, with a
 warning.
 
+A reference to one environment takes no prefix or locator either:
+`[see @a]` and `[@a, p. 3]` are left to citeproc, with a warning. Write
+the words outside the brackets, as in `see [@a]`.
+
 A reference to an unnumbered environment prints nothing meaningful in
 LaTeX, which gives the last number set before it, usually the
 section's. LaTeX output keeps it as `\ref`, as written; other output
