@@ -378,7 +378,9 @@ local function take_note(div, options)
     div.content = content
   end
   local info = div.attributes.info
-  if info then info = info:match("^%s*(.-)%s*$") end
+  -- (up to its last character that is no space: one pass, where a lazy
+  -- match before `%s*$` would look again at every run of spaces inside)
+  if info then info = info:match("^%s*(.*%S)") or "" end
   if info and info ~= "" then
     if note then
       io.stderr:write("[amsthm] warning: a note in both a leading " ..
