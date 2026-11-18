@@ -18,6 +18,10 @@
   keyed as the README writes `Conjecture\*` in a list, now names it, and
   a key such as `Aside\*: [Remark]` is the environment `Aside`, not
   `Aside\`, which broke LaTeX output.
+- Names listed under an unnumbered environment, as in
+  `Aside*: [Remark]`, are numbered on their own, with a warning: an
+  unnumbered environment has no counter to share, and the LaTeX output
+  (`\newtheorem{Remark}[Aside*]{Remark}`) did not compile.
 
 ## v3.1.1
 
