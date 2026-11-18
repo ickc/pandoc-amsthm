@@ -22,6 +22,10 @@
   `Aside*: [Remark]`, are numbered on their own, with a warning: an
   unnumbered environment has no counter to share, and the LaTeX output
   (`\newtheorem{Remark}[Aside*]{Remark}`) did not compile.
+- `name_to_text: {proof: ""}` leaves the proof's name as it is,
+  "Proof" (and babel's in LaTeX), as an empty text does for any other
+  environment. It named the proof "proof" in other output and nothing
+  in LaTeX.
 
 ## v3.1.1
 
