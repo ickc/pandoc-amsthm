@@ -555,6 +555,15 @@ local function meta_list(node)
   return { node }
 end
 
+-- The name a metadata key stands for. A value is read as markdown, so
+-- `Conjecture\*` in a list is `Conjecture*`, but a key is taken as it is
+-- written; drop a backslash before punctuation, as markdown does, so the
+-- two agree.
+local function meta_key(key)
+  return (key:gsub("\\(%p)", "%1"))
+end
+M.meta_key = meta_key
+
 -- The LaTeX unit that level-1 headings map to, as pandoc decides it.
 local function top_level_division(meta)
   local tld = PANDOC_WRITER_OPTIONS and PANDOC_WRITER_OPTIONS.top_level_division
@@ -655,14 +664,14 @@ local function from_meta(meta)
 
   local name_to_text = {}
   if opt.name_to_text ~= nil then
-    for k, v in pairs(opt.name_to_text) do name_to_text[k] = stringify(v) end
+    for k, v in pairs(opt.name_to_text) do name_to_text[meta_key(k)] = stringify(v) end
   end
   -- parent_counter is one unit for every environment, or a map from an
   -- environment's name to its unit, as \newtheorem takes one each.
   local parent_counters = {}
   local parent_counter
   if is_meta_map(opt.parent_counter) then
-    for k, v in pairs(opt.parent_counter) do parent_counters[k] = stringify(v) end
+    for k, v in pairs(opt.parent_counter) do parent_counters[meta_key(k)] = stringify(v) end
   elseif opt.parent_counter ~= nil then
     parent_counter = stringify(opt.parent_counter)
   end
@@ -698,7 +707,7 @@ local function from_meta(meta)
         table.sort(keys)
         for _, key in ipairs(keys) do
           local value = entry[key]
-          local key_s = stringify(key)
+          local key_s = meta_key(key)
           add(NewTheorem.new({
             style = style, env_name = key_s,
             text = name_to_text[key_s] or "",

@@ -13,6 +13,11 @@
   inside an environment whose style sets the body's font, is left alone;
   it used to be replaced with a copy of an environment nested there,
   which was then numbered twice.
+- A metadata key is read as the same name in a list is: a backslash
+  before punctuation is dropped. `name_to_text: {Conjecture\*: ...}`,
+  keyed as the README writes `Conjecture\*` in a list, now names it, and
+  a key such as `Aside\*: [Remark]` is the environment `Aside`, not
+  `Aside\`, which broke LaTeX output.
 
 ## v3.1.1
 
