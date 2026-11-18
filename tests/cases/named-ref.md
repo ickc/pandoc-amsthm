@@ -7,19 +7,19 @@ amsthm:
 # Sec
 
 ::: {#euler .Theorem}
-A.
+First.
 :::
 
 ::: {#nz .Lemma}
-B.
+Second.
 :::
 
 ::: {#kl .KL}
-C.
+Third.
 :::
 
 ::: {#Cap .Theorem}
-D.
+Fourth.
 :::
 
 By @Euler, [@Nz], @Kl and @Cap, @euler, @Unknown.

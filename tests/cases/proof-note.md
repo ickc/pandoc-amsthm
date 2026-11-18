@@ -4,7 +4,7 @@ amsthm:
 ---
 
 ::: {#euler .Theorem}
-A.
+First.
 :::
 
 ::: {.proof info="Proof of @Euler, see [@euler]"}
