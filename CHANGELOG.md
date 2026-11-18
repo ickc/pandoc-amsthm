@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased
+
+- A reference to one environment with a prefix or locator, such as
+  `[see @a]` or `[@a, p. 3]`, is left to citeproc with a warning, as a
+  reference to several environments already was, instead of becoming
+  the number alone. Write `see [@a]`.
+
 ## v3.1.1
 
 - The filter stops with a clear error on pandoc older than 3.1.1.

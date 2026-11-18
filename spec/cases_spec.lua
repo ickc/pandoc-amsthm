@@ -388,6 +388,20 @@ describe("a reference to several environments", function()
   end)
 end)
 
+describe("a reference to one environment with a prefix or suffix", function()
+  it("is left to citeproc, with a warning each, rather than lose them", function()
+    local out, err = run("affixed-ref.md", "-t markdown")
+    -- The markdown writer joins "p." to the number with a no-break space.
+    has(out, "See [see @a], [@a, p.\u{a0}3], @a [p.\u{a0}3] and [see @A], but see ([1](#a)).")
+    assert.are.equal(4, count(err, "cannot carry a prefix or suffix, and is left to citeproc"))
+    has(err, "left to citeproc: [see @a]")
+    has(err, "left to citeproc: [@a, p. 3]")
+    out, err = run("affixed-ref.md", "-t latex")
+    has(out, "See {[}see @a{]}, {[}@a, p. 3{]}, @a {[}p. 3{]} and {[}see @A{]}, but see \\eqref{a}.")
+    assert.are.equal(4, count(err, "cannot carry a prefix or suffix, and is left to citeproc"))
+  end)
+end)
+
 -- The examples on the documentation site, which people learn from: each
 -- must run without a warning from the filter, in LaTeX and other output.
 describe("the documentation's examples", function()

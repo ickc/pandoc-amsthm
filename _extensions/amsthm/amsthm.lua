@@ -205,6 +205,12 @@ local function cite_to_id_mode(elem)
 end
 M.cite_to_id_mode = cite_to_id_mode
 
+-- Whether a citation has a prefix or suffix, as `[see @a]` and
+-- `[@a, p. 3]` do, which a reference to an environment would drop.
+local function has_affix(c)
+  return #c.prefix > 0 or #c.suffix > 0
+end
+
 -- The ids of [@a; @b], a reference to several environments, when each
 -- of them is a key of `ids` and none has a prefix or suffix, which the
 -- list would drop; nil otherwise, leaving it to citeproc.
@@ -212,8 +218,9 @@ local function multi_ref_ids(elem, ids)
   if elem.t ~= "Cite" or #elem.citations < 2 then return nil end
   local out = {}
   for _, c in ipairs(elem.citations) do
-    if c.mode ~= "NormalCitation" or not ids[c.id]
-        or #c.prefix > 0 or #c.suffix > 0 then return nil end
+    if c.mode ~= "NormalCitation" or not ids[c.id] or has_affix(c) then
+      return nil
+    end
     out[#out + 1] = c.id
   end
   return out
@@ -267,7 +274,8 @@ local function cite_to_ref(elem, check_id, names)
     end)
   end
   local id, mode = cite_to_id_mode(elem)
-  if id == nil then return nil end
+  -- With a prefix or suffix, it is left to citeproc, as [@a; @b] is.
+  if id == nil or has_affix(elem.citations[1]) then return nil end
   if mode ~= "NormalCitation" and mode ~= "AuthorInText" then return nil end
   local paren = mode == "NormalCitation"
   local name
@@ -1073,6 +1081,15 @@ local function warn_unnumbered(elem, options)
         "other output leaves it unresolved\n")
     end
   end
+  -- [see @a], [@a, p. 3]: one environment, with a prefix or suffix.
+  if elem.t == "Cite" and #elem.citations == 1 and has_affix(elem.citations[1]) then
+    local id = elem.citations[1].id
+    if ref_target(id, options.identifiers) or ref_target(id, options.unnumbered) then
+      io.stderr:write("[amsthm] warning: a reference to an environment " ..
+        "cannot carry a prefix or suffix, and is left to citeproc: " ..
+        pandoc.utils.stringify(elem) .. "\n")
+    end
+  end
   -- [@a; @knuth]: environments and other keys in one citation.
   if elem.t == "Cite" and #elem.citations > 1 then
     local ours, others, named, affixed = false, false, false, false
@@ -1128,6 +1145,8 @@ local function resolve_inline(elem, options)
   end
   if elem.t == "Cite" then
     local id, mode = cite_to_id_mode(elem)
+    -- With a prefix or suffix, it is left to citeproc, as [@a; @b] is.
+    if id and has_affix(elem.citations[1]) then return nil end
     local is_named
     if id then id, is_named = ref_target(id, options.identifiers) end
     if id then
