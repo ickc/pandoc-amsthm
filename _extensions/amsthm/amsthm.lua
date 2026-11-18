@@ -1012,12 +1012,11 @@ local function amsthm_block(div, options)
     div = style_body(div, options, style.bodyfont)
   end
 
-  -- Prepend header to the first block's inline list when possible,
-  -- otherwise wrap into a fresh Para.
-  if #div.content >= 1 and div.content[1].content
-      and (div.content[1].t == "Para" or div.content[1].t == "Plain"
-           or div.content[1].t == "Header") then
-    local first = div.content[1]
+  -- Prepend header to the first block's inline list when it is a
+  -- paragraph, otherwise wrap into a fresh Para: a heading keeps a line
+  -- of its own, as \begin{Theorem} is set before it in LaTeX.
+  local first = div.content[1]
+  if first and (first.t == "Para" or first.t == "Plain") then
     local new_inlines = {}
     for _, e in ipairs(header) do new_inlines[#new_inlines + 1] = e end
     for _, e in ipairs(first.content) do new_inlines[#new_inlines + 1] = e end
@@ -1034,8 +1033,7 @@ local function amsthm_block(div, options)
     -- \hfill is left out, for the CSS to do in HTML.
     local qed = qed_span(options)
     local last = div.content[#div.content]
-    if last and last.content
-       and (last.t == "Para" or last.t == "Plain" or last.t == "Header") then
+    if last and (last.t == "Para" or last.t == "Plain") then
       local ic = last.content
       ic[#ic + 1] = qed
       last.content = ic
