@@ -220,6 +220,13 @@ describe("name_to_text for proof", function()
     local out = run("proof-name.md", "-t markdown")
     has(out, "[*Beweis.*]{.amsthm-title} Klar.")
   end)
+
+  it("is no name when empty, as for any other environment", function()
+    local out = run("proof-name-empty.md", LATEX)
+    lacks(out, "\\proofname")
+    out = run("proof-name-empty.md", "-t markdown")
+    has(out, "[*Proof.*]{.amsthm-title} Obvious.")
+  end)
 end)
 
 describe("a reference in the italic body of a plain theorem", function()

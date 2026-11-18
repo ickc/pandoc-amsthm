@@ -749,8 +749,11 @@ local function from_meta(meta)
     end
   end
 
-  -- Proof is predefined.
-  local proof = Proof.new(name_to_text.proof)
+  -- Proof is predefined. An empty name is no name, as for any other
+  -- environment: "Proof", and in LaTeX babel's for the language.
+  local proof_name = name_to_text.proof
+  if proof_name == "" then proof_name = nil end
+  local proof = Proof.new(proof_name)
   theorems_order[#theorems_order + 1] = proof
   theorems_map[proof:class_name()] = proof
 
@@ -824,7 +827,7 @@ local function from_meta(meta)
     counters = counters,
     numbered_depth = numbered_depth(meta, top),
     part_level = part_level,
-    proof_name = name_to_text.proof,
+    proof_name = proof_name,
     theorems_order = theorems_order,
     theorems_map = theorems_map,
     counter_depth = counter_depth,
